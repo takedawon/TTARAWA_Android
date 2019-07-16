@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "412044242709",
+    "firebase_url": "https://ttarawa-aa23f.firebaseio.com",
+    "project_id": "ttarawa-aa23f",
+    "storage_bucket": "ttarawa-aa23f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412044242709:android:2c9c860de4aaed00",
+        "android_client_info": {
+          "package_name": "com.seoul.ttarawa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412044242709-25i5qmsga7h1h6ahsj3bogpfqknmbgj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seoul.ttarawa",
+            "certificate_hash": "8e96fa2724986dcccbde6da7763f29a2ea39f7aa"
+          }
+        },
+        {
+          "client_id": "412044242709-cu6cnb3du0avslr7cjdmjlkk1q3qhg4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8X_H28rt8N6UViakMC9NQYG0FtM3dbFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412044242709-cu6cnb3du0avslr7cjdmjlkk1q3qhg4f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
