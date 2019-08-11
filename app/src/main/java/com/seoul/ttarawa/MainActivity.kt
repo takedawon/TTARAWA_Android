@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame_layout, home)
+            .replace(R.id.main_layout, home)
             .commitAllowingStateLoss() // 첫 화면 지정 HomeFragment
 
         bottom_navigation_bar.setOnNavigationItemSelectedListener(this)
@@ -46,15 +46,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (p0.itemId) {
             R.id.bottom_home -> {
                 val homeFragment = HomeFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, homeFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_layout, homeFragment).commit()
             }
             R.id.bottom_menu -> {
                 val menuFragment = MenuFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, menuFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_layout, menuFragment).commit()
             }
             R.id.bottom_info -> {
                 val infoFragment = InfoFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, infoFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_layout, infoFragment).commit()
             }
         }
         return true
