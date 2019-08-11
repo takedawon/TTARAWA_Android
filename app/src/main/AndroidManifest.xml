@@ -3,6 +3,7 @@
           package="com.seoul.ttarawa">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <meta-data android:name="com.kakao.sdk.AppKey" android:value="82bc076291b2fa4ae672fbba42d20b00"/>
 
