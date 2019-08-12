@@ -1,4 +1,4 @@
-package com.seoul.ttarawa
+package com.seoul.ttarawa.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,11 +6,7 @@ import android.content.Intent
 import com.kakao.util.exception.KakaoException
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
-import com.kakao.auth.Session.getCurrentSession
 import com.kakao.util.helper.log.Logger
-import android.R
-
-
 
 
 class LoginActivity : AppCompatActivity() {

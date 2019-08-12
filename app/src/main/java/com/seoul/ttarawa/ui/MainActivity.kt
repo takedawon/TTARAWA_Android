@@ -1,9 +1,10 @@
-package com.seoul.ttarawa
+package com.seoul.ttarawa.ui
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.seoul.ttarawa.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 

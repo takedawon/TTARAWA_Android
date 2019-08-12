@@ -23,9 +23,9 @@
                 android:name="com.kakao.sdk.AppKey"
                 android:value="@string/kakao_app_key"/>
 
-        <activity android:name=".TestActivity"/>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.TestActivity"/>
+        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
