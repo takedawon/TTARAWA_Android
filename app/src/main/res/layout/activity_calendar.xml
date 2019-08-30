@@ -44,8 +44,10 @@
             android:textColor="#7E7E7E"
             android:text="놀러 가시는 날짜를 선택해주세요!"/>
     <CalendarView
+            android:id="@+id/calendar_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
     </CalendarView>
+
 </LinearLayout>
