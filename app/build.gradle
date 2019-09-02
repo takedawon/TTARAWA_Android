@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -26,6 +28,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dataBinding.enabled true
 }
 
 dependencies {
@@ -37,7 +40,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha09'
 
     // test
-    implementation 'androidx.appcompat:appcompat:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -47,13 +49,47 @@ dependencies {
 
     // kakao
     // 사용자관리 sdk를 사용하기 위해 필요.
-    implementation files('src/main/libs/libDaumMapAndroid.jar')
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    // rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
 
     // okhttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    // tedPermission
+    // https://github.com/ParkSangGwon/TedPermission
+    implementation "gun0912.ted:tedpermission-rx2:$ted_permission_version"
+
+    // anko
+    // https://github.com/Kotlin/anko
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
+
+    // timber
+    // https://github.com/JakeWharton/timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    // ktx
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha02"
+    implementation "androidx.fragment:fragment-ktx:1.2.0-alpha01"
+
+    // koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-core-ext:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+
+    // stetho
+    implementation "com.facebook.stetho:stetho:$stetho_version"
 }
