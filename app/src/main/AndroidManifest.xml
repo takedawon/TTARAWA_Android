@@ -22,12 +22,7 @@
         <activity android:name=".ui.PlanActivity">
         </activity>
         <activity android:name=".ui.CalendarActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -36,7 +31,14 @@
 
         <activity android:name=".ui.TestActivity"/>
         <activity android:name=".ui.LoginActivity"/>
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
                 android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"
                 android:launchMode="singleTop"
