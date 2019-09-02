@@ -1,7 +1,7 @@
 package com.seoul.ttarawa.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.seoul.ttarawa.R
 
 class TestActivity : AppCompatActivity() {

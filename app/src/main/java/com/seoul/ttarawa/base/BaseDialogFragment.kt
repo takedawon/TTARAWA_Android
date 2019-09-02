@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseDialogFragment<B : ViewDataBinding>(
     private val layout: Int
