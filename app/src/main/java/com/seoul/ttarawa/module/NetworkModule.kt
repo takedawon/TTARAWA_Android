@@ -1,7 +1,7 @@
 package com.seoul.ttarawa.module
 
 import com.seoul.ttarawa.BuildConfig
-import com.seoul.ttarawa.data.service.SeoulApi
+import com.seoul.ttarawa.data.remote.api.SeoulApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
