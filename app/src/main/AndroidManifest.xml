@@ -19,17 +19,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
-        <activity android:name=".ui.PlanActivity">
-        </activity>
-        <activity android:name=".ui.CalendarActivity">
-
-        </activity>
 
         <meta-data
                 android:name="com.kakao.sdk.AppKey"
                 android:value="@string/kakao_app_key"/>
 
-        <activity android:name=".ui.LoginActivity"/>
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.plan.PlanActivity" />
+
         <activity
                 android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"
                 android:launchMode="singleTop"
