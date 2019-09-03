@@ -4,6 +4,9 @@ import android.app.Application
 import com.facebook.stetho.Stetho
 import com.kakao.auth.*
 import com.seoul.ttarawa.module.dataSourceModule
+import com.seoul.ttarawa.module.networkModule
+import com.seoul.ttarawa.module.repositoryModule
+import com.seoul.ttarawa.module.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -27,7 +30,10 @@ class GlobalApplication : Application() {
             androidLogger()
             modules(
                 listOf(
-                    dataSourceModule
+                    networkModule,
+                    dataSourceModule,
+                    repositoryModule,
+                    viewModelModule
                 )
             )
         }
