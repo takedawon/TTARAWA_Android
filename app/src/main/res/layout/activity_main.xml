@@ -14,15 +14,23 @@
             android:layout_height="match_parent"
             tools:context=".ui.main.MainActivity">
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="hello world"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="사용자님 어디가기 좋은 날씨네요!"
+                    android:textColor="#000"
+                    android:textSize="20dp" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
