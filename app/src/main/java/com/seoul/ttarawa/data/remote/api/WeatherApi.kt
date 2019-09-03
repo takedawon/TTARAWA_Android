@@ -4,8 +4,9 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+const val BASE_URL = "http://newsky2.kma.go.kr/"
+
 interface WeatherApi {
-    val BASEURL = "http://newsky2.kma.go.kr/"
 
     @GET("/service/SecndSrtpdFrcstInfoService2/ForecastTimeData")
     abstract fun getWeather(
