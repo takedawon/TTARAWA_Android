@@ -26,6 +26,8 @@ abstract class BaseFragment<B : ViewDataBinding>(private val layoutId: Int) :
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.lifecycleOwner = this@BaseFragment
+
+        initView()
     }
 
     protected fun bind(action: B.() -> Unit) {
@@ -35,4 +37,6 @@ abstract class BaseFragment<B : ViewDataBinding>(private val layoutId: Int) :
     protected fun <T : ViewDataBinding> bind(binding: T, action: T.() -> Unit) {
         binding.run(action)
     }
+
+    abstract fun initView()
 }
