@@ -1,9 +1,8 @@
-package com.seoul.ttarawa.data.remote.api
-
+package com.seoul.ttarawa.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class WeatherRepoResponse(
+data class WeatherResponse(
     @SerializedName("response")
     val response: Response
 ) {
