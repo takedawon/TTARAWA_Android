@@ -98,9 +98,11 @@ dependencies {
     implementation "org.koin:koin-core-ext:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
+    // smartlocation
+    implementation "io.nlopez.smartlocation:library:$smartlocation_version"
+
     // stetho
     implementation "com.facebook.stetho:stetho:$stetho_version"
 
-    // smartlocation
-    implementation "io.nlopez.smartlocation:library:$smartlocation_version"
+
 }
