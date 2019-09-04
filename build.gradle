@@ -13,6 +13,7 @@ buildscript {
         timber_version = '4.7.1'
         koin_version = '2.0.1'
         stetho_version = '1.5.1'
+        smartlocation_version = "3.3.3"
     }
     repositories {
         google()
