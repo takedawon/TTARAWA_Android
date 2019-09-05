@@ -13,8 +13,8 @@ buildscript {
         timber_version = '4.7.1'
         koin_version = '2.0.1'
         stetho_version = '1.5.1'
-        playServices_version="17.0.0"
         smartlocation_version = "3.3.3"
+        playServices_version="17.0.0"
     }
     repositories {
         google()
@@ -22,7 +22,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.2.0'
         // NOTE: Do not place your application dependencies here; they belong

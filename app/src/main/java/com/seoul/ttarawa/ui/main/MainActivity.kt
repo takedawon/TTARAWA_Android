@@ -1,7 +1,10 @@
 package com.seoul.ttarawa.ui.main
 
+import android.util.Log
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
@@ -11,13 +14,16 @@ import com.seoul.ttarawa.ext.replaceFragmentInActivity
 import com.seoul.ttarawa.ui.home.HomeFragment
 import com.seoul.ttarawa.ui.plan.PlanActivity
 import com.seoul.ttarawa.ui.setting.SettingFragment
+import io.nlopez.smartlocation.OnLocationUpdatedListener
+import io.nlopez.smartlocation.SmartLocation
+import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(
-    com.seoul.ttarawa.R.layout.activity_main
+    R.layout.activity_main
 ) {
     private val mainViewModel: MainViewModel by viewModel()
 
@@ -31,7 +37,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
                 // 권한 허가시 실행 할 내용
                 val provider: LocationGooglePlayServicesProvider? = LocationGooglePlayServicesProvider()
                 provider?.setCheckLocationSettings(true)
-                val smartLocation = SmartLocation.Builder(this@MainActivity).logging(true).build()
+                val smartLocation = SmartLocation.Builder(
+                    this@MainActivity).logging(true).build()
                 smartLocation.location(provider).start(OnLocationUpdatedListener {
                     Log.i("location : ", it.longitude.toString() + "," + it.latitude)
                 })
@@ -63,10 +70,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
                     openNavigationMenu()
                 }
 
-                replaceMenu(com.seoul.ttarawa.R.menu.menu_main_setting)
+                replaceMenu(R.menu.menu_main_setting)
                 setOnMenuItemClickListener {
-                    if (it.itemId == com.seoul.ttarawa.R.id.menu_setting) {
-                        replaceFragmentInActivity(com.seoul.ttarawa.R.id.container_main, SettingFragment.newInstance())
+                    if (it.itemId == R.id.menu_setting) {
+                        replaceFragmentInActivity(R.id.container_main, SettingFragment.newInstance())
                         return@setOnMenuItemClickListener true
                     }
                     return@setOnMenuItemClickListener false
@@ -85,23 +92,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
      */
     private fun openNavigationMenu() {
         val dialog: BottomSheetDialog
-        val bottomNavigation = layoutInflater.inflate(com.seoul.ttarawa.R.layout.layout_main_navigation, null, false)
+        val bottomNavigation = layoutInflater.inflate(
+            R.layout.layout_main_navigation,
+            null,
+            false)
 
         dialog = BottomSheetDialog(this@MainActivity).apply {
             setContentView(bottomNavigation)
         }
         dialog.show()
 
-        bottomNavigation.findViewById<NavigationView>(com.seoul.ttarawa.R.id.navigation_main_menu).apply {
+        bottomNavigation.findViewById<NavigationView>(R.id.navigation_main_menu).apply {
             setNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    com.seoul.ttarawa.R.id.bottom_home -> {
+                    R.id.bottom_home -> {
                         toast("bottom_home")
                     }
-                    com.seoul.ttarawa.R.id.bottom_info -> {
+                    R.id.bottom_info -> {
                         toast("bottom_info")
                     }
-                    com.seoul.ttarawa.R.id.bottom_menu -> {
+                    R.id.bottom_menu -> {
                         toast("bottom_menu")
                     }
                 }
@@ -112,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
     }
 
     private fun addHomeFragment() {
-        addFragmentInActivity(com.seoul.ttarawa.R.id.container_main, HomeFragment.newInstance())
+        addFragmentInActivity(R.id.container_main, HomeFragment.newInstance())
     }
 }
 

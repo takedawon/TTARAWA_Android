@@ -105,5 +105,4 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$stetho_version"
 
     implementation "com.google.android.gms:play-services-location:$playServices_version"
-
 }
