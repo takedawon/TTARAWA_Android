@@ -93,6 +93,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         getWeather(baseDate = currentDate, baseTime = currentTime, nx = lat, ny = lon)
     }
 
+    fun setWeatherView(ptyValue: Int, skyValue: Int) {
+        if (ptyValue == 0 && skyValue == 1)
+            binding.txtWeather.setText("사용자님 어디가기 좋은 날씨네요!")
+        else if (ptyValue == 0 && (skyValue == 3 || skyValue == 4))
+            binding.txtWeather.setText("사용자님 구름이 많은 날씨네요!")
+        else if (ptyValue == 1 || ptyValue == 2 || ptyValue == 4)
+            binding.txtWeather.setText("사용자님 비가 오고 있어요! 우산 꼭 챙기세요!")
+        else if (ptyValue == 3)
+            binding.txtWeather.setText("사용자님 눈이 오고 있어요! 우산 꼭 챙기세요!")
+    }
+
     private fun getWeather(baseDate: String, baseTime: String, nx: Int, ny: Int) {
         NetworkModule.weatherApi.getWeather(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
@@ -128,8 +139,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         if (switch == 2)
                             break
                     }
-
-
+                    setWeatherView(ptyValue, skyValue)
                 }
             })
     }
