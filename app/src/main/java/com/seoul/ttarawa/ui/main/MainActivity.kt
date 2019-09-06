@@ -9,7 +9,7 @@ import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.addFragmentInActivity
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.replaceFragmentInActivity
-import com.seoul.ttarawa.ui.map.PlanActivity
+import com.seoul.ttarawa.ui.map.CalendarActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -41,7 +41,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
                 }
             }
 
-            fabMain click { startActivity<PlanActivity>() }
+            fabMain click { startActivity<CalendarActivity>() }
 
         }
 
