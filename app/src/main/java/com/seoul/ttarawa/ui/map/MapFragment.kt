@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.map
 
+import android.os.Bundle
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentMapBinding
@@ -12,6 +13,13 @@ import net.daum.mf.map.api.MapView
 class MapFragment : BaseFragment<FragmentMapBinding>(
     R.layout.fragment_map
 ) {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initView()
+    }
+
     override fun initView() {
         bind {
             rlMap.addView(MapView(activity).apply {

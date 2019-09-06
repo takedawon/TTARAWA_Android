@@ -15,8 +15,6 @@ abstract class BaseActivity<B : ViewDataBinding>(private val layoutId: Int) :
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layoutId)
         binding.lifecycleOwner = this
-
-        initView()
     }
 
     protected fun bind(action: B.() -> Unit) {

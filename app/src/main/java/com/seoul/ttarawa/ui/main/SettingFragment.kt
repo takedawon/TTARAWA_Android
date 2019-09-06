@@ -1,4 +1,4 @@
-package com.seoul.ttarawa.ui.setting
+package com.seoul.ttarawa.ui.main
 
 import android.os.Bundle
 import com.kakao.auth.ISessionCallback
@@ -18,6 +18,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        initView()
 
         session = SessionCallback()
         Session.getCurrentSession().addCallback(session)

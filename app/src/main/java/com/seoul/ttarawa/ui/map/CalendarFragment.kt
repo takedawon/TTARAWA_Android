@@ -1,13 +1,12 @@
-package com.seoul.ttarawa.ui.calendar
+package com.seoul.ttarawa.ui.map
 
+import android.os.Bundle
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentCalendarBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.replaceInFragment
-import com.seoul.ttarawa.ui.search.SearchFragment
 import org.jetbrains.anko.support.v4.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * 달력 화면
@@ -17,7 +16,11 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(
     R.layout.fragment_calendar
 ) {
 
-    private val calViewModel: CalendarViewModel by viewModel()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initView()
+    }
 
     override fun initView() {
         bind {

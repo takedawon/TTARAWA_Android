@@ -1,43 +1,31 @@
 package com.seoul.ttarawa.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.addFragmentInActivity
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.replaceFragmentInActivity
-import com.seoul.ttarawa.ui.home.HomeFragment
-import com.seoul.ttarawa.ui.plan.PlanActivity
-import com.seoul.ttarawa.ui.setting.SettingFragment
-import com.seoul.ttarawa.util.LocationUtil
-import io.nlopez.smartlocation.OnLocationUpdatedListener
-import io.nlopez.smartlocation.SmartLocation
-import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider
+import com.seoul.ttarawa.ui.map.PlanActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(
     R.layout.activity_main
 ) {
-    private val mainViewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initView()
     }
 
     override fun initView() {
         bind {
-            vm = mainViewModel
-
             with(babMain) {
                 setNavigationOnClickListener {
                     openNavigationMenu()
@@ -68,7 +56,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         val bottomNavigation = layoutInflater.inflate(
             R.layout.layout_main_navigation,
             null,
-            false)
+            false
+        )
 
         dialog = BottomSheetDialog(this@MainActivity).apply {
             setContentView(bottomNavigation)

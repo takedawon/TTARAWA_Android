@@ -59,12 +59,6 @@ dependencies {
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-
-    // rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
 
     // okhttp
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
@@ -76,7 +70,7 @@ dependencies {
     // tedPermission
 
     // https://github.com/ParkSangGwon/TedPermission
-    implementation "gun0912.ted:tedpermission-rx2:$ted_permission_version"
+    implementation "gun0912.ted:tedpermission:$ted_permission_version"
 
     // anko
 
@@ -90,13 +84,7 @@ dependencies {
 
     // ktx
     implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha02'
     implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha01'
-
-    // koin
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-core-ext:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // smartlocation
     implementation "io.nlopez.smartlocation:library:$smartlocation_version"

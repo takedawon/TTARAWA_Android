@@ -11,7 +11,6 @@ buildscript {
         ted_permission_version = '2.2.2'
         anko_version = '0.10.8'
         timber_version = '4.7.1'
-        koin_version = '2.0.1'
         stetho_version = '1.5.1'
         smartlocation_version = "3.3.3"
         playServices_version="17.0.0"

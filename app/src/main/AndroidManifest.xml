@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.plan.PlanActivity" />
+        <activity android:name=".ui.map.PlanActivity" />
 
         <activity
                 android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"

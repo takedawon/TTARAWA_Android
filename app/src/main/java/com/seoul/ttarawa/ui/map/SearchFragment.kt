@@ -1,11 +1,11 @@
-package com.seoul.ttarawa.ui.search
+package com.seoul.ttarawa.ui.map
 
+import android.os.Bundle
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentSearchBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.replaceInFragment
-import com.seoul.ttarawa.ui.path.PathFragment
 
 /**
  * 검색 화면
@@ -15,6 +15,13 @@ import com.seoul.ttarawa.ui.path.PathFragment
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
     R.layout.fragment_search
 ) {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initView()
+    }
+
     override fun initView() {
         bind {
             filterIcon click {
