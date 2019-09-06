@@ -47,6 +47,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.map.CalendarActivity"/>
+        <activity android:name=".ui.map.PathActivity"/>
+        <activity android:name=".ui.map.SearchActivity"/>
     </application>
 
 </manifest>
