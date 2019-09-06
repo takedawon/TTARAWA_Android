@@ -108,7 +108,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
                 }
 
-                override fun onResponse(call: Call<WeatherResponse?>, response: Response<WeatherResponse?>) {
+                override fun onResponse(
+                    call: Call<WeatherResponse?>,
+                    response: Response<WeatherResponse?>
+                ) {
+                    var ptyValue = 0
+                    var skyValue = 0
+                    var switch = 0
+                    for (i in 0..19) {
+                        response.body()?.let {
+                            if (it.response.body.items.item[i].category == "PTY" && switch == 0) {
+                                ptyValue = it.response.body.items.item[i].fcstValue
+                                switch = 1
+                            } else if (it.response.body.items.item[i].category == "SKY" && switch == 1) {
+                                skyValue = it.response.body.items.item[i].fcstValue
+                                switch = 2
+                            }
+                        }
+                        if (switch == 2)
+                            break
+                    }
+
 
                 }
             })
