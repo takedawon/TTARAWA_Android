@@ -38,7 +38,7 @@ data class WeatherResponse(
                     @SerializedName("fcstTime")
                     val fcstTime: Int,
                     @SerializedName("fcstValue")
-                    val fcstValue: Int,
+                    val fcstValue: Double,
                     @SerializedName("nx")
                     val nx: Int,
                     @SerializedName("ny")

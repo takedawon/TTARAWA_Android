@@ -14,9 +14,11 @@ import com.seoul.ttarawa.util.LocationUtil
 import io.nlopez.smartlocation.SmartLocation
 import io.nlopez.smartlocation.location.LocationProvider
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider
+import org.jetbrains.anko.support.v4.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -85,6 +87,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         val formatDate = SimpleDateFormat("yyyyMMdd", Locale.KOREA)
         val formatTime = SimpleDateFormat("HHmm", Locale.KOREA)
         val cal: Calendar = Calendar.getInstance()
+        // 30 분 전 시간을 받기 위함
+        cal.add(Calendar.MINUTE, -30)
 
         val currentDate: String = formatDate.format(cal.time)
         val currentTime: String = formatTime.format(cal.time)
@@ -95,13 +99,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     fun setWeatherView(ptyValue: Int, skyValue: Int) {
         if (ptyValue == 0 && skyValue == 1)
-            binding.txtWeather.setText("사용자님 어디가기 좋은 날씨네요!")
+            binding.txtWeather.text = "사용자님 어디가기 좋은 날씨네요!"
         else if (ptyValue == 0 && (skyValue == 3 || skyValue == 4))
-            binding.txtWeather.setText("사용자님 구름이 많은 날씨네요!")
+            binding.txtWeather.text = "사용자님 구름이 많은 날씨네요!"
         else if (ptyValue == 1 || ptyValue == 2 || ptyValue == 4)
-            binding.txtWeather.setText("사용자님 비가 오고 있어요! 우산 꼭 챙기세요!")
+            binding.txtWeather.text = "사용자님 비가 오고 있어요! 우산 꼭 챙기세요!"
         else if (ptyValue == 3)
-            binding.txtWeather.setText("사용자님 눈이 오고 있어요! 우산 꼭 챙기세요!")
+            binding.txtWeather.text = "사용자님 눈이 오고 있어요! 우산 꼭 챙기세요!"
     }
 
     private fun getWeather(baseDate: String, baseTime: String, nx: Int, ny: Int) {
@@ -116,15 +120,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         )
             .enqueue(object : Callback<WeatherResponse?> {
                 override fun onFailure(call: Call<WeatherResponse?>, t: Throwable) {
-
+                    t.printStackTrace()
                 }
 
                 override fun onResponse(
                     call: Call<WeatherResponse?>,
                     response: Response<WeatherResponse?>
                 ) {
-                    var ptyValue = 0
-                    var skyValue = 0
+                    Timber.e(response.message())
+
+                    toast("abcdedf")
+
+                    var ptyValue = 0.0
+                    var skyValue = 0.0
                     var switch = 0
                     for (i in 0..19) {
                         response.body()?.let {
@@ -139,7 +147,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                         if (switch == 2)
                             break
                     }
-                    setWeatherView(ptyValue, skyValue)
+                    setWeatherView(ptyValue.toInt(), skyValue.toInt())
                 }
             })
     }
