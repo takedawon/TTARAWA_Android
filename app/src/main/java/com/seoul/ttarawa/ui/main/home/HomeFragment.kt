@@ -1,4 +1,4 @@
-package com.seoul.ttarawa.ui.main
+package com.seoul.ttarawa.ui.main.home
 
 import android.os.Bundle
 import android.util.Log

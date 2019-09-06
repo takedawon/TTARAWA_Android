@@ -9,6 +9,7 @@ import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.addFragmentInActivity
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.replaceFragmentInActivity
+import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.map.CalendarActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
