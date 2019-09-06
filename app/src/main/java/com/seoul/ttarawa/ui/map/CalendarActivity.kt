@@ -5,6 +5,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityCalendarBinding
 import com.seoul.ttarawa.ext.click
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 /**
@@ -29,11 +30,13 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
             }
 
             cvCal.setOnDateChangeListener { view, year, month, dayOfMonth ->
-                val msg: String =
-                    year.toString() + "년" + (month + 1).toString() + "월" + dayOfMonth.toString() + "일을 선택하셨습니다."
-                toast(msg)
+                toast("${year}년 ${month + 1}월 ${dayOfMonth}일을 선택하셨습니다.")
 
-                // todo 패스 액티비티 이동
+                val date = "$year${month+1}$dayOfMonth"
+
+                // 패스 액티비티로 이동 및 종료
+                startActivity<PathActivity>(PathActivity.EXTRA_DATE to date)
+                finish()
             }
         }
     }
