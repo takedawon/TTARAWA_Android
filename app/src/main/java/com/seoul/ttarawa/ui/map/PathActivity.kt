@@ -28,5 +28,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"
+        const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"
     }
 }

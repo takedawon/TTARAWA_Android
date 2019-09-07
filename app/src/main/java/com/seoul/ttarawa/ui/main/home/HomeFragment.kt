@@ -7,13 +7,19 @@ import com.gun0912.tedpermission.TedPermission
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
+import com.seoul.ttarawa.data.entity.SuggestRouteModel
+import com.seoul.ttarawa.data.entity.WeatherModel
 import com.seoul.ttarawa.data.remote.response.WeatherResponse
 import com.seoul.ttarawa.databinding.FragmentHomeBinding
+import com.seoul.ttarawa.ext.hide
+import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
+import com.seoul.ttarawa.ui.map.PathActivity
 import com.seoul.ttarawa.util.LocationUtil
 import io.nlopez.smartlocation.SmartLocation
 import io.nlopez.smartlocation.location.LocationProvider
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider
+import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,6 +35,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private val provider: LocationProvider by lazy { createProvider() }
 
+    private val homeAdapter: HomeAdapter by lazy { createHomeAdapter() }
+
     private lateinit var smartLocation: SmartLocation
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,7 +48,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     override fun initView() {
+        initHomeAdapter()
+    }
 
+    private fun initHomeAdapter() {
+        binding.rvHome.adapter = homeAdapter
+    }
+
+    private fun createHomeAdapter(): HomeAdapter =
+        HomeAdapter().apply {
+            setOnClickSuggestRoute { startPathActivityWithSuggestRouteKey(it) }
+        }
+
+    private fun startPathActivityWithSuggestRouteKey(routeKey: String) {
+        startActivity<PathActivity>(PathActivity.EXTRA_SUGGEST_ROUTE_KEY to routeKey)
     }
 
     private fun requestPermission() {
@@ -63,6 +84,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             }
 
             override fun onPermissionGranted() {
+                showProgressBar()
+
                 // 권한 허가시 실행 할 내용
                 smartLocation = SmartLocation.Builder(activity!!).logging(true).build()
 
@@ -98,14 +121,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     fun setWeatherView(ptyValue: Int, skyValue: Int) {
-        if (ptyValue == 0 && skyValue == 1)
-            binding.txtWeather.text = "사용자님 어디가기 좋은 날씨네요!"
+        val text = if (ptyValue == 0 && skyValue == 1)
+            "어디가기 좋은 날씨네요!"
         else if (ptyValue == 0 && (skyValue == 3 || skyValue == 4))
-            binding.txtWeather.text = "사용자님 구름이 많은 날씨네요!"
+            "구름이 많은 날씨네요!"
         else if (ptyValue == 1 || ptyValue == 2 || ptyValue == 4)
-            binding.txtWeather.text = "사용자님 비가 오고 있어요! 우산 꼭 챙기세요!"
-        else if (ptyValue == 3)
-            binding.txtWeather.text = "사용자님 눈이 오고 있어요! 우산 꼭 챙기세요!"
+            "비가 오고 있어요! 우산 꼭 챙기세요!"
+        else
+            "눈이 오고 있어요! 우산 꼭 챙기세요!"
+
+        hideProgressBar()
+
+        // todo 테스트 데이터
+        homeAdapter.replaceAll(
+            listOf(
+                WeatherModel("사용자님", text),
+                SuggestRouteModel(routeKey = "12345678",title = "명륜진사갈비", subTitle = "무한으로 즐겨요", textColor = android.R.color.white, imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"),
+                SuggestRouteModel(routeKey = "12345678",title = "다원이가다해줄거야", subTitle = "ㅎㅎㅎㅎㅎㅎㅎ", textColor = android.R.color.black, imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"),
+                SuggestRouteModel(routeKey = "12345678",title = "야경이 밫나는 밤", subTitle = "오늘 함께 떠나볼까요?", textColor = android.R.color.white, imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"),
+                SuggestRouteModel(routeKey = "12345678",title = "서울 경복궁 코스", subTitle = "가족 나들이 완성!", textColor = android.R.color.black, imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4")
+            )
+        )
     }
 
     private fun getWeather(baseDate: String, baseTime: String, nx: Int, ny: Int) {
@@ -155,6 +191,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     override fun onDestroy() {
         smartLocation.location(provider).stop()
         super.onDestroy()
+    }
+
+
+    private fun showProgressBar() {
+        binding.pbHome.show()
+    }
+
+    private fun hideProgressBar() {
+        binding.pbHome.hide()
     }
 
     companion object {
