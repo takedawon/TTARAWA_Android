@@ -1,6 +1,9 @@
 package com.seoul.ttarawa.ui.main
 
 import android.os.Bundle
+import androidx.annotation.MenuRes
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.seoul.ttarawa.R
@@ -15,9 +18,10 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(
-    R.layout.activity_main
-) {
+class MainActivity :
+    BaseActivity<ActivityMainBinding>(R.layout.activity_main),
+    MainBottomAppBarListener
+{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +35,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
                 setNavigationOnClickListener {
                     openNavigationMenu()
                 }
-
-                replaceMenu(R.menu.menu_main_setting)
-                setOnMenuItemClickListener {
-                    if (it.itemId == R.id.menu_setting) {
-                        replaceFragmentInActivity(R.id.container_main, SettingFragment.newInstance())
-                        return@setOnMenuItemClickListener true
-                    }
-                    return@setOnMenuItemClickListener false
-                }
             }
 
             fabMain click { startActivity<CalendarActivity>() }
@@ -47,6 +42,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         }
 
         addHomeFragment()
+    }
+
+    override fun moveFabCenter() {
+        binding.babMain.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+    }
+
+    override fun moveFabEnd() {
+        binding.babMain.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+    }
+
+    override fun clearMenuBottomAppBar() {
+        binding.babMain.menu.clear()
+    }
+
+    override fun replaceMenuBottomAppBar(@MenuRes menuId: Int) {
+        binding.babMain.replaceMenu(menuId)
+    }
+
+    override fun setOnMenuItemClickListener(listener: Toolbar.OnMenuItemClickListener) {
+        binding.babMain.setOnMenuItemClickListener(listener)
     }
 
     /**

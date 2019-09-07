@@ -1,7 +1,9 @@
 package com.seoul.ttarawa.ui.main.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.seoul.ttarawa.BuildConfig
@@ -12,8 +14,11 @@ import com.seoul.ttarawa.data.entity.WeatherModel
 import com.seoul.ttarawa.data.remote.response.WeatherResponse
 import com.seoul.ttarawa.databinding.FragmentHomeBinding
 import com.seoul.ttarawa.ext.hide
+import com.seoul.ttarawa.ext.replaceInFragment
 import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
+import com.seoul.ttarawa.ui.main.MainBottomAppBarListener
+import com.seoul.ttarawa.ui.main.SettingFragment
 import com.seoul.ttarawa.ui.map.PathActivity
 import com.seoul.ttarawa.util.LocationUtil
 import io.nlopez.smartlocation.SmartLocation
@@ -33,11 +38,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
 
+    private var listener: MainBottomAppBarListener? = null
+
     private val provider: LocationProvider by lazy { createProvider() }
 
     private val homeAdapter: HomeAdapter by lazy { createHomeAdapter() }
 
     private lateinit var smartLocation: SmartLocation
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as? MainBottomAppBarListener
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -48,7 +60,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     override fun initView() {
+        changeBottomAppBar()
         initHomeAdapter()
+    }
+
+    private fun changeBottomAppBar() {
+        listener?.let {
+            it.replaceMenuBottomAppBar(R.menu.menu_main_setting)
+            it.moveFabCenter()
+            it.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { menu ->
+                if (menu.itemId == R.id.menu_setting) {
+                    replaceInFragment(R.id.container_main, SettingFragment.newInstance())
+                    return@OnMenuItemClickListener true
+                }
+                return@OnMenuItemClickListener false
+            })
+        }
     }
 
     private fun initHomeAdapter() {
