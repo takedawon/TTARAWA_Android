@@ -7,6 +7,7 @@ import com.seoul.ttarawa.databinding.ActivityCalendarBinding
 import com.seoul.ttarawa.ext.click
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.util.*
 
 /**
  * 달력 화면
@@ -39,5 +40,10 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
                 finish()
             }
         }
+    }
+
+    fun isPastDay(cal: Calendar): Boolean {
+        val calendar = Calendar.getInstance()
+        return calendar.after(cal)
     }
 }
