@@ -163,10 +163,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         homeAdapter.replaceAll(
             listOf(
                 WeatherModel("사용자님", text),
-                SuggestRouteModel(routeKey = "12345678",title = "명륜진사갈비", subTitle = "무한으로 즐겨요", textColor = android.R.color.white, imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"),
-                SuggestRouteModel(routeKey = "12345678",title = "다원이가다해줄거야", subTitle = "ㅎㅎㅎㅎㅎㅎㅎ", textColor = android.R.color.black, imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"),
-                SuggestRouteModel(routeKey = "12345678",title = "야경이 밫나는 밤", subTitle = "오늘 함께 떠나볼까요?", textColor = android.R.color.white, imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"),
-                SuggestRouteModel(routeKey = "12345678",title = "서울 경복궁 코스", subTitle = "가족 나들이 완성!", textColor = android.R.color.black, imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4")
+                SuggestRouteModel(
+                    routeKey = "12345678",
+                    title = "명륜진사갈비",
+                    subTitle = "무한으로 즐겨요",
+                    textColor = android.R.color.white,
+                    imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"
+                ),
+                SuggestRouteModel(
+                    routeKey = "12345678",
+                    title = "다원이가다해줄거야",
+                    subTitle = "ㅎㅎㅎㅎㅎㅎㅎ",
+                    textColor = android.R.color.black,
+                    imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"
+                ),
+                SuggestRouteModel(
+                    routeKey = "12345678",
+                    title = "야경이 밫나는 밤",
+                    subTitle = "오늘 함께 떠나볼까요?",
+                    textColor = android.R.color.white,
+                    imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"
+                ),
+                SuggestRouteModel(
+                    routeKey = "12345678",
+                    title = "서울 경복궁 코스",
+                    subTitle = "가족 나들이 완성!",
+                    textColor = android.R.color.black,
+                    imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"
+                )
             )
         )
     }
