@@ -29,15 +29,24 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
                 onBackPressed()
                 // overridePendingTransition(R.anim.not_move_activity, R.anim.rightout_activity)
             }
-
+            val calTest=Calendar.getInstance()
+            cvCal.date = calTest.timeInMillis
             cvCal.setOnDateChangeListener { view, year, month, dayOfMonth ->
-                toast("${year}년 ${month + 1}월 ${dayOfMonth}일을 선택하셨습니다.")
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.YEAR,year)
+                calendar.set(Calendar.MONTH,month)
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
 
-                val date = "$year${month+1}$dayOfMonth"
+               if(!isPastDay(calendar)) {
+                   toast("${year}년 ${month + 1}월 ${dayOfMonth}일을 선택하셨습니다.")
+                   val date = "$year${month + 1}$dayOfMonth"
 
-                // 패스 액티비티로 이동 및 종료
-                startActivity<PathActivity>(PathActivity.EXTRA_DATE to date)
-                finish()
+                   // 패스 액티비티로 이동 및 종료
+                   startActivity<PathActivity>(PathActivity.EXTRA_DATE to date)
+                   finish()
+               } else {
+                   toast("이전 날짜는 선택이 불가능합니다.")
+               }
             }
         }
     }
