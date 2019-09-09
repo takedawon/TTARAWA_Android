@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.data.remote.api
 
+import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.data.remote.response.WeatherResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,5 +18,5 @@ interface TmapWalkingApi {
         @Query("endY") endY: String,
         @Query("startName") startName: String,
         @Query("endName") endName: String
-    ): Call<WeatherResponse>
+    ): Call<TmapWalkingResponse>
 }
