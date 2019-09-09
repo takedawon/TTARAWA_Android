@@ -1,6 +1,7 @@
 package com.seoul.ttarawa.ui.map
 
 import android.os.Bundle
+import android.os.SystemClock
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityCalendarBinding
@@ -16,6 +17,7 @@ import java.util.*
 class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
     R.layout.activity_calendar
 ) {
+    private var mLastClickTime:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,10 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
             cvCal.date = today.timeInMillis
 
             cvCal.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return@setOnDateChangeListener
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
                 val chooseCalendar = Calendar.getInstance().apply {
                     set(Calendar.YEAR, year)
                     set(Calendar.MONTH, month)
