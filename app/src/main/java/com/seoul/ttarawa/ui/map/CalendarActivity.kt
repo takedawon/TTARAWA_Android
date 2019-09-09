@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.map
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import com.seoul.ttarawa.R
