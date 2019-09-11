@@ -19,7 +19,7 @@ data class TmapWalkingResponse(
     ) {
         data class Geometry(
             @SerializedName("coordinates")
-            val coordinates: List<Double>,
+            val coordinates: List<Any>,
             @SerializedName("type")
             val type: String
         )
@@ -53,4 +53,5 @@ data class TmapWalkingResponse(
             val turnType: Int
         )
     }
+
 }
