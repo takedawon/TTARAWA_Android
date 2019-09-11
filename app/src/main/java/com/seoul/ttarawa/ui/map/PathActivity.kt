@@ -2,11 +2,13 @@ package com.seoul.ttarawa.ui.map
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.module.NetworkModule
 import net.daum.mf.map.api.*
+import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,20 +24,26 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-
     }
 
     override fun initView() {
         bind {
-            rlPathMap.addView(MapView(this@PathActivity).apply {
+            val mapView = MapView(this@PathActivity)
+            rlPathMap.addView(mapView.apply {
                 isHDMapTileEnabled = true
             })
-            getRoadPath("37.47276907","126.89075388","37.47371341","126.89094828")
+            getRoadPath("37.47276907", "126.89075388", "37.47371341", "126.89094828", mapView)
 
         }
     }
 
-    private fun getRoadPath(startLat:String, startLon:String, endLat:String, endLon:String) {
+    private fun getRoadPath(
+        startLat: String,
+        startLon: String,
+        endLat: String,
+        endLon: String,
+        mapView: MapView
+    ) {
         NetworkModule.tmapWalkingApi.getWalkingPath(
             appKey = "d21dbb20-70b0-4824-8b51-cf3cc6fd8aca",
             version = "1",
@@ -45,50 +53,63 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             startY = startLat,
             endX = endLon,
             endY = endLat
-        ).enqueue(object:Callback<TmapWalkingResponse?> {
+        ).enqueue(object : Callback<TmapWalkingResponse?> {
             override fun onFailure(call: Call<TmapWalkingResponse?>, t: Throwable) {
                 t.printStackTrace()
+                toast("실패")
+                Log.e("경로에러", call.toString())
+                Log.e("경로에러", t.localizedMessage)
+
             }
 
             override fun onResponse(
                 call: Call<TmapWalkingResponse?>,
                 response: Response<TmapWalkingResponse?>
             ) {
-                val mapView = MapView(this@PathActivity)
-                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(
-                    startLon.toDouble(),startLat.toDouble()),true)
+                toast("성공")
+                //Lon,Lat 순으로 입력할 것.
+                mapView.setMapCenterPoint(
+                    MapPoint.mapPointWithGeoCoord(
+                        startLat.toDouble(), startLon.toDouble()
+                    ), true
+                ) // 중심점 이동
 
-                val polyline=MapPolyline()
+                val polyline = MapPolyline()
                 val repo = response.body()
-                val naviPoints= arrayListOf<PointDouble>()
+                val naviPoints = arrayListOf<PointDouble>()
+
+                Log.e("startLat", startLat)
+                Log.e("startLon", startLon)
+                val featuresSize: Int? = response.body()?.features?.size
+                polyline.lineColor = Color.RED // 폴리라인 컬러 지정
+                polyline.addPoint(
+                    MapPoint.mapPointWithGeoCoord(
+                        startLat.toDouble(), startLon.toDouble()
+                    )
+                ) // 시작점 추가
+
+
                 repo?.let {
-                    val featuresSize = it.features.size
-
-
-                    polyline.lineColor = Color.RED
-                    polyline.addPoint(
-                        MapPoint.mapPointWithGeoCoord(
-                            startLat.toDouble(), startLon.toDouble()))
-
-                    for (i in 0 until featuresSize) {
+                    for (i in 0 until featuresSize!!) {
                         val type = repo.features[i].geometry.type
-                        val points: PointDouble
+                        var points: PointDouble
+                        Log.e("테스트: type", type)
                         if (type == "Point") {
                             points = PointDouble(
-                                repo.features[i].geometry.coordinates[1],
-                                repo.features[i].geometry.coordinates[0]
+                                repo.features[i].geometry.coordinates[1] as Double,
+                                repo.features[i].geometry.coordinates[0] as Double
                             )
-                            val marketPoint3 =
-                                MapPoint.mapPointWithGeoCoord(points.lat, points.lon)
-                            naviPoints.add(points)
-                            val marker3 = MapPOIItem() // 마커 생성
-                            marker3.itemName =
-                                repo.features[i].properties.description
-                            marker3.tag = 3
-                            marker3.mapPoint = marketPoint3
-                            marker3.markerType = MapPOIItem.MarkerType.RedPin
 
-                            mapView.addPOIItem(marker3)
+                            val marketPoint3 =
+                                MapPoint.mapPointWithGeoCoord(points.lat,points.lon)
+                            naviPoints.add(points)
+                            val marker5 = MapPOIItem() // 마커 생성
+                            marker5.itemName = repo.features[i].properties.description
+                            marker5.tag = 4
+                            marker5.mapPoint = marketPoint3
+                            marker5.markerType = MapPOIItem.MarkerType.RedPin
+
+                            mapView.addPOIItem(marker5)
 
                             polyline.addPoint(
                                 MapPoint.mapPointWithGeoCoord(
@@ -102,18 +123,35 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                                 val lit = list[k].toString().split(" ".toRegex())
                                     .dropLastWhile({ it.isEmpty() }).toTypedArray()
                                 val lineX =
-                                    java.lang.Double.parseDouble(lit[0].substring(1, lit[0].length - 1))
+                                    java.lang.Double.parseDouble(
+                                        lit[0].substring(
+                                            1,
+                                            lit[0].length - 1
+                                        )
+                                    )
                                 val lineY =
-                                    java.lang.Double.parseDouble(lit[1].substring(0, lit[1].length - 1))
-                                polyline.addPoint(MapPoint.mapPointWithGeoCoord(lineY, lineX))
+                                    java.lang.Double.parseDouble(
+                                        lit[1].substring(
+                                            0,
+                                            lit[1].length - 1
+                                        )
+                                    )
+                                polyline.addPoint(MapPoint.mapPointWithGeoCoord(lineY,lineX))
                             }
                         }
                     }
-                    val padding = 150 // px
-                    val mapPointBounds = MapPointBounds(polyline.mapPoints)
-                    mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
                 }
-        }
+
+                val padding = 150 // px
+                val mapPointBounds = MapPointBounds(polyline.mapPoints)
+                mapView.addPolyline(polyline)
+                mapView.moveCamera(
+                    CameraUpdateFactory.newMapPointBounds(
+                        mapPointBounds,
+                        padding
+                    )
+                )
+            }
         })
     }
 
@@ -124,6 +162,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 }
 
 class PointDouble(lat: Double, lon: Double) {
-    var lat:Double = 0.0
-    var lon:Double = 0.0
+    var lat: Double = lat
+    var lon: Double = lon
 }
