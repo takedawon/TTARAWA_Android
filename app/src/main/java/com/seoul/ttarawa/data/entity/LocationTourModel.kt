@@ -1,4 +1,4 @@
-package com.seoul.ttarawa
+package com.seoul.ttarawa.data.entity
 
 data class LocationTourModel(
     val imgUrl: String,

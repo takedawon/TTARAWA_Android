@@ -1,6 +1,7 @@
 package com.seoul.ttarawa.module
 
 import com.seoul.ttarawa.BuildConfig
+import com.seoul.ttarawa.data.remote.api.LocationBaseTourApi
 import com.seoul.ttarawa.data.remote.api.TmapWalkingApi
 import com.seoul.ttarawa.data.remote.api.WeatherApi
 import okhttp3.OkHttpClient
@@ -15,6 +16,8 @@ object NetworkModule {
     val weatherApi: WeatherApi = createRetrofit("http://newsky2.kma.go.kr/").create(WeatherApi::class.java)
 
     val tmapWalkingApi: TmapWalkingApi = createRetrofit("https://api2.sktelecom.com/").create(TmapWalkingApi::class.java)
+
+    val locationBaseTourApi: LocationBaseTourApi = createRetrofit("http://api.visitkorea.or.kr/").create(LocationBaseTourApi::class.java)
 
     @JvmStatic
     private fun createRetrofit(uri: String) =

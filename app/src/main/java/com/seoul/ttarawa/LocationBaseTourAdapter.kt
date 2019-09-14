@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.seoul.ttarawa.data.entity.LocationTourModel
 
 class LocationBaseTourAdapter : RecyclerView.Adapter<LocationBaseTourAdapter.ViewHolder>() {
-    val items: ArrayList<LocationTourModel> = ArrayList<LocationTourModel>()
+    private val items: ArrayList<LocationTourModel> = ArrayList()
 
     fun addItem(item: LocationTourModel) {
         items.add(item)
@@ -32,10 +33,10 @@ class LocationBaseTourAdapter : RecyclerView.Adapter<LocationBaseTourAdapter.Vie
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageTourPhoto = itemView?.findViewById<ImageView>(R.id.img_tour_photo)
-        private val txtTitle = itemView?.findViewById<TextView>(R.id.txt_title)
-        private val txtAddress = itemView?.findViewById<TextView>(R.id.txt_address)
-        private val txtDistance = itemView?.findViewById<TextView>(R.id.txt_distance)
+        private val imageTourPhoto = itemView.findViewById<ImageView>(R.id.img_tour_photo)
+        private val txtTitle = itemView.findViewById<TextView>(R.id.txt_title)
+        private val txtAddress = itemView.findViewById<TextView>(R.id.txt_address)
+        private val txtDistance = itemView.findViewById<TextView>(R.id.txt_distance)
 
         fun setItem(model: LocationTourModel) {
             Glide.with(itemView).load(model.imgUrl).into(imageTourPhoto)
