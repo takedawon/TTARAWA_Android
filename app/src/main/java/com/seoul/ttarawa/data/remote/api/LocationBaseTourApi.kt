@@ -8,7 +8,7 @@ import retrofit2.Call
 interface LocationBaseTourApi {
     @GET("openapi/service/rest/KorService/locationBasedList")
     fun getLocationBaseTour(
-        @Query("ServiceKey") serviceKey: String,
+        @Query("serviceKey") serviceKey: String,
         @Query("numOfRows") numOfRows: Int,
         @Query("pageNo") pageNo: Int,
         @Query("MobileOS") mobileOS: String,
@@ -19,6 +19,6 @@ interface LocationBaseTourApi {
         @Query("mapY") mapY: String,
         @Query("radius") radius: Int,
         @Query("listYN") listYN: String,
-        @Query("_type") type: String = "json"
+        @Query("_type") _type: String = "json"
     ): Call<LocationBaseTourResponse>
 }
