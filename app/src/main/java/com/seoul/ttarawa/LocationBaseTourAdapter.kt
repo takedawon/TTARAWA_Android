@@ -10,10 +10,11 @@ import com.bumptech.glide.Glide
 import com.seoul.ttarawa.data.entity.LocationTourModel
 
 class LocationBaseTourAdapter : RecyclerView.Adapter<LocationBaseTourAdapter.ViewHolder>() {
-    private val items: ArrayList<LocationTourModel> = ArrayList()
+    private val items: ArrayList<LocationTourModel> = arrayListOf()
 
-    fun addItem(item: LocationTourModel) {
-        items.add(item)
+    fun addItem(item: ArrayList<LocationTourModel>) {
+        items.addAll(item)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
