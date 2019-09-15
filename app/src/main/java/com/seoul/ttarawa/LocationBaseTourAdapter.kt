@@ -18,8 +18,8 @@ class LocationBaseTourAdapter : RecyclerView.Adapter<LocationBaseTourAdapter.Vie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(parent.context).
-            inflate(R.layout.custom_tour_list, parent, false)
+        val view: View =
+            LayoutInflater.from(parent.context).inflate(R.layout.custom_tour_list, parent, false)
 
         return ViewHolder(view)
     }
@@ -40,7 +40,7 @@ class LocationBaseTourAdapter : RecyclerView.Adapter<LocationBaseTourAdapter.Vie
         private val txtDistance = itemView.findViewById<TextView>(R.id.txt_distance)
 
         fun setItem(model: LocationTourModel) {
-            Glide.with(itemView).load(model.imgUrl).into(imageTourPhoto)
+            Glide.with(itemView).load(model.imgUrl).centerCrop().into(imageTourPhoto)
             txtTitle.text = model.title
             txtDistance.text = model.distance
             txtAddress.text = model.address
