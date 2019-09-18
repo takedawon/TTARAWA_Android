@@ -15,4 +15,15 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
+    <style name="CustomChipChoice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/all_selector_chip_bg_color</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/all_selector_chip_text_color</item>
+        <item name="chipIconVisible">true</item>
+        <item name="checkedIconVisible">true</item>
+        <item name="chipIconSize">20dp</item>
+        <item name="iconStartPadding">8dp</item>
+        <item name="android:padding">4dp</item>
+    </style>
 </resources>

@@ -96,4 +96,7 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$stetho_version"
     implementation "com.google.android.gms:play-services-location:$playServices_version"
     implementation files('libs/com.skt.Tmap_1.60.jar')
+
+    // flexBox
+    implementation 'com.google.android:flexbox:1.1.0'
 }

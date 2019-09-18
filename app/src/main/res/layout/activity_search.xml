@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -24,6 +25,94 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_menu_black_24dp" />
 
+            <TextView
+                android:id="@+id/tv_category_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="카테고리"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tb_search" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_category_label"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="영화"
+                    app:checkedIcon="@drawable/search_ic_movie_checked"
+                    app:chipIcon="@drawable/search_ic_movie"
+                    tools:checked="true" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="경유지"
+                    app:checkedIcon="@drawable/search_ic_marker_checked"
+                    app:chipIcon="@drawable/search_ic_marker" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카페"
+                    app:checkedIcon="@drawable/search_ic_cafe_checked"
+                    app:chipIcon="@drawable/search_ic_cafe" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="문화행사"
+                    app:checkedIcon="@drawable/search_ic_hanbok_checked"
+                    app:chipIcon="@drawable/search_ic_hanbok" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관람관"
+                    app:checkedIcon="@drawable/search_ic_museum_checked"
+                    app:chipIcon="@drawable/search_ic_museum" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관광지"
+                    app:checkedIcon="@drawable/search_ic_seoul_tower_checked"
+                    app:chipIcon="@drawable/search_ic_seoul_tower" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="스포츠"
+                    app:checkedIcon="@drawable/search_ic_sports_checked"
+                    app:chipIcon="@drawable/search_ic_sports" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="쇼핑"
+                    app:checkedIcon="@drawable/search_ic_shopping_checked"
+                    app:chipIcon="@drawable/search_ic_shopping" />
+
+            </com.google.android.material.chip.ChipGroup>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_search_text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -33,7 +122,7 @@
                 app:counterEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tb_search">
+                app:layout_constraintTop_toBottomOf="@id/cg_search">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -59,7 +148,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="시작시간"
-                    android:inputType="text"
+                    android:inputType="number"
+                    android:maxLength="4"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -79,7 +169,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="종료시간"
-                    android:inputType="text"
+                    android:inputType="number"
+                    android:maxLength="4"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
