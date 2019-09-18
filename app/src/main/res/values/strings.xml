@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TTARAWA</string>
     <string name="kakao_app_key">82bc076291b2fa4ae672fbba42d20b00</string>
+    <string name="path_actionbar_title">검색</string>
 </resources>
