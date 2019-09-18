@@ -25,6 +25,10 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="no1cx6tkxz" />
+
         <activity android:name=".ui.main.MainActivity">
 
         </activity>
@@ -41,14 +45,16 @@
         </activity>
 
         <activity android:name=".ui.map.CalendarActivity" />
-        <activity android:name=".ui.map.PathActivity" />
-        <activity android:name=".ui.search.SearchActivity">
+        <activity android:name=".ui.map.PathActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.search.SearchActivity">
+
         </activity>
     </application>
 

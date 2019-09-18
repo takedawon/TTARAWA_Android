@@ -11,10 +11,10 @@ interface TmapWalkingApi {
     fun getWalkingPath(
         @Header("appKey") appKey:String,
         @Query("version") version: String,
-        @Query("startX") startX: String,
-        @Query("startY") startY: String,
-        @Query("endX") endX: String,
-        @Query("endY") endY: String,
+        @Query("startX") startX: Double,
+        @Query("startY") startY: Double,
+        @Query("endX") endX: Double,
+        @Query("endY") endY: Double,
         @Query("startName") startName: String,
         @Query("endName") endName: String
     ): Call<TmapWalkingResponse>

@@ -99,4 +99,7 @@ dependencies {
 
     // flexBox
     implementation 'com.google.android:flexbox:1.1.0'
+
+    // naver
+    implementation 'com.naver.maps:map-sdk:3.5.0'
 }

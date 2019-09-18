@@ -11,14 +11,24 @@
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray">
 
-            <FrameLayout
-                android:id="@+id/fl_path_map"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+            <fragment
+                android:id="@+id/map_container"
+                android:name="com.naver.maps.map.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            <FrameLayout
+                            android:id="@+id/fl_path_map"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

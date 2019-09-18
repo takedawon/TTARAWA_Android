@@ -3,23 +3,39 @@ package com.seoul.ttarawa.ui.map
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.overlay.PathOverlay
+import com.naver.maps.map.util.MarkerIcons
+import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.module.NetworkModule
-import net.daum.mf.map.api.*
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import java.util.*
 
 /**
  * 지도 + 경로
  */
 class PathActivity : BaseActivity<ActivityPathBinding>(
-    com.seoul.ttarawa.R.layout.activity_path
-) {
+    R.layout.activity_path
+), OnMapReadyCallback {
+
+    private var naverMap: NaverMap? = null
+    private val latLngList = LinkedList<List<LatLng>>()
+    private val pathOverlayList = LinkedList<PathOverlay>()
+    private val markerList = LinkedList<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,22 +43,42 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     override fun initView() {
-        bind {
-            val mapView = MapView(this@PathActivity)
-            flPathMap.addView(mapView.apply {
-                isHDMapTileEnabled = true
-            })
-            getRoadPath("37.47276907", "126.89075388", "37.47371341", "126.89094828", mapView)
+        initMapFragment()
+    }
 
+    private fun initMapFragment() {
+        var mapFragment = supportFragmentManager.findFragmentById(R.id.map_container) as? MapFragment
+        if (mapFragment == null) {
+            mapFragment = MapFragment.newInstance()
+            supportFragmentManager.beginTransaction().add(R.id.map_container, mapFragment).commit()
         }
+        mapFragment?.getMapAsync(this@PathActivity)
+
+        getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828)
+
+        getRoadPath(37.47371341, 126.89094828, 37.48371341, 126.89575388)
+    }
+
+    override fun onMapReady(naverMap: NaverMap) {
+        this.naverMap = naverMap
+
+        naverMap.apply {
+            setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRANSIT, true)
+            isIndoorEnabled = true
+            setContentPadding(0, 0, 0, 250)
+        }
+
+        naverMap.uiSettings.apply {
+            isIndoorLevelPickerEnabled = true
+        }
+
     }
 
     private fun getRoadPath(
-        startLat: String,
-        startLon: String,
-        endLat: String,
-        endLon: String,
-        mapView: MapView
+        startLat: Double,
+        startLon: Double,
+        endLat: Double,
+        endLon: Double
     ) {
         NetworkModule.tmapWalkingApi.getWalkingPath(
             appKey = "d21dbb20-70b0-4824-8b51-cf3cc6fd8aca",
@@ -67,85 +103,114 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                 response: Response<TmapWalkingResponse?>
             ) {
                 toast("성공")
-                //Lon,Lat 순으로 입력할 것.
-                mapView.setMapCenterPoint(
-                    MapPoint.mapPointWithGeoCoord(
-                        startLat.toDouble(), startLon.toDouble()
-                    ), true
-                ) // 중심점 이동
 
-                val polyline = MapPolyline()
-                val repo = response.body()
-                val naviPoints = arrayListOf<PointDouble>()
+                response.body()?.let {
 
-                Log.e("startLat", startLat)
-                Log.e("startLon", startLon)
-                val featuresSize = response.body()?.features?.size ?: 0
-                polyline.lineColor = Color.RED // 폴리라인 컬러 지정
-                polyline.addPoint(
-                    MapPoint.mapPointWithGeoCoord(
-                        startLat.toDouble(), startLon.toDouble()
-                    )
-                ) // 시작점 추가
+                    val startLatLng = LatLng(startLat, startLon)
+                    naverMap?.moveCamera(CameraUpdate.scrollTo(startLatLng))
 
-                repo?.let {
-                    for (i in 0 until featuresSize) {
-                        val type = repo.features[i].geometry.type
-                        Log.e("테스트: type", type)
+                    if (latLngList.isEmpty()) {
+                        addMarkerInMap(startLatLng, "시작")
+                    }
 
-                        if (type == "Point") {
-                            val points = PointDouble(
-                                repo.features[i].geometry.coordinates[1] as Double,
-                                repo.features[i].geometry.coordinates[0] as Double
-                            )
+                    val latLngs = mutableListOf<LatLng>()
+                    latLngs.add(startLatLng)
 
-                            val marketPoint3 =
-                                MapPoint.mapPointWithGeoCoord(points.lat, points.lon)
-                            naviPoints.add(points)
-                            val marker5 = MapPOIItem() // 마커 생성
-                            marker5.itemName = repo.features[i].properties.description
-                            marker5.tag = 4
-                            marker5.mapPoint = marketPoint3
-                            marker5.markerType = MapPOIItem.MarkerType.RedPin
+                    for (feature in it.features) {
+                        val geometry = feature.geometry
+                        Log.e("테스트: type", geometry.type)
 
-                            mapView.addPOIItem(marker5)
-
-                            polyline.addPoint(MapPoint.mapPointWithGeoCoord(points.lat, points.lon))
-
-                        } else if (type == "LineString") {
-                            val list = repo.features[i].geometry.coordinates
-                            for (k in list.indices) { // k
-                                val lit = list[k].toString().split(" ".toRegex())
-                                    .dropLastWhile { it.isEmpty() }.toTypedArray()
-                                val lineX = lit[1].substring(0, lit[1].length - 1).toDouble()
-                                val lineY = lit[0].substring(1, lit[0].length - 1).toDouble()
-
-                                polyline.addPoint(MapPoint.mapPointWithGeoCoord(lineX, lineY))
+                        if (geometry.type == "LineString") {
+                            val list = geometry.coordinates
+                            for (j in list.indices) { // j
+                                val x = (list[j] as List<*>)[1].toString().toDouble()
+                                val y = (list[j] as List<*>)[0].toString().toDouble()
+                                latLngs.add(LatLng(x, y))
                             }
                         }
                     }
-                }
 
-                val padding = 150 // px
-                val mapPointBounds = MapPointBounds(polyline.mapPoints)
-                mapView.addPolyline(polyline)
-                mapView.moveCamera(
-                    CameraUpdateFactory.newMapPointBounds(
-                        mapPointBounds,
-                        padding
-                    )
-                )
+                    val endLatLng = LatLng(endLat, endLon)
+                    addMarkerInMap(endLatLng, "종료")
+
+                    latLngs.add(endLatLng)
+
+                    addPathLineInMap(latLngs)
+                    moveCameraCenterFromLatLngList()
+                }
             }
         })
+    }
+
+    private fun moveCameraCenterFromLatLngList() {
+        naverMap?.moveCamera(
+            CameraUpdate.fitBounds(
+                LatLngBounds.Builder().include(latLngList.flatten()).build(),
+                400, 400, 400, 400
+            )
+        )
+    }
+
+    private fun addPathLineInMap(latLngs: List<LatLng>) {
+        val pathOverlay = PathOverlay().apply {
+            // 경로
+            coords = latLngs
+            // 두께
+            width = 30
+            // 테두리
+            outlineWidth = 5
+            outlineColor = ContextCompat.getColor(this@PathActivity, R.color.colorAccent)
+            // 라인 색
+            color = Color.GREEN
+            // 라인 패턴
+            patternImage = OverlayImage.fromResource(R.drawable.path_ic_arrow_24dp)
+            patternInterval = 50
+            // 세팅
+            map = naverMap
+        }
+        latLngList.add(latLngs)
+        pathOverlayList.add(pathOverlay)
+    }
+
+    private fun clearAllPathLine() {
+        pathOverlayList.forEach { it.map = null }
+        pathOverlayList.clear()
+        latLngList.clear()
+    }
+
+
+    private fun clearPathLineInMap(position: Int) {
+        pathOverlayList[position].map = null
+        latLngList.remove(latLngList[position])
+        pathOverlayList.remove(pathOverlayList[position])
+    }
+
+    private fun addMarkerInMap(latLng: LatLng, captionText: String) {
+        val marker = Marker(latLng)
+        markerList.add(marker)
+
+        marker.apply {
+            map = naverMap
+            this.captionText = captionText
+            // icon = OverlayImage.fromResource(R.drawable.search_ic_movie_checked)
+            icon = MarkerIcons.GREEN
+            iconTintColor = Color.RED
+        }
+    }
+
+    private fun clearAllMarker() {
+        markerList.forEach { it.map = null }
+        markerList.clear()
+    }
+
+
+    private fun clearMarkerInMap(position: Int) {
+        markerList[position].map = null
+        markerList.remove(markerList[position])
     }
 
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"
         const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"
     }
-}
-
-class PointDouble(lat: Double, lon: Double) {
-    var lat: Double = lat
-    var lon: Double = lon
 }
