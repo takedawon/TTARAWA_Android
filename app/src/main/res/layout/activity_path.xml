@@ -9,11 +9,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
-            >
+            android:background="@android:color/darker_gray">
 
-            <RelativeLayout
-                android:id="@+id/rl_path_map"
+            <FrameLayout
+                android:id="@+id/fl_path_map"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -23,13 +22,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <View
+            android:id="@+id/v_path_shadow_above_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:background="@drawable/path_bg_bottom_sheet_shadow"
+            app:layout_anchor="@id/cl_path_bottom_sheet" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_path_bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ic_path_bottom_sheet_background"
+            android:padding="20dp"
             app:behavior_hideable="false"
             app:behavior_peekHeight="56dp"
-            android:padding="20dp"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <TextView
