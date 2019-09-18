@@ -19,7 +19,7 @@ import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.main.MainBottomAppBarListener
 import com.seoul.ttarawa.ui.main.SettingFragment
-import com.seoul.ttarawa.ui.map.PathActivity
+import com.seoul.ttarawa.ui.path.PathActivity
 import com.seoul.ttarawa.util.LocationUtil
 import io.nlopez.smartlocation.SmartLocation
 import io.nlopez.smartlocation.location.LocationProvider

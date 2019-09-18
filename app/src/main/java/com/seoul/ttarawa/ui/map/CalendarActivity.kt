@@ -1,12 +1,12 @@
 package com.seoul.ttarawa.ui.map
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityCalendarBinding
 import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ui.path.PathActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.util.*
