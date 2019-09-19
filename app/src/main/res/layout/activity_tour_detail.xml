@@ -5,17 +5,90 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ui.search.TourDetailActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cal_back"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="#00ff0000"
+                android:drawableStart="@drawable/ic_arrow_back_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="120dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="상세정보"
+                android:textColor="#000"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.017"
+                app:layout_constraintStart_toEndOf="@+id/btn_cal_back"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3BEBEBE"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/tour_detail_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="260dp"
             android:orientation="horizontal"
-            android:background="#BABABD"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
+
+        </androidx.viewpager2.widget.ViewPager2>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D3BEBEBE"
+            app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager"
+            app:layout_constraintBottom_toTopOf="@+id/layout_tour_detail_content"/>
+
+        <LinearLayout
+            android:id="@+id/layout_tour_detail_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="건강서울페스티벌 2019"
+                android:textColor="#242424"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직접 운영/상담하는 부스(어린이를 위한 약사 직업체험교육, 뷰티, 비타민 안내등)와 약과 관련된 다양한 프로그램이 운영되는 축제이다. 약사와 시민간의 소통 및 시민건강증진을 위해 마련된 축제이며, 누구나 참여가능하다."/>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

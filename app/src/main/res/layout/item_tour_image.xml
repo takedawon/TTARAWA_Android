@@ -15,7 +15,7 @@
         android:id="@+id/img_tour_detail_image"
         photoUrl="@{imageUrl}"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="260dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 </LinearLayout>

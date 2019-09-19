@@ -15,8 +15,8 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
 
     override fun initView() {
         val url: ArrayList<String> = ArrayList()
-        url.add("https://avatars2.githubusercontent.com/u/44185071?s=460&v=4")
-
+        url.add("http://tong.visitkorea.or.kr/cms/resource/04/2613904_image2_1.jpg")
+        url.add("http://tong.visitkorea.or.kr/cms/resource/04/2613904_image2_1.jpg")
         val adapter = TourImageAdapter()
         bind {
             tourDetailViewPager.adapter = adapter

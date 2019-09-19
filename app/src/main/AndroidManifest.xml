@@ -20,21 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.search.TourDetailActivity">
-
-        </activity>
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="no1cx6tkxz" />
-
-        <activity android:name=".ui.main.MainActivity">
-
-        </activity>
 
         <activity
             android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"
@@ -46,8 +37,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.map.CalendarActivity" />
-        <activity android:name=".ui.path.PathActivity">
+
+        <activity android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.search.TourDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -55,6 +47,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.map.CalendarActivity" />
+        <activity android:name=".ui.path.PathActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>
     </application>
 
