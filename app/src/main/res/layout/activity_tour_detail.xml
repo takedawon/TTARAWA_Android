@@ -58,12 +58,14 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
 
         </androidx.viewpager2.widget.ViewPager2>
+
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#D3BEBEBE"
-            app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager"
-            app:layout_constraintBottom_toTopOf="@+id/layout_tour_detail_content"/>
+            app:layout_constraintBottom_toTopOf="@+id/layout_tour_detail_content"
+            app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager" />
 
         <LinearLayout
             android:id="@+id/layout_tour_detail_content"
@@ -89,6 +91,17 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:text="올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직접 운영/상담하는 부스(어린이를 위한 약사 직업체험교육, 뷰티, 비타민 안내등)와 약과 관련된 다양한 프로그램이 운영되는 축제이다. 약사와 시민간의 소통 및 시민건강증진을 위해 마련된 축제이며, 누구나 참여가능하다."/>
+
+            <Button
+                android:id="@+id/btn_tour_detail_ok"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="ggggg"
+                android:textColor="#000"
+                android:background="@drawable/activity_create_button"/>
+
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
