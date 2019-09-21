@@ -1,10 +1,7 @@
 package com.seoul.ttarawa.module
 
 import com.seoul.ttarawa.BuildConfig
-import com.seoul.ttarawa.data.remote.api.KobisApi
-import com.seoul.ttarawa.data.remote.api.LocationBaseTourApi
-import com.seoul.ttarawa.data.remote.api.TmapWalkingApi
-import com.seoul.ttarawa.data.remote.api.WeatherApi
+import com.seoul.ttarawa.data.remote.api.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,6 +16,8 @@ object NetworkModule {
     val tmapWalkingApi: TmapWalkingApi = createRetrofit("https://api2.sktelecom.com/").create(TmapWalkingApi::class.java)
 
     val locationBaseTourApi: LocationBaseTourApi = createRetrofit("http://api.visitkorea.or.kr/").create(LocationBaseTourApi::class.java)
+
+    val tourImageApi: TourImageApi = createRetrofit("http://api.visitkorea.or.kr/").create(TourImageApi::class.java)
 
     val kobisApi: KobisApi = createRetrofit("http://www.kobis.or.kr/kobisopenapi/webservice/rest/").create(KobisApi::class.java)
 
