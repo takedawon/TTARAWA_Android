@@ -3,6 +3,7 @@ package com.seoul.ttarawa.ui.search
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.view.View
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TourDetailsResponse
@@ -36,6 +37,16 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                 "Y")
         bind {
             txtTourTitle.text=title
+            btnDetailsShow.setOnClickListener {
+                btnDetailsShow.visibility= View.INVISIBLE
+                btnDetailsHide.visibility= View.VISIBLE
+                txtTourDetails.maxLines = Integer.MAX_VALUE
+            }
+            btnDetailsHide.setOnClickListener {
+                btnDetailsHide.visibility = View.INVISIBLE
+                btnDetailsShow.visibility = View.VISIBLE
+                txtTourDetails.maxLines = 6
+            }
         }
     }
 
