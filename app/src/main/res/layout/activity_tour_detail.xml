@@ -66,7 +66,6 @@
             android:background="#D3BEBEBE"
             app:layout_constraintBottom_toTopOf="@+id/layout_tour_detail_content"
             app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager" />
-
         <LinearLayout
             android:id="@+id/layout_tour_detail_content"
             android:layout_width="match_parent"
@@ -75,6 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tour_detail_view_pager">
 
             <TextView
+                android:id="@+id/txt_tour_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

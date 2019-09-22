@@ -25,6 +25,7 @@ class TourViewHolder(
                 layoutLocationTour.setOnClickListener {
                     val intent= Intent(context, TourDetailActivity::class.java)
                     intent.putExtra("contentId", tour.contentID)
+                    intent.putExtra("title", tour.title)
                     context.startActivity(intent)
                 }
             }

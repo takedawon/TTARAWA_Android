@@ -28,11 +28,15 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
     override fun initView() {
         val intent = intent
         val contentId= intent.getIntExtra("contentId",0)
+        val title:String = intent.getStringExtra("title")
         getTourImage(10,
                 1,
                 contentId,
                 "Y",
                 "Y")
+        bind {
+            txtTourTitle.text=title
+        }
     }
 
     private fun getTourImage(
