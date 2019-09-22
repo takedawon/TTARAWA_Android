@@ -10,6 +10,13 @@
         android:layout_height="wrap_content"
         tools:context=".ui.search.TourDetailActivity">
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/grp_tour_details"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="layout_tour_detail_content,tour_detail_view_pager,view"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -82,38 +89,33 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="5dp"
                     android:gravity="center"
-                    android:text="건강서울페스티벌 2019"
+                    tools:text="건강서울페스티벌 2019"
                     android:textColor="#242424"
                     android:textSize="30dp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_tour_details"
+                <LinearLayout
+                    android:id="@+id/layout_tour_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:maxLines="6"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text="올해로 7회를 올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직맞하는 2019건강서울페올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직스티벌은 약사가 직접 운영/상담하는 부스(어린이를 위한 약사 직업체험교육, 뷰티, 비타민 안내등)와 약과 관련된 다양한 프로그램이 운영되는 축제이다. 약사와 시민간의 소통 및 시민건강증진을 위해 마련된 축제이며, 누구나 참여가능하다." />
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/txt_tour_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:maxLines="6"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        tools:text="올해로 7회를 올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직맞하는 2019건강서울페올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직올해로 7회를 맞하는 2019건강서울페스티벌은 약사가 직스티벌은 약사가 직접 운영/상담하는 부스(어린이를 위한 약사 직업체험교육, 뷰티, 비타민 안내등)와 약과 관련된 다양한 프로그램이 운영되는 축제이다. 약사와 시민간의 소통 및 시민건강증진을 위해 마련된 축제이며, 누구나 참여가능하다." />
 
-                <ImageButton
-                    android:id="@+id/btn_details_show"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/down_arrow" />
-
-                <ImageButton
-                    android:id="@+id/btn_details_hide"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/up_arrow"
-                    android:visibility="gone" />
-
+                    <ImageButton
+                        android:id="@+id/btn_details_show"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/down_arrow" />
+                </LinearLayout>
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_tour_detail_ok"
                     android:layout_width="match_parent"
@@ -126,7 +128,19 @@
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
+
             </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_tour_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 </layout>

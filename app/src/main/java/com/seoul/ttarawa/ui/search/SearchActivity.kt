@@ -167,7 +167,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                 } else {
                                     tourItem.dist.toString() + "m"
                                 },
-                                contentID = tourItem.contentid
+                                contentID = tourItem.contentid,
+                                mapX = tourItem.mapx,
+                                mapY = tourItem.mapy
                             )
                         }
                     )

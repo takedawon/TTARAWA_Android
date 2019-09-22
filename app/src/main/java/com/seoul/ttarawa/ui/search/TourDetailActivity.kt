@@ -1,14 +1,18 @@
 package com.seoul.ttarawa.ui.search
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.view.View
+import android.view.View.VISIBLE
 import com.seoul.ttarawa.BuildConfig
+import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TourDetailsResponse
 import com.seoul.ttarawa.data.remote.response.TourImageResponse
 import com.seoul.ttarawa.databinding.ActivityTourDetailBinding
+import com.seoul.ttarawa.ext.hide
+import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,50 +21,55 @@ import java.net.URLDecoder
 
 
 class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
-    com.seoul.ttarawa.R.layout.activity_tour_detail
+    R.layout.activity_tour_detail
 ) {
     private lateinit var url: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showProgressBar()
         initView()
+        val contentId= intent.getIntExtra("contentId",0)
+        getTourImage(10,
+            1,
+            contentId,
+            "Y",
+            "Y")
     }
 
     override fun initView() {
-        val intent = intent
-        val contentId= intent.getIntExtra("contentId",0)
+        var swit = true
         val title:String = intent.getStringExtra("title")
-        var swit:Boolean = true
-        getTourImage(10,
-                1,
-                contentId,
-                "Y",
-                "Y")
         bind {
             txtTourTitle.text=title
-            txtTourDetails.setOnClickListener {
-                if(swit) {
-                    btnDetailsShow.visibility= View.INVISIBLE
-                    btnDetailsHide.visibility= View.VISIBLE
-                    txtTourDetails.maxLines = Integer.MAX_VALUE
-                    swit = false
+            layoutTourDetails.setOnClickListener {
+                swit = if(swit) {
+                    setDetailsViewShow()
+                    false
                 } else {
-                    btnDetailsHide.visibility = View.INVISIBLE
-                    btnDetailsShow.visibility = View.VISIBLE
-                    txtTourDetails.maxLines = 6
-                    swit = true
+                    setDetailsViewHide()
+                    true
                 }
             }
-            btnDetailsShow.setOnClickListener {
-                btnDetailsShow.visibility= View.INVISIBLE
-                btnDetailsHide.visibility= View.VISIBLE
-                txtTourDetails.maxLines = Integer.MAX_VALUE
+            btnTourDetailOk.setOnClickListener{
+                val intentSearch = Intent(this@TourDetailActivity, SearchActivity::class.java)
+                intentSearch.putExtra("mapX", intent.getDoubleArrayExtra("mapX"))
+                intentSearch.putExtra("mapY", intent.getDoubleArrayExtra("mapY"))
+                startActivity(intentSearch)
             }
-            btnDetailsHide.setOnClickListener {
-                btnDetailsHide.visibility = View.INVISIBLE
-                btnDetailsShow.visibility = View.VISIBLE
-                txtTourDetails.maxLines = 6
-            }
+        }
+    }
+
+    private fun setDetailsViewShow() {
+        bind{
+            btnDetailsShow.setImageResource(R.drawable.up_arrow)
+            txtTourDetails.maxLines = Integer.MAX_VALUE
+        }
+    }
+    private fun setDetailsViewHide() {
+        bind {
+            btnDetailsShow.setImageResource(R.drawable.down_arrow)
+            txtTourDetails.maxLines = 6
         }
     }
 
@@ -136,6 +145,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                         txtTourDetails.text = str.htmlToString().replace("\n","")
                     }
                 }
+                hideProgressBar()
             }
         })
     }
@@ -145,6 +155,17 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
         } else {
             return Html.fromHtml(this).toString()
+        }
+    }
+
+    private fun showProgressBar() {
+        binding.pbTourDetails.show()
+    }
+
+    private fun hideProgressBar() {
+        bind {
+            pbTourDetails.hide()
+            grpTourDetails.visibility = VISIBLE
         }
     }
 }
