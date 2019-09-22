@@ -5,5 +5,7 @@ data class LocationTourModel(
     val title: String,
     val address: String,
     val distance: String,
-    val contentID: Int
+    val contentID: Int,
+    val mapX:Double,
+    val mapY:Double
 )
