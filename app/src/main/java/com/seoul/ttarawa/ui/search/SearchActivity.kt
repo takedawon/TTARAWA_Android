@@ -31,7 +31,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
 
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
-    private val searchAdapter = SearchAdapter()
+    private val searchAdapter = SearchAdapter(this@SearchActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

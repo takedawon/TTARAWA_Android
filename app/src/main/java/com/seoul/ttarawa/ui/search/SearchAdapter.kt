@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.search
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,7 +10,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.ui.search.veiwholder.TourViewHolder
 
-class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter(val context:Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val list = mutableListOf<Any>()
 
@@ -46,7 +47,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_TOUR -> {
-                (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel)
+                (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel,context)
             }
             else -> {
             }

@@ -30,6 +30,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             tourDetailViewPager.adapter = adapter
         }
         adapter.replaceAll(url)
+        getTourImage(1,1,2613900,"Y","Y")
     }
 
     private fun getTourImage(numOfRows:Int,

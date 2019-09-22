@@ -40,6 +40,10 @@
 
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.search.TourDetailActivity">
+        </activity>
+        <activity android:name=".ui.map.CalendarActivity" />
+        <activity android:name=".ui.path.PathActivity"/>
+        <activity android:name=".ui.search.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -47,9 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.map.CalendarActivity" />
-        <activity android:name=".ui.path.PathActivity"/>
-        <activity android:name=".ui.search.SearchActivity"/>
     </application>
 
 </manifest>
