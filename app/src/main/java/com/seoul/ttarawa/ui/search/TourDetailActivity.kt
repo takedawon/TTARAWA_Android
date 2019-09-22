@@ -30,6 +30,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
         val intent = intent
         val contentId= intent.getIntExtra("contentId",0)
         val title:String = intent.getStringExtra("title")
+        var swit:Boolean = true
         getTourImage(10,
                 1,
                 contentId,
@@ -37,6 +38,19 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                 "Y")
         bind {
             txtTourTitle.text=title
+            txtTourDetails.setOnClickListener {
+                if(swit) {
+                    btnDetailsShow.visibility= View.INVISIBLE
+                    btnDetailsHide.visibility= View.VISIBLE
+                    txtTourDetails.maxLines = Integer.MAX_VALUE
+                    swit = false
+                } else {
+                    btnDetailsHide.visibility = View.INVISIBLE
+                    btnDetailsShow.visibility = View.VISIBLE
+                    txtTourDetails.maxLines = 6
+                    swit = true
+                }
+            }
             btnDetailsShow.setOnClickListener {
                 btnDetailsShow.visibility= View.INVISIBLE
                 btnDetailsHide.visibility= View.VISIBLE
