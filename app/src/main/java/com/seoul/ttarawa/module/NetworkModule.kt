@@ -19,6 +19,8 @@ object NetworkModule {
 
     val tourImageApi: TourImageApi = createRetrofit("http://api.visitkorea.or.kr/").create(TourImageApi::class.java)
 
+    val tourDetailsApi: TourDetailsApi = createRetrofit("http://api.visitkorea.or.kr/").create(TourDetailsApi::class.java)
+
     val kobisApi: KobisApi = createRetrofit("http://www.kobis.or.kr/kobisopenapi/webservice/rest/").create(KobisApi::class.java)
 
     @JvmStatic

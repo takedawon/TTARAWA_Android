@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.data.remote.api
 
+import com.seoul.ttarawa.data.remote.response.TourDetailsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,5 +16,5 @@ interface TourDetailsApi {
         @Query("contentId") contentId:Int,
         @Query("contentTypeId") contentTypeId:Int,
         @Query("_type") _type:String
-    ): Call<TourDetailsApi>
+    ): Call<TourDetailsResponse>
 }
