@@ -16,36 +16,39 @@ import javax.security.auth.callback.Callback
 class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
     R.layout.activity_tour_detail
 ) {
+    private lateinit var url: ArrayList<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
     }
 
     override fun initView() {
-        val url: ArrayList<String> = ArrayList()
-        url.add("http://tong.visitkorea.or.kr/cms/resource/04/2613904_image2_1.jpg")
-        url.add("http://tong.visitkorea.or.kr/cms/resource/04/2613904_image2_1.jpg")
-        val adapter = TourImageAdapter()
-        bind {
-            tourDetailViewPager.adapter = adapter
-        }
-        adapter.replaceAll(url)
-        getTourImage(1,1,2613900,"Y","Y")
+        val intent = intent
+        val contentId= intent.getIntExtra("contentId",0)
+        getTourImage(10,
+                1,
+                contentId,
+                "Y",
+                "Y")
     }
 
-    private fun getTourImage(numOfRows:Int,
-                             pageNo:Int,
-                             contentId:Int,
-                             imageYN:String,
-                             subImageYN:String) {
+    private fun getTourImage(
+        numOfRows: Int,
+        pageNo: Int,
+        contentId: Int,
+        imageYN: String,
+        subImageYN: String
+    ) {
+        val image: ArrayList<String> = ArrayList()
         NetworkModule.tourImageApi.getTourImage(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
             numOfRows = numOfRows,
             pageNo = pageNo,
-            mobileOS="AND",
+            mobileOS = "AND",
             mobileApp = "TARRAWA",
             contentId = contentId,
-            imageYN=imageYN,
+            imageYN = imageYN,
             subImageYN = subImageYN,
             _type = "json"
         ).enqueue(object : retrofit2.Callback<TourImageResponse> {
@@ -59,7 +62,16 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 response.body()?.let {
-                    Log.e("테스트", it.response.body.toString());
+                    val num=it.response.body.totalCount
+                    for (i in 0 until num) {
+                        image.add(it.response.body.items.item[i].smallimageurl)
+                    }
+                }
+
+                val adapter = TourImageAdapter()
+                adapter.replaceAll(image)
+                bind {
+                    tourDetailViewPager.adapter = adapter
                 }
             }
         })

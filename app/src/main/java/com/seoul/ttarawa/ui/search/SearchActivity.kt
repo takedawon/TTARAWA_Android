@@ -166,7 +166,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                     String.format("%.1f", (tourItem.dist / 1000.0)) + "km"
                                 } else {
                                     tourItem.dist.toString() + "m"
-                                }
+                                },
+                                contentID = tourItem.contentid
                             )
                         }
                     )
