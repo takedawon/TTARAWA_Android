@@ -45,7 +45,6 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
     override fun initView() {
         var swit = true
         val title:String = intent.getStringExtra("title")
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         val sDate = intent.getIntExtra("sDate",0)
         val eDate = intent.getIntExtra("eDate",0)
