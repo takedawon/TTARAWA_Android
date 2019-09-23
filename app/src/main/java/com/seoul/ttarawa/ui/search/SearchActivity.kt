@@ -9,6 +9,7 @@ import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.LocationTourModel
+import com.seoul.ttarawa.data.remote.response.EventDetailsResponse
 import com.seoul.ttarawa.data.remote.response.LocationBaseTourResponse
 import com.seoul.ttarawa.databinding.ActivitySearchBinding
 import com.seoul.ttarawa.ext.hide
@@ -102,6 +103,38 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
 
     private fun hideProgressBar() {
         binding.pbTour.hide()
+    }
+
+    private fun getEventDetailsList(
+        numOfRows:Int,
+        pageNo: Int,
+        arrange:String,
+        eventStartDate:Int,
+        eventEndDate:String
+    ) {
+        NetworkModule.eventDetailsApi.getEventDetail(
+            serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
+            numOfRows=numOfRows,
+            pageNo=pageNo,
+            MobileOS="AND",
+            MobileApp="TARRAWA",
+            arrange=arrange,
+            listYN="Y",
+            eventStartDate=eventStartDate,
+            eventEndDate=eventEndDate,
+            _type = "json"
+        ).enqueue(object : Callback<EventDetailsResponse> {
+            override fun onFailure(call: Call<EventDetailsResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+            override fun onResponse(
+                call: Call<EventDetailsResponse>,
+                response: Response<EventDetailsResponse>
+            ) {
+
+                }
+        })
     }
 
     /**
