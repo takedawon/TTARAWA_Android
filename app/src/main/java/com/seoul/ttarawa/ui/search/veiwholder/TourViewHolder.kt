@@ -20,7 +20,7 @@ class TourViewHolder(
             tour?.let { tour ->
                 Glide.with(itemView).load(tour.imgUrl).centerCrop().into(imgTourPhoto)
                 txtTitle.text = tour.title
-                txtDistance.text = tour.distance
+                txtDistance.text = ""
                 txtAddress.text = tour.address
                 layoutLocationTour.setOnClickListener {
                     val intent= Intent(context, TourDetailActivity::class.java)

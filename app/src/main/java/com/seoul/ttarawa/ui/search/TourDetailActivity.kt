@@ -104,7 +104,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                 response.body()?.let {
                     val num=it.response.body.totalCount
                     for (i in 0 until num) {
-                        image.add(it.response.body.items.item[i].smallimageurl)
+                        image.add(it.response.body.items.item[i].originimgurl)
                     }
                 }
 
@@ -114,7 +114,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                     tourDetailViewPager.adapter = adapter
                 }
 
-                getTourDetails(2,1,contentId,15)
+                getTourDetails(1,1,contentId,15)
             }
         })
     }
@@ -141,7 +141,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
 
                 bind {
                     response.body()?.let{
-                        var str:String = it.response.body.items.item[0].infotext
+                        var str:String = it.response.body.items.item.infotext
                         txtTourDetails.text = str.htmlToString().replace("\n","")
                     }
                 }

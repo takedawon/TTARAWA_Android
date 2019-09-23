@@ -57,7 +57,7 @@ data class EventDetailsResponse(
                     @SerializedName("mapx")
                     val mapx: Double,
                     @SerializedName("mapy")
-                    val mapy: String,
+                    val mapy: Double,
                     @SerializedName("mlevel")
                     val mlevel: Int,
                     @SerializedName("modifiedtime")

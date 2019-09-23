@@ -38,14 +38,21 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         super.onCreate(savedInstanceState)
         initView()
 
-        getLocationBaseTourList(
+        getEventDetailsList(
+            numOfRows = 30,
+            pageNo = 1,
+            arrange = "P",
+            eventStartDate = 20190923,
+            eventEndDate = 20191023
+        )
+        /* getLocationBaseTourList(
             pageNo = 1,
             contentTypeId = 15,
             arrange = "B",
             mapX = "126.981611",
             mapY = "37.568477",
             radius = 5000
-        )
+        )*/
     }
 
     override fun initView() {
@@ -110,7 +117,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         pageNo: Int,
         arrange:String,
         eventStartDate:Int,
-        eventEndDate:String
+        eventEndDate:Int
     ) {
         NetworkModule.eventDetailsApi.getEventDetail(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
@@ -120,11 +127,13 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
             MobileApp="TARRAWA",
             arrange=arrange,
             listYN="Y",
+            areaCode = 1,
             eventStartDate=eventStartDate,
             eventEndDate=eventEndDate,
             _type = "json"
         ).enqueue(object : Callback<EventDetailsResponse> {
             override fun onFailure(call: Call<EventDetailsResponse>, t: Throwable) {
+                hideProgressBar()
                 t.printStackTrace()
             }
 
@@ -132,8 +141,23 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 call: Call<EventDetailsResponse>,
                 response: Response<EventDetailsResponse>
             ) {
+                response.body()?.let {
 
+                    searchAdapter.replaceAll(
+                        it.response.body.items.item
+                            .map { tourItem ->
+                                LocationTourModel(
+                                    imgUrl = tourItem.firstimage,
+                                    title = tourItem.title,
+                                    address = tourItem.addr1,
+                                    contentID = tourItem.contentid,
+                                    mapX = tourItem.mapx,
+                                    mapY = tourItem.mapy
+                                )
+                            }
+                    )
                 }
+            }
         })
     }
 
@@ -184,28 +208,30 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 hideProgressBar()
 
                 response.body()?.let {
+                    /*
                     val defaultPhoto =
-                        "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
+                      "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
 
-                    searchAdapter.replaceAll(
-                        it.response.body.items.item
-                            .sortedBy { it.dist }
-                            .map { tourItem ->
-                            LocationTourModel(
-                                imgUrl = tourItem.firstimage ?: defaultPhoto,
-                                title = tourItem.title,
-                                address = tourItem.addr1,
-                                distance = if (tourItem.dist >= 1000.0) {
-                                    String.format("%.1f", (tourItem.dist / 1000.0)) + "km"
-                                } else {
-                                    tourItem.dist.toString() + "m"
-                                },
-                                contentID = tourItem.contentid,
-                                mapX = tourItem.mapx,
-                                mapY = tourItem.mapy
-                            )
-                        }
-                    )
+                  searchAdapter.replaceAll(
+                      it.response.body.items.item
+                          .sortedBy { it.dist }
+                          .map { tourItem ->
+                          LocationTourModel(
+                              imgUrl = tourItem.firstimage ?: defaultPhoto,
+                              title = tourItem.title,
+                              address = tourItem.addr1,
+                              distance = if (tourItem.dist >= 1000.0) {
+                                  String.format("%.1f", (tourItem.dist / 1000.0)) + "km"
+                              } else {
+                                  tourItem.dist.toString() + "m"
+                              },
+                              contentID = tourItem.contentid,
+                              mapX = tourItem.mapx,
+                              mapY = tourItem.mapy
+                          )
+                      }
+                  )
+                  */
                 }
             }
         })

@@ -15,8 +15,9 @@ interface EventDetailsApi {
         @Query("MobileApp") MobileApp:String,
         @Query("arrange") arrange:String,
         @Query("listYN") listYN:String,
+        @Query("areaCode") areaCode:Int,
         @Query("eventStartDate") eventStartDate:Int,
-        @Query("eventEndDate") eventEndDate:String,
+        @Query("eventEndDate") eventEndDate:Int,
         @Query("_type") _type:String
         ):Call<EventDetailsResponse>
 }

@@ -25,7 +25,7 @@ data class TourDetailsResponse(
         ) {
             data class Items(
                 @SerializedName("item")
-                val item: List<Item>
+                val item: Item
             ) {
                 data class Item(
                     @SerializedName("contentid")
