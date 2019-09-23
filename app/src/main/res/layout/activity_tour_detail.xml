@@ -14,6 +14,7 @@
             android:id="@+id/grp_tour_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:constraint_referenced_ids="layout_tour_detail_content,tour_detail_view_pager,view"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
