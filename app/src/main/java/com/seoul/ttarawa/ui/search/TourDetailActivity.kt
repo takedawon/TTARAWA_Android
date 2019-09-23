@@ -102,7 +102,10 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 response.body()?.let {
-                    val num=it.response.body.totalCount
+                    val num=if(it.response.body.totalCount<numOfRows)
+                        it.response.body.totalCount
+                    else
+                        numOfRows
                     for (i in 0 until num) {
                         image.add(it.response.body.items.item[i].originimgurl)
                     }
