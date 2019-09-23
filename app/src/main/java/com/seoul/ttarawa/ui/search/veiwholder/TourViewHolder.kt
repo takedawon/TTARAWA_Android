@@ -28,6 +28,8 @@ class TourViewHolder(
                     intent.putExtra("title", tour.title)
                     intent.putExtra("mapX",tour.mapX)
                     intent.putExtra("mapY",tour.mapY)
+                    intent.putExtra("sDate",tour.startDate)
+                    intent.putExtra("eDate",tour.endDate)
                     context.startActivity(intent)
                 }
             }

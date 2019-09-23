@@ -12,7 +12,6 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grp_tour_details"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="layout_tour_detail_content,tour_detail_view_pager,view"/>
@@ -87,12 +86,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="5dp"
                     android:gravity="center"
                     tools:text="건강서울페스티벌 2019"
                     android:textColor="#242424"
                     android:textSize="30dp"
                     android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/txt_event_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    tools:text="2019.09.23 ~ 2019.10.23"/>
                 <LinearLayout
                     android:id="@+id/layout_tour_details"
                     android:layout_width="match_parent"

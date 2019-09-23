@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.search
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URLDecoder
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
@@ -37,11 +41,18 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             "Y")
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun initView() {
         var swit = true
         val title:String = intent.getStringExtra("title")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+        val sDate = intent.getIntExtra("sDate",0)
+        val eDate = intent.getIntExtra("eDate",0)
+        val date = getDateToString(sDate) + " ~ " + getDateToString(eDate)
         bind {
             txtTourTitle.text=title
+            txtEventDate.text=date
             layoutTourDetails.setOnClickListener {
                 swit = if(swit) {
                     setDetailsViewShow()
@@ -58,6 +69,14 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                 startActivity(intentSearch)
             }
         }
+    }
+
+    private fun getDateToString(date:Int):String {
+        val stringDate = date.toString()
+        val year = stringDate.substring(0,4) + "-"
+        val month = stringDate.substring(4,6) + "-"
+        val day = stringDate.substring(6,8)
+        return year+month+day
     }
 
     private fun setDetailsViewShow() {
@@ -102,7 +121,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 response.body()?.let {
-                    val num=if(it.response.body.totalCount<numOfRows)
+                    val num= if (numOfRows >= it.response.body.totalCount)
                         it.response.body.totalCount
                     else
                         numOfRows
@@ -144,7 +163,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
 
                 bind {
                     response.body()?.let{
-                        var str:String = it.response.body.items.item.infotext
+                        val str:String = it.response.body.items.item.infotext
                         txtTourDetails.text = str.htmlToString().replace("\n","")
                     }
                 }

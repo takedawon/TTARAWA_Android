@@ -6,5 +6,7 @@ data class LocationTourModel(
     val address: String,
     val contentID: Int,
     val mapX:Double,
-    val mapY:Double
+    val mapY:Double,
+    val startDate:Int,
+    val endDate:Int
 )

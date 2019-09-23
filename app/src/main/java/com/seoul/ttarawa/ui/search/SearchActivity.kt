@@ -152,7 +152,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                     address = tourItem.addr1,
                                     contentID = tourItem.contentid,
                                     mapX = tourItem.mapx,
-                                    mapY = tourItem.mapy
+                                    mapY = tourItem.mapy,
+                                    startDate = tourItem.eventstartdate,
+                                    endDate = tourItem.eventenddate
                                 )
                             }
                     )
