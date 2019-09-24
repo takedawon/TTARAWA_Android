@@ -53,6 +53,7 @@ dependencies {
 
     // firebase
     implementation "com.google.firebase:firebase-core:$firebase_version"
+    implementation "com.google.firebase:firebase-database:$firebase_database_version"
 
     // kakao
 

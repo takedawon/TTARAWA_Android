@@ -7,6 +7,7 @@ buildscript {
         retrofit_version = '2.6.0'
         androidx_version = '1.0.2'
         firebase_version = '17.0.1'
+        firebase_database_version = '16.1.0'
         glide_version = '4.9.0'
         ted_permission_version = '2.2.2'
         anko_version = '0.10.8'

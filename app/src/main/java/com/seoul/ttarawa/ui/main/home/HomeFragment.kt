@@ -38,6 +38,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
 
+
     private var listener: MainBottomAppBarListener? = null
 
     private val provider: LocationProvider by lazy { createProvider() }
@@ -50,6 +51,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         super.onAttach(context)
         listener = context as? MainBottomAppBarListener
     }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
