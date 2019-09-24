@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
@@ -29,7 +30,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 ) {
     private lateinit var database: DatabaseReference
     private var listener: MainBottomAppBarListener? = null
-
     private lateinit var session: SessionCallback
 
     override fun onAttach(context: Context) {
@@ -68,6 +68,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun initView() {
         changeBottomAppBar()
+        database = FirebaseDatabase.getInstance().reference
     }
 
     private fun changeBottomAppBar() {
@@ -174,3 +175,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         }
     }
 }
+
+data class KakaoUserMember(
+    var username: String? = "",
+    var profileImage: String? = "",
+    var thumbnailImage: String? = ""
+)
