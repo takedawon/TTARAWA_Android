@@ -21,7 +21,10 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
+import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.module.NetworkModule
+import com.seoul.ttarawa.ui.search.SearchActivity
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -76,6 +79,10 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
         bind {
             rvPath.adapter = pathAdapter
+
+            fabPathAdd click {
+                startActivity<SearchActivity>()
+            }
 
             // 아이템 제거 버튼을 활성, 비활성화
             cbPathDeleteMode.setOnCheckedChangeListener { _, isChecked ->
