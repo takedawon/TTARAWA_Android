@@ -1,14 +1,15 @@
 package com.seoul.ttarawa.ui.main
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.kakao.auth.AuthType
+import com.google.firebase.database.ValueEventListener
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.network.ErrorResult
@@ -28,7 +29,7 @@ import timber.log.Timber
 class SettingFragment : BaseFragment<FragmentSettingBinding>(
     R.layout.fragment_setting
 ) {
-    private lateinit var database: DatabaseReference
+    private lateinit var database: FirebaseDatabase
     private var listener: MainBottomAppBarListener? = null
     private lateinit var session: SessionCallback
 
@@ -45,7 +46,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         session = SessionCallback()
         if(!Session.getCurrentSession().isOpenable) {
             Session.getCurrentSession().addCallback(session)
-            Session.getCurrentSession().open(AuthType.KAKAO_LOGIN_ALL, this)
             Session.getCurrentSession().checkAndImplicitOpen()
         }
 
@@ -68,7 +68,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun initView() {
         changeBottomAppBar()
-        database = FirebaseDatabase.getInstance().reference
+        database = FirebaseDatabase.getInstance()
     }
 
     private fun changeBottomAppBar() {
@@ -83,7 +83,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         AlertDialog.Builder(activity)
         .setMessage(appendMessage)
         .setPositiveButton(getString(R.string.com_kakao_ok_button)
-        ) { dialog, which ->
+        ) { dialog, _ ->
             UserManagement.requestUnlink(object:UnLinkResponseCallback() {
         override fun onFailure(errorResult:ErrorResult?) {
             Logger.e(errorResult!!.toString())
@@ -103,12 +103,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     })
     dialog.dismiss()
 }
-    .setNegativeButton(getString(R.string.com_kakao_cancel_button),
-        object:DialogInterface.OnClickListener {
-        override fun onClick(dialog:DialogInterface, which:Int) {
-        dialog.dismiss()
-        }
-        }).show()
+    .setNegativeButton(getString(R.string.com_kakao_cancel_button)
+    ) { dialog, _ -> dialog.dismiss() }.show()
 
         }
 
@@ -116,7 +112,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         Session.getCurrentSession().removeCallback(session)
         super.onDestroyView()
 }
+/*
 
+ */
     private inner class SessionCallback : ISessionCallback {
 
         override fun onSessionOpened() {
@@ -133,7 +131,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         }
 
         fun requestMe() {
-
             UserManagement.requestMe(object : MeResponseCallback() {
                 // 세션 오픈 실패, 세션이 삭제된 경우
                 override fun onSessionClosed(errorResult: ErrorResult) {
@@ -147,17 +144,29 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
                 //사용자 정보 요청 성공 : 사용자 정보를 리턴
                 override fun onSuccess(userProfile: UserProfile) {
-                    Log.e("SessionCallback :: ", "onSuccess")
+                    val myRef = database.getReference("USER")
+                    val id = userProfile.id.toString()
+                    var swit=true
+                    val postListener = object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for(a in dataSnapshot.children)
+                                if(a.key==id)
+                                    swit=false
 
-                    val id = userProfile.id
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // Getting Post failed, log a message
+                            Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+                            // ...
+                        }
+                    }
                     val nickname = userProfile.nickname
                     val profileImage=userProfile.profileImagePath
                     val thumbnailImage = userProfile.thumbnailImagePath
-
-                    Log.e("Profile : ", nickname + "")
-                    Log.e("Profile : ", id.toString() + "")
-                    Log.e("Profile : ", profileImage + "")
-                    Log.e("Profile : ", thumbnailImage + "")
+                    myRef.addValueEventListener(postListener)
+                    if(swit)
+                        myRef.child(id).setValue(KakaoUserMember(nickname,profileImage,thumbnailImage))
                 }
 
                 //사용자 정보 요청 실패
@@ -177,7 +186,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 }
 
 data class KakaoUserMember(
-    var username: String? = "",
+    var nickname: String? = "",
     var profileImage: String? = "",
     var thumbnailImage: String? = ""
 )

@@ -6,12 +6,12 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.FirebaseApp
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.addFragmentInActivity
 import com.seoul.ttarawa.ext.click
-import com.seoul.ttarawa.ext.replaceFragmentInActivity
 import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.map.CalendarActivity
 import org.jetbrains.anko.startActivity
@@ -25,7 +25,7 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        FirebaseApp.initializeApp(this)
         initView()
     }
 
@@ -103,4 +103,5 @@ class MainActivity :
         addFragmentInActivity(R.id.container_main, HomeFragment.newInstance())
     }
 }
+
 
