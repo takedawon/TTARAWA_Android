@@ -50,7 +50,11 @@
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.search.TourDetailActivity" />
         <activity android:name=".ui.map.CalendarActivity" />
-        <activity android:name=".ui.path.PathActivity" />
+
+        <activity
+            android:name=".ui.path.PathActivity"
+            android:theme="@style/AppTheme.NoneStatusBar" />
+
         <activity android:name=".ui.search.SearchActivity" />
     </application>
 
