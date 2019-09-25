@@ -8,13 +8,13 @@ data class WeatherResponse(
 ) {
     data class Response(
         @SerializedName("body")
-        val body: Body,
+        val body: Body?,
         @SerializedName("header")
         val header: Header
     ) {
         data class Body(
             @SerializedName("items")
-            val items: Items,
+            val items: Items?,
             @SerializedName("numOfRows")
             val numOfRows: Int,
             @SerializedName("pageNo")

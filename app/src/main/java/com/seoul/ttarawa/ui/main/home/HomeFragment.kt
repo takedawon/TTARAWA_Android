@@ -195,12 +195,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     var skyValue = 0.0
                     var switch = 0
                     for (i in 0..19) {
-                        response.body()?.let {
-                            if (it.response.body.items.item[i].category == "PTY" && switch == 0) {
-                                ptyValue = it.response.body.items.item[i].fcstValue
+                        response.body()?.response?.body?.items?.let {
+                            if (it.item[i].category == "PTY" && switch == 0) {
+                                ptyValue = it.item[i].fcstValue
                                 switch = 1
-                            } else if (it.response.body.items.item[i].category == "SKY" && switch == 1) {
-                                skyValue = it.response.body.items.item[i].fcstValue
+                            } else if (it.item[i].category == "SKY" && switch == 1) {
+                                skyValue = it.item[i].fcstValue
                                 switch = 2
                             }
                         }
