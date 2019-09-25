@@ -3,13 +3,15 @@ package com.seoul.ttarawa.ui.main
 import android.os.Bundle
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
-import com.seoul.ttarawa.ext.addFragmentInActivity
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.map.CalendarActivity
@@ -18,47 +20,140 @@ import org.jetbrains.anko.toast
 
 
 class MainActivity :
-    BaseActivity<ActivityMainBinding>(R.layout.activity_main),
-    MainBottomAppBarListener {
+    BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var settingFragment: SettingFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initView()
     }
 
     override fun initView() {
         bind {
-            with(babMain) {
-                setNavigationOnClickListener {
-                    openNavigationMenu()
-                }
-            }
+            babMain.setNavigationOnClickListener { openNavigationMenu() }
+            setOnMenuItemClickListener()
 
             fabMain click { startActivity<CalendarActivity>() }
-
         }
 
-        addHomeFragment()
+        initFragment()
     }
 
-    override fun moveFabCenter() {
+    private fun initFragment() {
+        homeFragment = HomeFragment.newInstance()
+        settingFragment = SettingFragment.newInstance()
+
+        addFragment(homeFragment, MainFragmentTags.HOME, false)
+    }
+
+    private fun addFragment(
+        fragment: Fragment,
+        mainFragmentTags: MainFragmentTags,
+        saveBackStack: Boolean = true
+    ) {
+        supportFragmentManager.commit {
+            applyTransition(this, mainFragmentTags)
+            changeOptionBabMain(mainFragmentTags)
+
+            add(R.id.container_main, fragment, mainFragmentTags.name)
+
+            if (saveBackStack) {
+                addToBackStack(null)
+            }
+
+            if (fragment !is HomeFragment) {
+                hide(homeFragment)
+            }
+        }
+    }
+
+    /**
+     * 트랜잭션 추가
+     */
+    private fun applyTransition(
+        fragmentTransaction: FragmentTransaction,
+        mainFragmentTags: MainFragmentTags
+    ) {
+        fragmentTransaction.apply {
+            when (mainFragmentTags) {
+                MainFragmentTags.HOME -> {
+                    setCustomAnimations(
+                        0,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_left
+                    )
+                }
+                MainFragmentTags.SETTING -> {
+                    setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_right
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * bottom app bar 옵션 수정
+     */
+    private fun changeOptionBabMain(mainFragmentTags: MainFragmentTags) {
+        when (mainFragmentTags) {
+            MainFragmentTags.HOME -> {
+                replaceMenuBottomAppBar(R.menu.menu_main_setting)
+                moveFabCenter()
+            }
+            MainFragmentTags.SETTING -> {
+                clearMenuBottomAppBar()
+                moveFabEnd()
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        // 현재 화면이 홈프래그먼트가 아니면 다시 보여주기
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.container_main)
+        if (currentFragment !is HomeFragment) {
+            for (fragment in supportFragmentManager.fragments) {
+                if (fragment.tag == MainFragmentTags.HOME.name) {
+                    supportFragmentManager.commit {
+                        changeOptionBabMain(MainFragmentTags.HOME)
+                    }
+                }
+            }
+        }
+        super.onBackPressed()
+    }
+
+    private fun moveFabCenter() {
         binding.babMain.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
     }
 
-    override fun moveFabEnd() {
+    private fun moveFabEnd() {
         binding.babMain.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
     }
 
-    override fun clearMenuBottomAppBar() {
+    private fun clearMenuBottomAppBar() {
         binding.babMain.menu.clear()
     }
 
-    override fun replaceMenuBottomAppBar(@MenuRes menuId: Int) {
+    private fun replaceMenuBottomAppBar(@MenuRes menuId: Int) {
         binding.babMain.replaceMenu(menuId)
     }
 
-    override fun setOnMenuItemClickListener(listener: Toolbar.OnMenuItemClickListener) {
-        binding.babMain.setOnMenuItemClickListener(listener)
+    private fun setOnMenuItemClickListener() {
+        binding.babMain.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { menu ->
+            if (menu.itemId == R.id.menu_setting) {
+                addFragment(settingFragment, MainFragmentTags.SETTING)
+                return@OnMenuItemClickListener true
+            }
+            return@OnMenuItemClickListener false
+        })
     }
 
     /**
@@ -94,10 +189,6 @@ class MainActivity :
                 return@setNavigationItemSelectedListener false
             }
         }
-    }
-
-    private fun addHomeFragment() {
-        addFragmentInActivity(R.id.container_main, HomeFragment.newInstance())
     }
 }
 

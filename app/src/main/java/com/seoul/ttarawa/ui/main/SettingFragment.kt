@@ -30,13 +30,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     R.layout.fragment_setting
 ) {
     private lateinit var database: FirebaseDatabase
-    private var listener: MainBottomAppBarListener? = null
     private lateinit var session: SessionCallback
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? MainBottomAppBarListener
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -67,15 +61,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     }
 
     override fun initView() {
-        changeBottomAppBar()
         database = FirebaseDatabase.getInstance()
-    }
-
-    private fun changeBottomAppBar() {
-        listener?.let {
-            it.clearMenuBottomAppBar()
-            it.moveFabEnd()
-        }
     }
 
    private fun onClickUnlink() {
