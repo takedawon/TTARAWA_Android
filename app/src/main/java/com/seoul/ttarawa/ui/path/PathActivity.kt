@@ -18,6 +18,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
+import com.naver.maps.map.util.FusedLocationSource
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
@@ -30,6 +31,7 @@ import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -39,6 +41,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
 
+    private lateinit var locationSource: FusedLocationSource
+
     /**
      * 바텀시트동작 제어
      */
@@ -47,7 +51,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * 바텀시트에 있는 어댑터
      */
     private val pathAdapter = PathAdapter()
-
     /**
      * 네이버 맵 객체
      */
@@ -68,6 +71,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
         getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828)
 
@@ -154,6 +159,20 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     /**
+     * 네이버 맵 위치 권한
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            return
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    /**
      * 네이버 맵 초기화
      */
     override fun onMapReady(naverMap: NaverMap) {
@@ -167,13 +186,20 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             isIndoorEnabled = true
             // 화면 패딩 추가 : 중심점 변경
             setContentPadding(0, 0, 0, 250)
+
+            locationSource = this@PathActivity.locationSource
+            // 위치 변경 리스너
+            addOnLocationChangeListener {location ->
+                Timber.d("${location.latitude} ${location.longitude}")
+            }
         }
 
         naverMap.uiSettings.apply {
             // 화면 확대시 건물 내부 층수 선택하는 뷰 활성화
             isIndoorLevelPickerEnabled = true
+            // 위치 추적 버튼 활성화
+            isLocationButtonEnabled = true
         }
-
     }
 
     private fun getRoadPath(
@@ -354,5 +380,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"
         const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
