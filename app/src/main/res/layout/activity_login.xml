@@ -5,43 +5,126 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.LoginActivity">
+
+    <TextView
+        android:id="@+id/txt_login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TTARAWA"
+        android:textColor="#000"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_login_back" />
+
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/layout_login_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_setting_back"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:background="#00ff0000"
-        android:drawableStart="@drawable/ic_arrow_back_black_24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_login_back"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="#00ff0000"
+            android:drawableStart="@drawable/ic_arrow_back_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/txt_input_login_id"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="25dp"
         android:hint="아이디"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        app:boxStrokeColor="#0025FF"
+        app:hintTextColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/txt_login_title"
+        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintStart_toStartOf="@+id/txt_login_title"
+        app:layout_constraintTop_toBottomOf="@+id/txt_login_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            android:inputType="text"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt_input_login_pw"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:hint="패스워드"
+        app:boxStrokeColor="#0025FF"
+        app:hintTextColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/txt_input_login_id"
+        app:layout_constraintStart_toStartOf="@+id/txt_input_login_id"
+        app:layout_constraintTop_toBottomOf="@+id/txt_input_login_id">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="25dp"
+        android:backgroundTint="#F7216EF3"
+        android:padding="13dp"
+        android:text="로그인"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_input_login_pw"
+        app:layout_constraintStart_toStartOf="@+id/txt_input_login_pw"
+        app:layout_constraintTop_toBottomOf="@+id/txt_input_login_pw" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/btn_login"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_login"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="아직 회원이 아니세요?"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/txt_login_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="회원가입"
+            android:textColor="#2557BB"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_login"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_login"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
