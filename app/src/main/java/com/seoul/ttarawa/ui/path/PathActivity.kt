@@ -2,9 +2,11 @@ package com.seoul.ttarawa.ui.path
 
 import android.graphics.Color
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
@@ -16,7 +18,6 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
-import com.naver.maps.map.util.MarkerIcons
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
@@ -74,6 +75,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     override fun initView() {
+        initTransparentStatusBar()
         initMapFragment()
         initBottomSheet()
 
@@ -89,6 +91,20 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                 pathAdapter.changeDeleteMode(isChecked)
             }
         }
+    }
+
+    private fun initTransparentStatusBar() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        // 스테이터스바 글자 색 어둡게 변경, 23 이상
+        var flag = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        window.decorView.systemUiVisibility = flag
+        window.statusBarColor = Color.TRANSPARENT
     }
 
     /**
