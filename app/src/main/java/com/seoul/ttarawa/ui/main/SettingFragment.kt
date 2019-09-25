@@ -43,8 +43,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             Session.getCurrentSession().checkAndImplicitOpen()
         }
 
-        binding.button.setOnClickListener {
-            onClickUnlink()
+        binding.btnLoginJoin.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
