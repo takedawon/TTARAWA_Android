@@ -20,7 +20,6 @@ import io.nlopez.smartlocation.SmartLocation
 import io.nlopez.smartlocation.location.LocationProvider
 import io.nlopez.smartlocation.location.providers.LocationGooglePlayServicesProvider
 import org.jetbrains.anko.support.v4.startActivity
-import org.jetbrains.anko.support.v4.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -188,9 +187,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     response: Response<WeatherResponse?>
                 ) {
                     Timber.e(response.message())
-
-                    toast("abcdedf")
-
                     var ptyValue = 0.0
                     var skyValue = 0.0
                     var switch = 0
