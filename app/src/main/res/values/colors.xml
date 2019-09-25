@@ -5,6 +5,8 @@
     <color name="colorAccent">#3662ff</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="join_text_layout">#F1F1F1</color>
+    <color name="join_helper_color">#EB1414</color>
 
     <color name="colorOnBackground">#353435</color>
     <color name="border_on_bg">#D8D7DC</color>
