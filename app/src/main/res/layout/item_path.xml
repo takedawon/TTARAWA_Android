@@ -3,59 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp">
+        android:orientation="vertical"
+        android:paddingStart="@dimen/path_bottom_sheet_left_time_space"
+        android:paddingTop="@dimen/path_bottom_sheet_left_time_text_padding_top"
+        android:paddingEnd="16dp"
+        android:paddingBottom="11dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_path_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/iv_path_drag_drop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="18sp"
+            tools:text="명륜진사갈비" />
 
-            <TextView
-                android:id="@+id/tv_path_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toStartOf="@id/iv_path_drag_drop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="명륜진사갈비" />
+        <TextView
+            android:id="@+id/tv_path_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_path_name"
+            tools:text="서울특별시 구로구 고척동" />
 
-            <TextView
-                android:id="@+id/tv_path_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_path_name"
-                tools:text="14:00 ~ 15:00" />
+        <ImageView
+            android:id="@+id/iv_path_drag_drop"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/ic_drag_handle_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_path_delete"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginEnd="0dp" />
 
-            <ImageView
-                android:id="@+id/iv_path_drag_drop"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/ic_drag_handle_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_path_delete"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_goneMarginEnd="0dp" />
+        <ImageView
+            android:id="@+id/iv_path_delete"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/ic_delete_red_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_path_delete"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/ic_delete_red_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="path_bottom_sheet_left_time_text_size">20dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_text_left">16dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_text_padding_top">15dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_text_padding_bottom">8dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_line_interval">4dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_line_width">1dp</dimen>
+    <dimen name="path_bottom_sheet_left_time_space">76dp</dimen>
+</resources>

@@ -16,17 +16,19 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val list = mutableListOf<PathEntity>()
 
     init {
-        replaceAll(listOf(
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false),
-            PathEntity("abcd", "", "", "10:20", "20:30", false)
-        ))
+        replaceAll(
+            listOf(
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1020", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1720", "2030", false, 0),
+                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1820", "2030", false, 0)
+            )
+        )
     }
 
     fun changeDeleteMode(isChecked: Boolean) {
@@ -61,7 +63,7 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             false
         )
 
-    override fun getItemCount(): Int = list.size + 1
+    override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_PATH) {
@@ -70,22 +72,28 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == list.size) {
-            return TYPE_PATH_ADD
-        }
         return super.getItemViewType(position)
+    }
+
+    fun getItem(position: Int): PathEntity? {
+        return if (position >= list.size) {
+            null
+        } else {
+            list[position]
+        }
     }
 
     class PathViewHolder(val binding: ItemPathBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(path: PathEntity) {
             binding.tvPathName.text = path.name
-            binding.tvPathTime.text = "${path.startTime} ~ ${path.endTime}"
+            binding.tvPathTime.text = path.address
             binding.ivPathDelete.visibility = if (path.isVisibleDelete) View.VISIBLE else View.GONE
         }
     }
 
-    class PathAddViewHolder(val binding: ItemPathAddBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PathAddViewHolder(val binding: ItemPathAddBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
     }
 

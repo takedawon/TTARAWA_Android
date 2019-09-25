@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -24,6 +25,9 @@ import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ext.gone
+import com.seoul.ttarawa.ext.isVisible
+import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.SearchActivity
 import org.jetbrains.anko.startActivity
@@ -85,7 +89,16 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         initBottomSheet()
 
         bind {
-            rvPath.adapter = pathAdapter
+            rvPath.apply {
+                adapter = pathAdapter
+                addItemDecoration(PathItemDecoration(this@PathActivity, pathAdapter))
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        binding.pathListHeaderShadow.visibility =
+                            if (recyclerView.canScrollVertically(-1)) View.VISIBLE else View.GONE
+                    }
+                })
+            }
 
             fabPathAdd click {
                 startActivity<SearchActivity>()
@@ -116,7 +129,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * @see OnMapReadyCallback.onMapReady
      */
     private fun initMapFragment() {
-        var mapFragment = supportFragmentManager.findFragmentById(R.id.map_container) as? MapFragment
+        var mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map_container) as? MapFragment
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.map_container, mapFragment).commit()
@@ -131,7 +145,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         // 바텀시트 초기화
         bottomSheetBehavior = BottomSheetBehavior.from(binding.clPathBottomSheet)
         // 바텀시트 콜백
-        bottomSheetBehavior?.setBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior?.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 /*ignored*/
             }
@@ -189,7 +204,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
             locationSource = this@PathActivity.locationSource
             // 위치 변경 리스너
-            addOnLocationChangeListener {location ->
+            addOnLocationChangeListener { location ->
                 Timber.d("${location.latitude} ${location.longitude}")
             }
         }
