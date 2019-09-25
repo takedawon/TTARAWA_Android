@@ -116,16 +116,9 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        // 현재 화면이 홈프래그먼트가 아니면 다시 보여주기
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.container_main)
-        if (currentFragment !is HomeFragment) {
-            for (fragment in supportFragmentManager.fragments) {
-                if (fragment.tag == MainFragmentTags.HOME.name) {
-                    supportFragmentManager.commit {
-                        changeOptionBabMain(MainFragmentTags.HOME)
-                    }
-                }
-            }
+        // 스택에 있는 프래그먼트가 2개일 때 홈 옵션으로 변경
+        if (supportFragmentManager.fragments.size == 2) {
+            changeOptionBabMain(MainFragmentTags.HOME)
         }
         super.onBackPressed()
     }
