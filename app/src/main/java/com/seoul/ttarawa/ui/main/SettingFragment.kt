@@ -49,8 +49,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             Session.getCurrentSession().checkAndImplicitOpen()
         }
 
-        binding.button.setOnClickListener {
-            onClickUnlink()
+        binding.btnLoginJoin.setOnClickListener {
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -77,37 +78,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             it.moveFabEnd()
         }
     }
-
-   private fun onClickUnlink() {
-        val appendMessage = getString(R.string.com_kakao_confirm_unlink)
-        AlertDialog.Builder(activity)
-        .setMessage(appendMessage)
-        .setPositiveButton(getString(R.string.com_kakao_ok_button)
-        ) { dialog, _ ->
-            UserManagement.requestUnlink(object:UnLinkResponseCallback() {
-        override fun onFailure(errorResult:ErrorResult?) {
-            Logger.e(errorResult!!.toString())
-        }
-
-        override fun onSessionClosed(errorResult:ErrorResult) {
-            //redirectLoginActivity()
-        }
-
-        override fun onNotSignedUp() {
-            //redirectSignupActivity()
-        }
-
-        override fun onSuccess(userId:Long?) {
-            //redirectLoginActivity()
-        }
-    })
-    dialog.dismiss()
-}
-    .setNegativeButton(getString(R.string.com_kakao_cancel_button)
-    ) { dialog, _ -> dialog.dismiss() }.show()
-
-        }
-
     override fun onDestroyView() {
         Session.getCurrentSession().removeCallback(session)
         super.onDestroyView()

@@ -20,6 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.main.LoginActivity"></activity>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
@@ -37,7 +39,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,10 +47,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.search.TourDetailActivity"/>
+        <activity android:name=".ui.search.TourDetailActivity" />
         <activity android:name=".ui.map.CalendarActivity" />
-        <activity android:name=".ui.path.PathActivity"/>
-        <activity android:name=".ui.search.SearchActivity"/>
+        <activity android:name=".ui.path.PathActivity" />
+        <activity android:name=".ui.search.SearchActivity" />
     </application>
 
 </manifest>
