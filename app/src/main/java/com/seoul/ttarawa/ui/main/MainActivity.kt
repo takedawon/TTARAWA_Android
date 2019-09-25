@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.FirebaseApp
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
@@ -20,12 +19,10 @@ import org.jetbrains.anko.toast
 
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main),
-    MainBottomAppBarListener
-{
+    MainBottomAppBarListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         initView()
     }
 

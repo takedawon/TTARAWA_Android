@@ -2,6 +2,7 @@ package com.seoul.ttarawa
 
 import android.app.Application
 import com.facebook.stetho.Stetho
+import com.google.firebase.FirebaseApp
 import com.kakao.auth.*
 import timber.log.Timber
 
@@ -11,6 +12,7 @@ class GlobalApplication : Application() {
         super.onCreate()
         instance = this
         KakaoSDK.init(KakaoSDKAdapter())
+        FirebaseApp.initializeApp(this)
 
         // init timber
         Timber.plant(Timber.DebugTree())
