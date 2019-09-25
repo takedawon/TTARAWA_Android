@@ -327,12 +327,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             // 하단 텍스트
             this.captionText = captionText
 
-            // todo 아이콘 모양이 필요함, 현재있는 아이콘으로는 투명하게 처리됨
-            // icon = OverlayImage.fromResource(R.drawable.search_ic_movie_checked)
+            icon = OverlayImage.fromResource(R.drawable.path_ic_cafe_marker)
 
             // 아이콘 색 변경
-            icon = MarkerIcons.GREEN
-            iconTintColor = Color.RED
+            // icon = MarkerIcons.GREEN
+            iconTintColor = Color.BLUE
         }
     }
 
