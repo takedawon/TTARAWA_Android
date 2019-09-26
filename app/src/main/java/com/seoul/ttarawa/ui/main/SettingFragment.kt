@@ -71,6 +71,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                 .setPositiveButton("네") { _, _ ->
                     auth.signOut()
                     setLogoutView()
+                    toast("로그아웃 되었습니다.")
                 }
                 .setNegativeButton("아니오",null)
                 .show()
