@@ -112,10 +112,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     val nick = p0.child("nickname").value.toString()
+                    val email = p0.child("email").value.toString()
                     val profileUrl = p0.child("profileImage").value.toString()
 
                     bind {
                         txtSettingInfoAfter.text = nick + "님 환영합니다!"
+                        txtLoginEmail.text = email
                         Glide.with(this@SettingFragment)
                             .load(profileUrl)
                             .centerCrop()
