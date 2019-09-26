@@ -1,6 +1,5 @@
 package com.seoul.ttarawa.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity

@@ -30,4 +30,8 @@
         <item name="iconStartPadding">8dp</item>
         <item name="android:padding">4dp</item>
     </style>
+
+    <style name="TextLimitError" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
 </resources>
