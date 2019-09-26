@@ -27,6 +27,8 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                 val email = txtInputJoinEmail.text.toString()
                 val pw = txtInputJoinPw.text.toString()
                 val nickname = txtInputJoinNick.text.toString()
+                val profileImageUrl =
+                    "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/defaultProfileImage.png?alt=media&token=5b361730-eb16-41fd-8027-ecda1d9fca58"
                 if (email.isEmpty() || pw.isEmpty() || nickname.isEmpty()) {
                     toast("입력 정보가 비어있지 않은지 확인해주세요.")
                 } else {
@@ -38,6 +40,8 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                                 user?.let {
                                     ref.child(user.uid).child("email").setValue(email)
                                     ref.child(user.uid).child("nickname").setValue(nickname)
+                                    ref.child(user.uid).child("profileImage")
+                                        .setValue(profileImageUrl)
                                 }
                                 finish()
                             } else {
