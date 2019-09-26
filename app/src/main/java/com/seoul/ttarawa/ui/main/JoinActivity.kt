@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -43,6 +44,10 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                                     ref.child(user.uid).child("profileImage")
                                         .setValue(profileImageUrl)
                                 }
+                                val intent = Intent()
+                                intent.putExtra("id", email)
+                                intent.putExtra("pw", pw)
+                                setResult(RESULT_OK, intent)
                                 finish()
                             } else {
                                 toast("이미 있는 아이디거나 정보를 다시 확인해주세요.")
