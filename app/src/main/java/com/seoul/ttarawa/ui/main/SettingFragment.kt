@@ -1,15 +1,16 @@
 package com.seoul.ttarawa.ui.main
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.network.ErrorResult
@@ -22,6 +23,7 @@ import com.kakao.util.helper.log.Logger
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentSettingBinding
+import kotlinx.android.synthetic.main.fragment_setting.*
 import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 
@@ -38,14 +40,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         initView()
 
         session = SessionCallback()
-        if(!Session.getCurrentSession().isOpenable) {
+        if (!Session.getCurrentSession().isOpenable) {
             Session.getCurrentSession().addCallback(session)
             Session.getCurrentSession().checkAndImplicitOpen()
         }
 
         binding.btnLoginJoin.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 1000)
         }
     }
 
@@ -65,43 +67,46 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         database = FirebaseDatabase.getInstance()
     }
 
-   private fun onClickUnlink() {
+    private fun onClickUnlink() {
         val appendMessage = getString(R.string.com_kakao_confirm_unlink)
         AlertDialog.Builder(activity)
-        .setMessage(appendMessage)
-        .setPositiveButton(getString(R.string.com_kakao_ok_button)
-        ) { dialog, _ ->
-            UserManagement.requestUnlink(object:UnLinkResponseCallback() {
-        override fun onFailure(errorResult:ErrorResult?) {
-            Logger.e(errorResult!!.toString())
-        }
+            .setMessage(appendMessage)
+            .setPositiveButton(
+                getString(R.string.com_kakao_ok_button)
+            ) { dialog, _ ->
+                UserManagement.requestUnlink(object : UnLinkResponseCallback() {
+                    override fun onFailure(errorResult: ErrorResult?) {
+                        Logger.e(errorResult!!.toString())
+                    }
 
-        override fun onSessionClosed(errorResult:ErrorResult) {
-            //redirectLoginActivity()
-        }
+                    override fun onSessionClosed(errorResult: ErrorResult) {
+                        //redirectLoginActivity()
+                    }
 
-        override fun onNotSignedUp() {
-            //redirectSignupActivity()
-        }
+                    override fun onNotSignedUp() {
+                        //redirectSignupActivity()
+                    }
 
-        override fun onSuccess(userId:Long?) {
-            //redirectLoginActivity()
-        }
-    })
-    dialog.dismiss()
-}
-    .setNegativeButton(getString(R.string.com_kakao_cancel_button)
-    ) { dialog, _ -> dialog.dismiss() }.show()
+                    override fun onSuccess(userId: Long?) {
+                        //redirectLoginActivity()
+                    }
+                })
+                dialog.dismiss()
+            }
+            .setNegativeButton(
+                getString(R.string.com_kakao_cancel_button)
+            ) { dialog, _ -> dialog.dismiss() }.show()
 
-        }
+    }
 
     override fun onDestroyView() {
         Session.getCurrentSession().removeCallback(session)
         super.onDestroyView()
-}
-/*
+    }
 
- */
+    /*
+
+     */
     private inner class SessionCallback : ISessionCallback {
 
         override fun onSessionOpened() {
@@ -131,14 +136,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
                 //사용자 정보 요청 성공 : 사용자 정보를 리턴
                 override fun onSuccess(userProfile: UserProfile) {
-                    val myRef = database.getReference("USER")
                     val id = userProfile.id.toString()
-                    var swit=true
+                    var swit = true
                     val postListener = object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            for(a in dataSnapshot.children)
-                                if(a.key==id)
-                                    swit=false
+                            for (a in dataSnapshot.children)
+                                if (a.key == id)
+                                    swit = false
 
                         }
 
@@ -149,11 +153,17 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                         }
                     }
                     val nickname = userProfile.nickname
-                    val profileImage=userProfile.profileImagePath
+                    val profileImage = userProfile.profileImagePath
                     val thumbnailImage = userProfile.thumbnailImagePath
                     myRef.addValueEventListener(postListener)
-                    if(swit)
-                        myRef.child(id).setValue(KakaoUserMember(nickname,profileImage,thumbnailImage))
+                    if (swit)
+                        myRef.child(id).setValue(
+                            KakaoUserMember(
+                                nickname,
+                                profileImage,
+                                thumbnailImage
+                            )
+                        )
                 }
 
                 //사용자 정보 요청 실패
