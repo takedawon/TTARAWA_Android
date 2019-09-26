@@ -87,7 +87,7 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                     }
 
                     if (view == layoutTextInputNick) {
-                        ref.addValueEventListener(object : ValueEventListener {
+                        ref.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(p0: DataSnapshot) {
                                 for (data in p0.children) {
                                     if (data.child("nickname").value!! == txtInputJoinNick.text.toString()) {

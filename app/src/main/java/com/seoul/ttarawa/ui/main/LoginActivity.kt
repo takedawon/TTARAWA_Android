@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
@@ -12,6 +13,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+        binding.txtLoginJoin.setOnClickListener {
+            val intent = Intent(applicationContext, JoinActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initView() {
