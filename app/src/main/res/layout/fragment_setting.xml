@@ -87,6 +87,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/txt_setting_info" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <ProgressBar
+                android:id="@+id/pb_login_after"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_gravity="center_vertical|center_horizontal"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_login_after"
                 android:layout_width="match_parent"

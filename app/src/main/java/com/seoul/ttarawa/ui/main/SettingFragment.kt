@@ -107,6 +107,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     }
 
     private fun updateUI(data: String) {
+        showProgressBar()
         myRef.child(data).addListenerForSingleValueEvent(
             object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
@@ -114,8 +115,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     val profileUrl = p0.child("profileImage").value.toString()
 
                     bind {
-                        layoutLoginAfter.visibility = View.VISIBLE
-                        layoutLoginBefore.visibility = View.GONE
                         txtSettingInfoAfter.text = nick + "님 환영합니다!"
                         Glide.with(this@SettingFragment)
                             .load(profileUrl)
@@ -123,16 +122,27 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                             .apply(RequestOptions().circleCrop())
                             .into(img_profile_after)
                     }
+                    hideProgressBar()
                 }
 
                 override fun onCancelled(p0: DatabaseError) {
                 }
             })
+    }
 
+    private fun showProgressBar() {
         bind {
-            btnLoginLogout.visibility = View.VISIBLE
-            layoutLoginAfter.visibility = View.VISIBLE
             layoutLoginBefore.visibility = View.GONE
+            layoutLoginAfter.visibility = View.INVISIBLE
+            pbLoginAfter.visibility=View.VISIBLE
+        }
+    }
+
+    private fun hideProgressBar() {
+        bind {
+            layoutLoginAfter.visibility = View.VISIBLE
+            btnLoginLogout.visibility = View.VISIBLE
+            pbLoginAfter.visibility=View.INVISIBLE
         }
     }
 
