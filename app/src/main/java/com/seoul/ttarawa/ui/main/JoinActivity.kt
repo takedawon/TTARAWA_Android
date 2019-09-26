@@ -24,19 +24,19 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
         initView()
         bind {
             btnLogin.setOnClickListener {
-                val id = txtInputJoinEmail.text.toString()
+                val email = txtInputJoinEmail.text.toString()
                 val pw = txtInputJoinPw.text.toString()
                 val nickname = txtInputJoinNick.text.toString()
-                if (id.isEmpty() || pw.isEmpty() || nickname.isEmpty()) {
+                if (email.isEmpty() || pw.isEmpty() || nickname.isEmpty()) {
                     toast("입력 정보가 비어있지 않은지 확인해주세요.")
                 } else {
-                    auth.createUserWithEmailAndPassword(id, pw)
+                    auth.createUserWithEmailAndPassword(email, pw)
                         .addOnCompleteListener(this@JoinActivity) { task ->
                             if (task.isSuccessful) {
                                 toast("회원가입이 완료되었습니다.")
                                 val user = auth.currentUser
                                 user?.let {
-                                    ref.child(user.uid).child("email").setValue(id)
+                                    ref.child(user.uid).child("email").setValue(email)
                                     ref.child(user.uid).child("nickname").setValue(nickname)
                                 }
                                 finish()
