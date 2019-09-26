@@ -37,7 +37,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.JoinActivity">
+        <activity android:name=".ui.main.JoinActivity"/>
+        <activity android:name=".ui.main.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -45,7 +46,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.LoginActivity" />
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.search.TourDetailActivity" />
         <activity android:name=".ui.map.CalendarActivity" />
