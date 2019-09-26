@@ -5,24 +5,43 @@ import android.text.Editable
 import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityJoinBinding
+import org.jetbrains.anko.toast
 import java.util.regex.Pattern
 
 
 class JoinActivity : BaseActivity<ActivityJoinBinding>(
     R.layout.activity_join
 ) {
-
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+
+        bind {
+            btnLogin.setOnClickListener {
+                val id=txtInputJoinEmail.text.toString()
+                val pw =txtInputJoinPw.text.toString()
+                auth.createUserWithEmailAndPassword(id, pw)
+                    .addOnCompleteListener(this@JoinActivity) { task ->
+                        if (task.isSuccessful) {
+                            toast("회원가입이 완료되었습니다.")
+                            val user = auth.currentUser
+                        } else {
+                            toast("이미 있는 아이디거나 정보를 다시 확인해주세요.")
+                        }
+                    }
+            }
+        }
     }
 
     override fun initView() {
         bind {
-            setEventTextwatcher(layoutTextInputId, txtInputJoinId)
+            auth = FirebaseAuth.getInstance()
+            setEventTextwatcher(layoutTextInputEmail, txtInputJoinEmail)
             setEventTextwatcher(layoutTextInputPw, txtInputJoinPw)
             setEventTextwatcher(layoutTextInputNick, txtInputJoinNick)
         }
@@ -59,7 +78,7 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
     }
 
     private fun isTextCheck(text:String) : Boolean { // 특수문자가 있으면 true
-        val pattern = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$"
+        val pattern = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-@]*$"
         return !Pattern.matches(pattern, text)
     }
 

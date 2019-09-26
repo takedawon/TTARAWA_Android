@@ -58,14 +58,14 @@
             app:layout_constraintTop_toBottomOf="@+id/layout_join_back" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout_text_input_id"
+            android:id="@+id/layout_text_input_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:hint="아이디"
+            android:hint="이메일"
             app:boxBackgroundColor="@color/join_text_layout"
             app:boxStrokeColor="#0025FF"
             app:boxStrokeWidth="2dp"
@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_login_title">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_input_join_id"
+                android:id="@+id/txt_input_join_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -102,9 +102,9 @@
             app:counterOverflowTextAppearance="@style/TextLimitError"
             app:helperTextTextColor="@color/join_helper_color"
             app:hintTextColor="#000000"
-            app:layout_constraintEnd_toEndOf="@+id/layout_text_input_id"
-            app:layout_constraintStart_toStartOf="@+id/layout_text_input_id"
-            app:layout_constraintTop_toBottomOf="@+id/layout_text_input_id">
+            app:layout_constraintEnd_toEndOf="@+id/layout_text_input_email"
+            app:layout_constraintStart_toStartOf="@+id/layout_text_input_email"
+            app:layout_constraintTop_toBottomOf="@+id/layout_text_input_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_input_join_pw"
