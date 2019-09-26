@@ -3,12 +3,14 @@ package com.seoul.ttarawa.ui.main
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.kakao.auth.ISessionCallback
@@ -33,6 +35,19 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 ) {
     private lateinit var database: FirebaseDatabase
     private lateinit var session: SessionCallback
+    private lateinit var myRef: DatabaseReference
+    private lateinit var auth: FirebaseAuth
+
+    override fun onStart() {
+        super.onStart()
+        auth = FirebaseAuth.getInstance()
+        myRef = database.getReference("USER")
+
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            updateUI(currentUser.uid)
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -49,11 +64,26 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             val intent = Intent(activity, LoginActivity::class.java)
             startActivityForResult(intent, 1000)
         }
+
+        binding.btnLoginLogout.setOnClickListener {
+            MaterialAlertDialogBuilder(context)
+                .setTitle("로그아웃 하시겠습니까?")
+                .setPositiveButton("네") { _, _ ->
+                    auth.signOut()
+                    setLogoutView()
+                }
+                .setNegativeButton("아니오",null)
+                .show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
             return
+        } else if (resultCode == RESULT_OK) {
+            if (requestCode == 1000) { // LoginActivity
+                updateUI(data!!.getStringExtra("uid"))
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -65,6 +95,44 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun initView() {
         database = FirebaseDatabase.getInstance()
+    }
+
+    private fun setLogoutView() {
+        bind {
+            btnLoginLogout.visibility = View.GONE
+            layoutLoginAfter.visibility = View.GONE
+            layoutLoginBefore.visibility = View.VISIBLE
+        }
+    }
+
+    private fun updateUI(data: String) {
+        myRef.child(data).addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    val nick = p0.child("nickname").value.toString()
+                    val profileUrl = p0.child("profileImage").value.toString()
+
+                    bind {
+                        layoutLoginAfter.visibility = View.VISIBLE
+                        layoutLoginBefore.visibility = View.GONE
+                        txtSettingInfoAfter.text = nick + "님 환영합니다!"
+                        Glide.with(this@SettingFragment)
+                            .load(profileUrl)
+                            .centerCrop()
+                            .apply(RequestOptions().circleCrop())
+                            .into(img_profile_after)
+                    }
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                }
+            })
+
+        bind {
+            btnLoginLogout.visibility = View.VISIBLE
+            layoutLoginAfter.visibility = View.VISIBLE
+            layoutLoginBefore.visibility = View.GONE
+        }
     }
 
     private fun onClickUnlink() {
