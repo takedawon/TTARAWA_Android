@@ -54,9 +54,9 @@
                 android:id="@+id/tv_path_bottom_sheet_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="경로"
                 android:layout_marginStart="20dp"
                 android:minHeight="36dp"
+                android:text="경로"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,7 +102,8 @@
             app:borderWidth="0dp"
             app:layout_anchor="@+id/cl_path_bottom_sheet"
             app:layout_anchorGravity="end"
-            app:rippleColor="@color/colorPrimaryDark" />
+            app:rippleColor="@color/colorPrimaryDark"
+            app:tint="@color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

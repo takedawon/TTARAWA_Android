@@ -9,18 +9,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--스테이터스바 제거-->
     <style name="AppTheme.NoneStatusBar" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:theme">@style/AppTheme</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="CustomChipChoice" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/all_selector_chip_bg_color</item>
+        <item name="android:elevation">4dp</item>
+        <item name="chipStrokeColor">@color/colorAccent</item>
+        <item name="chipStrokeWidth">1dp</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="rippleColor">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/all_selector_chip_text_color</item>
@@ -29,5 +33,10 @@
         <item name="chipIconSize">20dp</item>
         <item name="iconStartPadding">8dp</item>
         <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="hintTextColor">@color/colorPrimaryDark</item>
     </style>
 </resources>

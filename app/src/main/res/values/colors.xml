@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#7d8fff</color>
+    <color name="colorPrimaryDark">#5256FF</color>
     <color name="colorAccent">#3662ff</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
@@ -10,4 +10,5 @@
 
     <color name="colorOnBackground">#353435</color>
     <color name="border_on_bg">#D8D7DC</color>
+    <color name="time_picker_btn_selected">#2849bf</color>
 </resources>

@@ -24,10 +24,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
-import com.seoul.ttarawa.ext.click
-import com.seoul.ttarawa.ext.gone
-import com.seoul.ttarawa.ext.isVisible
-import com.seoul.ttarawa.ext.show
+import com.seoul.ttarawa.ext.*
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.SearchActivity
 import org.jetbrains.anko.startActivity
@@ -44,6 +41,8 @@ import java.util.*
 class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
+
+    private var chooseDate: String? = null
 
     private lateinit var locationSource: FusedLocationSource
 
@@ -76,6 +75,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         super.onCreate(savedInstanceState)
         initView()
 
+        chooseDate = intent.getStringExtra(EXTRA_DATE)
+
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
         getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828)
@@ -101,7 +102,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             }
 
             fabPathAdd click {
-                startActivity<SearchActivity>()
+                startActivity<SearchActivity>(SearchActivity.EXTRA_DATE to (chooseDate ?: getCurrentDay()))
             }
 
             // 아이템 제거 버튼을 활성, 비활성화
