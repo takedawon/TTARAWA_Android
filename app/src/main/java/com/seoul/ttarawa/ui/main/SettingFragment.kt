@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,7 +27,6 @@ import com.kakao.util.helper.log.Logger
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentSettingBinding
-import kotlinx.android.synthetic.main.fragment_setting.*
 import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 
@@ -39,22 +39,22 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     private lateinit var session: SessionCallback
     private lateinit var myRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private var file: Uri? = null
     private var state: Boolean = true
 
     override fun onStart() {
         super.onStart()
         auth = FirebaseAuth.getInstance()
-        myRef = database.getReference("USER")
+        database = FirebaseDatabase.getInstance()
 
         val currentUser = auth.currentUser
-        if (currentUser != null) {
+        myRef = database.getReference("USER")
+        if (currentUser != null)
             updateUI(currentUser.uid)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        database = FirebaseDatabase.getInstance()
         initView()
 
         session = SessionCallback()
@@ -62,8 +62,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             Session.getCurrentSession().addCallback(session)
             Session.getCurrentSession().checkAndImplicitOpen()
         }
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,22 +71,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             if (requestCode == 1000) { // LoginActivity
                 updateUI(data!!.getStringExtra("uid"))
             } else if (requestCode == 2000) { // 이미지 가져오기
-                val storageRef = FirebaseStorage.getInstance().reference
-                val user = FirebaseAuth.getInstance().currentUser!!.uid
-
-                val file = data!!.data
-                val riversRef = storageRef.child("profileImage/$user")
-                val uploadTask = riversRef.putFile(file!!) // 파일 업로드
-
-                uploadTask.addOnFailureListener {
-                }.addOnSuccessListener {
-                    riversRef.downloadUrl.addOnSuccessListener {
-                        val ref = database.getReference("USER")
-                        ref.child(user).child("profileImage").setValue(it.toString())
-                    }
-                }.addOnCompleteListener {
-                    it.getResult()
-                }
+                file = data!!.data // 선택한 사진 file에 대입
             }
         }
     }
@@ -118,9 +101,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             }
 
             btnLoginJoinAfter.setOnClickListener {
-                // 프로필 편집
+                // 프로필 편집 변수 state 기본값=true
                 if (state) {
-                    txtProfileAfterEdit.visibility = View.VISIBLE // "편집" 텍스트 보이게하기
+                    txtProfileAfterEdit.visibility = View.VISIBLE // 프로필 "편집" 텍스트 보이게하기
                     btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#0E2FFF"))
                     imgProfileAfter.setOnClickListener {
                         // 이미지 누를시 편집창
@@ -138,7 +121,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     btnLoginJoinAfter.text = "완료" // 버튼 텍스트 수정
                     state = false
                 } else {
-                    txtProfileAfterEdit.visibility = View.INVISIBLE // "편집" 텍스트 안 보이게하기
+                    if (file != null) { // 프로필 사진을 변경했을 경우
+                        val storageRef = FirebaseStorage.getInstance().reference
+                        val user = auth.currentUser!!.uid
+                        val riversRef = storageRef.child("profileImage/$user")
+                        val uploadTask = riversRef.putFile(file!!) // 파일 업로드
+
+                        uploadTask.addOnFailureListener {
+                        }.addOnSuccessListener {
+                            riversRef.downloadUrl.addOnSuccessListener {
+                                val ref = database.getReference("USER")
+                                ref.child(user).child("profileImage").setValue(it.toString())
+                            }
+                        }.addOnCompleteListener {
+                            it.getResult()
+                        }
+                    }
+                    txtProfileAfterEdit.visibility = View.INVISIBLE // 프로필 "편집" 텍스트 안 보이게하기
                     btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#D14D77"))
                     imgProfileAfter.isClickable = false
                     btnLoginJoinAfter.text = "프로필 편집"
@@ -168,11 +167,19 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     bind {
                         txtSettingInfoAfter.text = nick + "님 환영합니다!"
                         txtLoginEmail.text = email
-                        Glide.with(this@SettingFragment)
-                            .load(profileUrl)
-                            .centerCrop()
-                            .apply(RequestOptions().circleCrop())
-                            .into(img_profile_after)
+                        if (file == null) {
+                            Glide.with(this@SettingFragment)
+                                .load(profileUrl)
+                                .centerCrop()
+                                .apply(RequestOptions().circleCrop())
+                                .into(imgProfileAfter)
+                        } else {
+                            Glide.with(this@SettingFragment)
+                                .load(file)
+                                .centerCrop()
+                                .apply(RequestOptions().circleCrop())
+                                .into(imgProfileAfter)
+                        }
                     }
                     hideProgressBar()
                 }
