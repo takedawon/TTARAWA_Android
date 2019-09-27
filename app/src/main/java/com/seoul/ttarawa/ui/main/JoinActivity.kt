@@ -30,7 +30,7 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                 val nickname = txtInputJoinNick.text.toString()
                 val profileImageUrl =
                     "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/defaultProfileImage.png?alt=media&token=5b361730-eb16-41fd-8027-ecda1d9fca58"
-                if (email.isEmpty() || pw.isEmpty() || nickname.isEmpty()) {
+                if (email.isNullOrEmpty() || pw.isNullOrEmpty() || nickname.isNullOrEmpty()) {
                     toast("입력 정보가 비어있지 않은지 확인해주세요.")
                 } else {
                     auth.createUserWithEmailAndPassword(email, pw)

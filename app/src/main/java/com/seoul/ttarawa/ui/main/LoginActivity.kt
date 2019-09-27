@@ -26,7 +26,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(
                 startActivityForResult(intent, 2000)
             }
             binding.btnLogin.setOnClickListener {
-                if (edtInputLoginEmail.text!!.isEmpty() || edtInputLoginPw.text!!.isEmpty())
+                if (edtInputLoginEmail.text!!.isNullOrEmpty() || edtInputLoginPw.text!!.isNullOrEmpty())
                     toast("입력정보를 다시 확인해주세요.")
                 else {
                     val email = edtInputLoginEmail.text.toString()
