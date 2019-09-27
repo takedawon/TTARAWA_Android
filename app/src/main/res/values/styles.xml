@@ -15,7 +15,7 @@
     </style>
 
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:theme">@style/AppTheme</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
@@ -38,5 +38,9 @@
     <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/colorPrimaryDark</item>
         <item name="hintTextColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="TextLimitError" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorRed</item>
     </style>
 </resources>

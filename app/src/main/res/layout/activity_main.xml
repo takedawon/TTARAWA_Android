@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="#fff"
             app:fabAlignmentMode="center"
             app:fabCradleMargin="15dp"
             app:navigationIcon="@drawable/ic_menu_black_24dp" />
