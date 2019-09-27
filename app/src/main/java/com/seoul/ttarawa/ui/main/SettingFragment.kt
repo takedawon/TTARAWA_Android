@@ -86,12 +86,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                 updateUI(data!!.getStringExtra("uid"))
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Session.getCurrentSession().removeCallback(session)
+        super.onDestroy()
     }
 
     override fun initView() {

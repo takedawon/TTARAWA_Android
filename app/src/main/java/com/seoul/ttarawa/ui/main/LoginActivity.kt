@@ -16,25 +16,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
         initView()
-        bind {
-            binding.btnLoginBack.setOnClickListener {
-                finish()
-            }
-            binding.txtLoginJoin.setOnClickListener {
-                val intent = Intent(applicationContext, JoinActivity::class.java)
-                startActivityForResult(intent, 2000)
-            }
-            binding.btnLogin.setOnClickListener {
-                if (edtInputLoginEmail.text!!.isNullOrEmpty() || edtInputLoginPw.text!!.isNullOrEmpty())
-                    toast("입력정보를 다시 확인해주세요.")
-                else {
-                    val email = edtInputLoginEmail.text.toString()
-                    val pw = edtInputLoginPw.text.toString()
-                    setFirebaseLogin(email,pw)
-                }
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -45,11 +28,27 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(
                 setFirebaseLogin(id,pw)
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun initView() {
-        auth = FirebaseAuth.getInstance()
+        bind {
+            binding.btnLoginBack.setOnClickListener {
+                finish()
+            }
+            binding.txtLoginJoin.setOnClickListener {
+                val intent = Intent(applicationContext, JoinActivity::class.java)
+                startActivityForResult(intent, 2000)
+            }
+            binding.btnLogin.setOnClickListener {
+                if (edtInputLoginEmail.text.isNullOrEmpty() || edtInputLoginPw.text.isNullOrEmpty())
+                    toast("입력정보를 다시 확인해주세요.")
+                else {
+                    val email = edtInputLoginEmail.text.toString()
+                    val pw = edtInputLoginPw.text.toString()
+                    setFirebaseLogin(email,pw)
+                }
+            }
+        }
 
     }
 

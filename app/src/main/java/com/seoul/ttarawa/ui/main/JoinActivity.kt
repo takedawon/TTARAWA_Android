@@ -22,15 +22,23 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
     private lateinit var ref: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+        ref = FirebaseDatabase.getInstance().getReference("USER")
         initView()
+    }
+
+    override fun initView() {
         bind {
+            setEventTextwatcher(layoutTextInputEmail, txtInputJoinEmail)
+            setEventTextwatcher(layoutTextInputPw, txtInputJoinPw)
+            setEventTextwatcher(layoutTextInputNick, txtInputJoinNick)
             btnLogin.setOnClickListener {
                 val email = txtInputJoinEmail.text.toString()
                 val pw = txtInputJoinPw.text.toString()
                 val nickname = txtInputJoinNick.text.toString()
                 val profileImageUrl =
                     "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/defaultProfileImage.png?alt=media&token=5b361730-eb16-41fd-8027-ecda1d9fca58"
-                if (email.isNullOrEmpty() || pw.isNullOrEmpty() || nickname.isNullOrEmpty()) {
+                if (email.isEmpty() || pw.isEmpty() || nickname.isEmpty()) {
                     toast("입력 정보가 비어있지 않은지 확인해주세요.")
                 } else {
                     auth.createUserWithEmailAndPassword(email, pw)
@@ -55,16 +63,6 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
                         }
                 }
             }
-        }
-    }
-
-    override fun initView() {
-        bind {
-            auth = FirebaseAuth.getInstance()
-            ref = FirebaseDatabase.getInstance().getReference("USER")
-            setEventTextwatcher(layoutTextInputEmail, txtInputJoinEmail)
-            setEventTextwatcher(layoutTextInputPw, txtInputJoinPw)
-            setEventTextwatcher(layoutTextInputNick, txtInputJoinNick)
         }
     }
 
