@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.network.ErrorResult
@@ -30,6 +31,7 @@ import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class SettingFragment : BaseFragment<FragmentSettingBinding>(
     R.layout.fragment_setting
 ) {
@@ -37,7 +39,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     private lateinit var session: SessionCallback
     private lateinit var myRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private var state:Boolean = true
+    private var state: Boolean = true
 
     override fun onStart() {
         super.onStart()
@@ -70,6 +72,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         } else if (resultCode == RESULT_OK) {
             if (requestCode == 1000) { // LoginActivity
                 updateUI(data!!.getStringExtra("uid"))
+            } else if (requestCode == 2000) { // 이미지 가져오기
+                val storageRef = FirebaseStorage.getInstance().reference
+                val user = FirebaseAuth.getInstance().currentUser!!.uid
+
+                val file = data!!.data
+                val riversRef = storageRef.child("profileImage/$user")
+                val uploadTask = riversRef.putFile(file!!) // 파일 업로드
+
+                uploadTask.addOnFailureListener {
+                }.addOnSuccessListener {
+                    riversRef.downloadUrl.addOnSuccessListener {
+                        val ref = database.getReference("USER")
+                        ref.child(user).child("profileImage").setValue(it.toString())
+                    }
+                }.addOnCompleteListener {
+                    it.getResult()
+                }
             }
         }
     }
@@ -94,26 +113,36 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                         setLogoutView()
                         toast("로그아웃 되었습니다.")
                     }
-                    .setNegativeButton("아니오",null)
+                    .setNegativeButton("아니오", null)
                     .show()
             }
 
-            btnLoginJoinAfter.setOnClickListener { // 프로필 편집
-                if(state) {
+            btnLoginJoinAfter.setOnClickListener {
+                // 프로필 편집
+                if (state) {
                     txtProfileAfterEdit.visibility = View.VISIBLE // "편집" 텍스트 보이게하기
                     btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#0E2FFF"))
-                    imgProfileAfter.setOnClickListener { // 이미지 누를시 편집창
-                        val intent = Intent(context, MainActivity::class.java)
-                        startActivity(intent)
+                    imgProfileAfter.setOnClickListener {
+                        // 이미지 누를시 편집창
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle("프로필 사진을 변경하시겠습니까?")
+                            .setPositiveButton("네") { _, _ ->
+                                val intent = Intent()
+                                intent.type = "image/*"
+                                intent.action = Intent.ACTION_GET_CONTENT
+                                startActivityForResult(intent, 2000)
+                            }
+                            .setNegativeButton("아니오", null)
+                            .show()
                     }
                     btnLoginJoinAfter.text = "완료" // 버튼 텍스트 수정
-                    state=false
+                    state = false
                 } else {
                     txtProfileAfterEdit.visibility = View.INVISIBLE // "편집" 텍스트 안 보이게하기
                     btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#D14D77"))
-                    imgProfileAfter.isClickable=false
+                    imgProfileAfter.isClickable = false
                     btnLoginJoinAfter.text = "프로필 편집"
-                    state=true
+                    state = true
                 }
             }
         }
@@ -157,7 +186,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         bind {
             layoutLoginBefore.visibility = View.GONE
             layoutLoginAfter.visibility = View.INVISIBLE
-            pbLoginAfter.visibility=View.VISIBLE
+            pbLoginAfter.visibility = View.VISIBLE
         }
     }
 
@@ -165,7 +194,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
         bind {
             layoutLoginAfter.visibility = View.VISIBLE
             btnLoginLogout.visibility = View.VISIBLE
-            pbLoginAfter.visibility=View.INVISIBLE
+            pbLoginAfter.visibility = View.INVISIBLE
         }
     }
 

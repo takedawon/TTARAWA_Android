@@ -54,6 +54,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$firebase_version"
     implementation "com.google.firebase:firebase-database:$firebase_database_version"
     implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
+    implementation "com.google.firebase:firebase-storage:$firebase_storage_version"
     // kakao
 
     // 사용자관리 sdk를 사용하기 위해 필요.
