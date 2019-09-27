@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ui.main
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +29,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(
                 setFirebaseLogin(id,pw)
             }
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun initView() {

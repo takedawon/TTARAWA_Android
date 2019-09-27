@@ -11,4 +11,5 @@
     <color name="colorOnBackground">#353435</color>
     <color name="border_on_bg">#D8D7DC</color>
     <color name="colorRed">#ff0000</color>
+    <color name="colorSettingProfileEdit">#D14D77</color>
 </resources>

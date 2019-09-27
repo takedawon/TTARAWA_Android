@@ -3,8 +3,8 @@ package com.seoul.ttarawa.ui.main
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -37,6 +37,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     private lateinit var session: SessionCallback
     private lateinit var myRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private var state:Boolean = true
 
     override fun onStart() {
         super.onStart()
@@ -51,7 +52,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        database = FirebaseDatabase.getInstance()
         initView()
 
         session = SessionCallback()
@@ -60,22 +61,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             Session.getCurrentSession().checkAndImplicitOpen()
         }
 
-        binding.btnLoginJoin.setOnClickListener {
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivityForResult(intent, 1000)
-        }
 
-        binding.btnLoginLogout.setOnClickListener {
-            MaterialAlertDialogBuilder(context)
-                .setTitle("로그아웃 하시겠습니까?")
-                .setPositiveButton("네") { _, _ ->
-                    auth.signOut()
-                    setLogoutView()
-                    toast("로그아웃 되었습니다.")
-                }
-                .setNegativeButton("아니오",null)
-                .show()
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -94,7 +80,43 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     }
 
     override fun initView() {
-        database = FirebaseDatabase.getInstance()
+        bind {
+            btnLoginJoin.setOnClickListener {
+                val intent = Intent(activity, LoginActivity::class.java)
+                startActivityForResult(intent, 1000)
+            }
+
+            btnLoginLogout.setOnClickListener {
+                MaterialAlertDialogBuilder(context)
+                    .setTitle("로그아웃 하시겠습니까?")
+                    .setPositiveButton("네") { _, _ ->
+                        auth.signOut()
+                        setLogoutView()
+                        toast("로그아웃 되었습니다.")
+                    }
+                    .setNegativeButton("아니오",null)
+                    .show()
+            }
+
+            btnLoginJoinAfter.setOnClickListener { // 프로필 편집
+                if(state) {
+                    txtProfileAfterEdit.visibility = View.VISIBLE // "편집" 텍스트 보이게하기
+                    btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#0E2FFF"))
+                    imgProfileAfter.setOnClickListener { // 이미지 누를시 편집창
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                    btnLoginJoinAfter.text = "완료" // 버튼 텍스트 수정
+                    state=false
+                } else {
+                    txtProfileAfterEdit.visibility = View.INVISIBLE // "편집" 텍스트 안 보이게하기
+                    btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#D14D77"))
+                    imgProfileAfter.isClickable=false
+                    btnLoginJoinAfter.text = "프로필 편집"
+                    state=true
+                }
+            }
+        }
     }
 
     private fun setLogoutView() {
