@@ -17,6 +17,7 @@ import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.map.CalendarActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import timber.log.Timber
 
 
 class MainActivity :
@@ -115,8 +116,10 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        // 스택에 있는 프래그먼트가 2개일 때 홈 옵션으로 변경
-        if (supportFragmentManager.fragments.size == 2) {
+        // 맨위 프래그먼트가 설정 일 때 홈 옵션으로 변경
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.container_main)
+
+        if (currentFragment?.tag ?: "" == MainFragmentTags.SETTING.name) {
             changeOptionBabMain(MainFragmentTags.HOME)
         }
         super.onBackPressed()
