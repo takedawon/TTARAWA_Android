@@ -22,9 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JoinActivity">
-
-        </activity>
+        <activity android:name=".ui.main.NewsActivity"></activity>
+        <activity android:name=".ui.main.JoinActivity"></activity>
         <activity android:name=".ui.main.LoginActivity" />
 
         <meta-data
@@ -44,13 +43,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity"/>
-        <activity android:name=".ui.search.TourDetailActivity" />
-        <activity android:name=".ui.map.CalendarActivity" />
-
-        <activity
-            android:name=".ui.path.PathActivity"
-            android:theme="@style/AppTheme.NoneStatusBar">
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -58,7 +51,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ui.search.TourDetailActivity" />
+        <activity android:name=".ui.map.CalendarActivity" />
+        <activity
+            android:name=".ui.path.PathActivity"
+            android:theme="@style/AppTheme.NoneStatusBar" />
         <activity android:name=".ui.search.SearchActivity" />
     </application>
 
