@@ -28,6 +28,7 @@ import com.seoul.ttarawa.ext.*
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.SearchActivity
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -102,7 +103,10 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             }
 
             fabPathAdd click {
-                startActivity<SearchActivity>(SearchActivity.EXTRA_DATE to (chooseDate ?: getCurrentDay()))
+                startActivityForResult<SearchActivity>(
+                    requestCode = 300,
+                    params = *arrayOf(SearchActivity.EXTRA_DATE to (chooseDate ?: getCurrentDay()))
+                )
             }
 
             // 아이템 제거 버튼을 활성, 비활성화
