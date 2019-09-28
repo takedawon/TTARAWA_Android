@@ -1,5 +1,7 @@
 package com.seoul.ttarawa.ui.path
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Build
@@ -20,13 +22,17 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.*
 import com.seoul.ttarawa.module.NetworkModule
+import com.seoul.ttarawa.ui.search.CategoryType
 import com.seoul.ttarawa.ui.search.SearchActivity
+import com.seoul.ttarawa.ui.search.TourDetailActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -43,7 +49,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
 
-    private var chooseDate: String? = null
+    private var chooseDate: String = ""
 
     private lateinit var locationSource: FusedLocationSource
 
@@ -80,9 +86,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
-        getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828)
-
-        getRoadPath(37.47371341, 126.89094828, 37.48371341, 126.89575388)
+        // getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828, CategoryType.WAY_POINT)
+        // getRoadPath(37.47371341, 126.89094828, 37.48371341, 126.89575388, CategoryType.WAY_POINT)
     }
 
     override fun initView() {
@@ -104,8 +109,8 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
             fabPathAdd click {
                 startActivityForResult<SearchActivity>(
-                    requestCode = 300,
-                    params = *arrayOf(SearchActivity.EXTRA_DATE to (chooseDate ?: getCurrentDay()))
+                    requestCode = SEARCH_REQUEST_CODE,
+                    params = *arrayOf(SearchActivity.EXTRA_DATE to chooseDate)
                 )
             }
 
@@ -222,11 +227,41 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                SEARCH_REQUEST_CODE -> {
+                    val tour = data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                    // 여기서 받아야 하는 정보들
+                    // 출발시간, 도착시간, 이름, 주소, 부가정보, 카테고리
+                    tour?.let {
+                        if (markerList.isEmpty()) {
+                            // 처음에는 마커만 생성
+                            Timber.e("addMarkerInMap onActivityResult")
+                            addMarkerInMap(LatLng(tour.latitude, tour.longitude), CategoryType.get(tour.categoryCode))
+                        } else {
+                            getRoadPath(
+                                startLat = markerList.last.position.latitude,
+                                startLon = markerList.last.position.longitude,
+                                endLat = tour.latitude,
+                                endLon = tour.longitude,
+                                categoryType = CategoryType.get(tour.categoryCode)
+                            )
+                        }
+                    }
+                    return
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun getRoadPath(
         startLat: Double,
         startLon: Double,
         endLat: Double,
-        endLon: Double
+        endLon: Double,
+        categoryType: CategoryType
     ) {
         NetworkModule.tmapWalkingApi.getWalkingPath(
             appKey = "d21dbb20-70b0-4824-8b51-cf3cc6fd8aca",
@@ -256,11 +291,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
                     val startLatLng = LatLng(startLat, startLon)
 
-                    // fixme 첫 시작시에는 마커만 보이게 될 것임. 수정이 필요한 부분
-                    if (latLngList.isEmpty()) {
-                        addMarkerInMap(startLatLng, "시작")           // 마커 추가
-                    }
-
                     // onResponse 안에서만 수집할 좌표 리스트
                     val latLngs = mutableListOf<LatLng>()
                     latLngs.add(startLatLng)
@@ -282,11 +312,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                     }
 
                     val endLatLng = LatLng(endLat, endLon)
-                    addMarkerInMap(endLatLng, "종료")         // 마커 추가
+                    addMarkerInMap(endLatLng, categoryType)         // 마커 추가
 
                     latLngs.add(endLatLng)
                     // 좌표리스트 맵에 반영
-                    addPathLineInMap(latLngs)
+                    addPathLineInMap(latLngs, categoryType)
                     // 맵 이동
                     moveCameraCenterByLatLngList()
                 }
@@ -318,7 +348,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * 맵에 라인 추가
      * @param latLngs 좌표 리스트
      */
-    private fun addPathLineInMap(latLngs: List<LatLng>) {
+    private fun addPathLineInMap(latLngs: List<LatLng>, category: CategoryType) {
         val pathOverlay = PathOverlay().apply {
             // 경로
             coords = latLngs
@@ -326,9 +356,9 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             width = 30
             // 테두리
             outlineWidth = 5
-            outlineColor = ContextCompat.getColor(this@PathActivity, R.color.colorAccent)
+            outlineColor = ContextCompat.getColor(this@PathActivity, category.pathStrokeColor)
             // 라인 색
-            color = Color.GREEN
+            color = ContextCompat.getColor(this@PathActivity, category.PathColor)
             // 라인 패턴
             patternImage = OverlayImage.fromResource(R.drawable.path_ic_arrow_24dp)
             patternInterval = 50
@@ -363,7 +393,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * @param latLng 좌표
      * @param captionText 마커 하단에 보이는 텍스트
      */
-    private fun addMarkerInMap(latLng: LatLng, captionText: String) {
+    private fun addMarkerInMap(latLng: LatLng, category: CategoryType) {
         val marker = Marker(latLng)
         markerList.add(marker)
 
@@ -371,13 +401,13 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             // 맵에 표시
             map = naverMap
             // 하단 텍스트
-            this.captionText = captionText
+            // this.captionText = captionText
 
-            icon = OverlayImage.fromResource(R.drawable.path_ic_cafe_marker)
+            icon = OverlayImage.fromResource(category.markerIconId)
 
             // 아이콘 색 변경
             // icon = MarkerIcons.GREEN
-            iconTintColor = Color.BLUE
+            iconTintColor = ContextCompat.getColor(this@PathActivity, category.PathColor)
         }
     }
 
@@ -401,5 +431,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         const val EXTRA_DATE = "EXTRA_DATE"
         const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        const val SEARCH_REQUEST_CODE = 2000
     }
 }

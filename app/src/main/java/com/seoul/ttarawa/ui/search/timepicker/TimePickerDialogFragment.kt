@@ -10,10 +10,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseDialogFragment
 import com.seoul.ttarawa.base.abstract.CustomAnimationListener
 import com.seoul.ttarawa.databinding.DialogFragmentTimePickerBinding
-import com.seoul.ttarawa.ext.click
-import com.seoul.ttarawa.ext.getCurrentDay
-import com.seoul.ttarawa.ext.hide
-import com.seoul.ttarawa.ext.show
+import com.seoul.ttarawa.ext.*
 import com.seoul.ttarawa.ui.search.SearchActivity
 import org.jetbrains.anko.support.v4.px2dip
 import timber.log.Timber
@@ -123,21 +120,14 @@ class TimePickerDialogFragment : BaseDialogFragment<DialogFragmentTimePickerBind
             }
 
             tpStart.setOnTimeChangedListener { _: TimePicker?, hourOfDay: Int, minute: Int ->
-                startTime = "${getTextFormattedTime(hourOfDay)}:${getTextFormattedTime(minute)}"
+                startTime = "${hourOfDay.getTextFormattedTime()}:${minute.getTextFormattedTime()}"
             }
 
             tpEnd.setOnTimeChangedListener { _, hourOfDay, minute ->
-                endTime = "${getTextFormattedTime(hourOfDay)}:${getTextFormattedTime(minute)}"
+                endTime = "${hourOfDay.getTextFormattedTime()}:${minute.getTextFormattedTime()}"
             }
         }
     }
-
-    private fun getTextFormattedTime(time: Int) =
-        if (time < 10) {
-            "0$time"
-        } else {
-            "$time"
-        }
 
     private fun initAnimation() {
         val animationListener = object : CustomAnimationListener() {

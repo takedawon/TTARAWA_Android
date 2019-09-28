@@ -1,12 +1,60 @@
 package com.seoul.ttarawa.data.entity
 
+import android.os.Parcel
+import android.os.Parcelable
+
 data class LocationTourModel(
+    override val categoryCode: Int,
+    override val title: String,
+    override val address: String,
+    override val startTime: Int,
+    override val endTime: Int,
+    override val latitude: Double,
+    override val longitude: Double,
     val imgUrl: String?,
-    val title: String,
-    val address: String,
-    val contentID: Int,
-    val mapX:Double,
-    val mapY:Double,
-    val startDate:Int,
-    val endDate:Int
-)
+    val contentId: Int,
+    val startDate: Int,
+    val endDate: Int
+) : BaseSearchEntity, Parcelable {
+    constructor(source: Parcel) : this(
+        source.readInt(),
+        source.readString() ?: "",
+        source.readString() ?: "",
+        source.readInt(),
+        source.readInt(),
+        source.readDouble(),
+        source.readDouble(),
+        source.readString(),
+        source.readInt(),
+        source.readInt(),
+        source.readInt()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(categoryCode)
+        writeString(title)
+        writeString(address)
+        writeInt(startTime)
+        writeInt(endTime)
+        writeDouble(latitude)
+        writeDouble(longitude)
+        writeString(imgUrl)
+        writeInt(contentId)
+        writeInt(startDate)
+        writeInt(endDate)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<LocationTourModel> =
+            object : Parcelable.Creator<LocationTourModel> {
+                override fun createFromParcel(source: Parcel): LocationTourModel =
+                    LocationTourModel(source)
+
+                override fun newArray(size: Int): Array<LocationTourModel?> = arrayOfNulls(size)
+            }
+    }
+}
+

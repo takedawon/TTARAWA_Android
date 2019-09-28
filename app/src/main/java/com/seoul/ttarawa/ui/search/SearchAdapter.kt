@@ -1,20 +1,22 @@
 package com.seoul.ttarawa.ui.search
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
+import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.ui.search.veiwholder.TourViewHolder
 
-class SearchAdapter(val context:Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val list = mutableListOf<Any>()
+    private val list = mutableListOf<BaseSearchEntity>()
 
-    fun replaceAll(list: List<Any>) {
+    var onClickStartDetail: ((model: BaseSearchEntity) -> Unit)? = null
+
+    fun replaceAll(list: List<BaseSearchEntity>) {
         this.list.clear()
         this.list.addAll(list)
         notifyDataSetChanged()
@@ -28,7 +30,7 @@ class SearchAdapter(val context:Context) : RecyclerView.Adapter<RecyclerView.Vie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_TOUR) {
-            TourViewHolder(inflateDataBinding(parent, R.layout.item_tour))
+            TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
         } else {
             super.createViewHolder(parent, viewType)
         }
@@ -47,7 +49,7 @@ class SearchAdapter(val context:Context) : RecyclerView.Adapter<RecyclerView.Vie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_TOUR -> {
-                (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel,context)
+                (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel)
             }
             else -> {
             }

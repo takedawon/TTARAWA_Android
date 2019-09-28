@@ -1,4 +1,4 @@
-package com.seoul.ttarawa.ui.map
+package com.seoul.ttarawa.ui.calendar
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -6,6 +6,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityCalendarBinding
 import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ext.getTextFormattedTime
 import com.seoul.ttarawa.ui.path.PathActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -54,7 +55,7 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
                 }
 
                 toast("${year}년 ${month + 1}월 ${dayOfMonth}일을 선택하셨습니다.")
-                val date = "$year${month + 1}$dayOfMonth"
+                val date = "$year${(month + 1).getTextFormattedTime()}${dayOfMonth.getTextFormattedTime()}"
 
                 // 패스 액티비티로 이동 및 종료
                 startActivity<PathActivity>(PathActivity.EXTRA_DATE to date)

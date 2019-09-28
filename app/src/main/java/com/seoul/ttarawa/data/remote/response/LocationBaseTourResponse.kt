@@ -52,9 +52,9 @@ data class LocationBaseTourResponse(
                     val firstimage: String?,
                     @SerializedName("firstimage2")
                     val firstimage2: String,
-                    @SerializedName("mapx")
-                    val mapx: Double,
                     @SerializedName("mapy")
+                    val mapx: Double,
+                    @SerializedName("mapx")
                     val mapy: Double,
                     @SerializedName("mlevel")
                     val mlevel: Int,

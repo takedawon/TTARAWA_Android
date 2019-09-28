@@ -14,10 +14,9 @@ import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.main.home.HomeFragment
-import com.seoul.ttarawa.ui.map.CalendarActivity
+import com.seoul.ttarawa.ui.calendar.CalendarActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import timber.log.Timber
 
 
 class MainActivity :

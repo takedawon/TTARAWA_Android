@@ -1,14 +1,17 @@
 package com.seoul.ttarawa.ui.search
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.text.Spanned
 import android.view.View.VISIBLE
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.remote.response.TourDetailsResponse
 import com.seoul.ttarawa.data.remote.response.TourImageResponse
 import com.seoul.ttarawa.databinding.ActivityTourDetailBinding
@@ -19,41 +22,43 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.net.URLDecoder
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
     R.layout.activity_tour_detail
 ) {
+    private lateinit var tour: LocationTourModel
     private lateinit var url: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showProgressBar()
+
+        tour = intent.getParcelableExtra(EXTRA_ENTITY)
         initView()
-        val contentId= intent.getIntExtra("contentId",0)
-        getTourImage(10,
+
+        showProgressBar()
+        getTourImage(
+            10,
             1,
-            contentId,
+            tour.contentId,
             "Y",
-            "Y")
+            "Y"
+        )
     }
 
     @SuppressLint("SimpleDateFormat")
     override fun initView() {
         var swit = true
-        val title:String = intent.getStringExtra("title")
+        val title: String = tour.title
 
-        val sDate = intent.getIntExtra("sDate",0)
-        val eDate = intent.getIntExtra("eDate",0)
+        val sDate = tour.startDate
+        val eDate = tour.endDate
         val date = getDateToString(sDate) + " ~ " + getDateToString(eDate)
         bind {
-            txtTourTitle.text=title
-            txtEventDate.text=date
+            txtTourTitle.text = title
+            txtEventDate.text = date
             layoutTourDetails.setOnClickListener {
-                swit = if(swit) {
+                swit = if (swit) {
                     setDetailsViewShow()
                     false
                 } else {
@@ -61,29 +66,33 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                     true
                 }
             }
-            btnTourDetailOk.setOnClickListener{
-                val intentSearch = Intent(this@TourDetailActivity, SearchActivity::class.java)
-                intentSearch.putExtra("mapX", intent.getDoubleArrayExtra("mapX"))
-                intentSearch.putExtra("mapY", intent.getDoubleArrayExtra("mapY"))
-                startActivity(intentSearch)
+            btnTourDetailOk.setOnClickListener {
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().apply {
+                        putExtra(EXTRA_ENTITY, tour)
+                    }
+                )
+                finish()
             }
         }
     }
 
-    private fun getDateToString(date:Int):String {
+    private fun getDateToString(date: Int): String {
         val stringDate = date.toString()
-        val year = stringDate.substring(0,4) + "-"
-        val month = stringDate.substring(4,6) + "-"
-        val day = stringDate.substring(6,8)
-        return year+month+day
+        val year = stringDate.substring(0, 4) + "-"
+        val month = stringDate.substring(4, 6) + "-"
+        val day = stringDate.substring(6, 8)
+        return year + month + day
     }
 
     private fun setDetailsViewShow() {
-        bind{
+        bind {
             btnDetailsShow.setImageResource(R.drawable.up_arrow)
             txtTourDetails.maxLines = Integer.MAX_VALUE
         }
     }
+
     private fun setDetailsViewHide() {
         bind {
             btnDetailsShow.setImageResource(R.drawable.down_arrow)
@@ -120,7 +129,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 response.body()?.let {
-                    val num= if (numOfRows >= it.response.body.totalCount)
+                    val num = if (numOfRows >= it.response.body.totalCount)
                         it.response.body.totalCount
                     else
                         numOfRows
@@ -135,12 +144,12 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                     tourDetailViewPager.adapter = adapter
                 }
 
-                getTourDetails(1,1,contentId,15)
+                getTourDetails(1, 1, contentId, 15)
             }
         })
     }
 
-    private fun getTourDetails(numOfRows:Int,pageNo:Int,contentId:Int,contentTypeId:Int) {
+    private fun getTourDetails(numOfRows: Int, pageNo: Int, contentId: Int, contentTypeId: Int) {
         NetworkModule.tourDetailsApi.getTourDetail(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
             numOfRows = numOfRows,
@@ -161,9 +170,9 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 bind {
-                    response.body()?.let{
-                        val str:String = it.response.body.items.item.infotext
-                        txtTourDetails.text = str.htmlToString().replace("\n","")
+                    response.body()?.let {
+                        val str: String = it.response.body.items.item.infotext
+                        txtTourDetails.text = str.htmlToString()
                     }
                 }
                 hideProgressBar()
@@ -171,11 +180,11 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
         })
     }
 
-    fun String.htmlToString() : String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
+    fun String.htmlToString(): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
         } else {
-            return Html.fromHtml(this).toString()
+            Html.fromHtml(this)
         }
     }
 
@@ -188,6 +197,10 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             pbTourDetails.hide()
             grpTourDetails.visibility = VISIBLE
         }
+    }
+
+    companion object {
+        const val EXTRA_ENTITY = "EXTRA_ENTITY"
     }
 }
 

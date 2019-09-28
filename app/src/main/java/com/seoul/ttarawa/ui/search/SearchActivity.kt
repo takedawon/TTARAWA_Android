@@ -1,5 +1,7 @@
 package com.seoul.ttarawa.ui.search
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
 import android.view.MenuItem
@@ -12,16 +14,19 @@ import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.remote.response.EventDetailsResponse
 import com.seoul.ttarawa.data.remote.response.LocationBaseTourResponse
 import com.seoul.ttarawa.databinding.ActivitySearchBinding
-import com.seoul.ttarawa.ext.*
+import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ext.getCurrentDay
+import com.seoul.ttarawa.ext.hide
+import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.timepicker.TimePickerDialogFragment
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.IllegalArgumentException
 import java.net.URLDecoder
 
 /**
@@ -39,7 +44,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
 
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
-    private val searchAdapter = SearchAdapter(this@SearchActivity)
+    private val searchAdapter by lazy { createSearchAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,10 +104,20 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         }
     }
 
+    private fun createSearchAdapter() =
+        SearchAdapter().apply {
+            onClickStartDetail = { model ->
+                startActivityForResult<TourDetailActivity>(
+                    DETAIL_REQUEST_CODE,
+                    TourDetailActivity.EXTRA_ENTITY to model
+                )
+            }
+        }
+
     private fun requestSearch() {
         try {
             validateSearch()
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             toast(e.message ?: "")
         }
 
@@ -113,13 +128,34 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 /*ignored*/
             }
             CategoryType.MOVIE -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.WAY_POINT -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.CAFE -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.CULTURE -> {
                 getEventDetailsList(
@@ -127,20 +163,49 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                     pageNo = 1,
                     arrange = "P",
                     eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023
+                    eventEndDate = 20191023,
+                    category = category
                 )
             }
             CategoryType.EXHIBITION -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.TOUR -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.SPORTS -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
             CategoryType.SHOPPING -> {
-
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate = chooseDate.toInt(),
+                    eventEndDate = 20191023,
+                    category = category
+                )
             }
         }
     }
@@ -187,6 +252,16 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == DETAIL_REQUEST_CODE) {
+                setResult(Activity.RESULT_OK, data)
+                finish()
+                return
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
     private fun showProgressBar() {
         binding.pbTour.show()
@@ -197,23 +272,24 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
     }
 
     private fun getEventDetailsList(
-        numOfRows:Int,
+        numOfRows: Int,
         pageNo: Int,
-        arrange:String,
-        eventStartDate:Int,
-        eventEndDate:Int
+        arrange: String,
+        eventStartDate: Int,
+        eventEndDate: Int,
+        category: CategoryType
     ) {
         NetworkModule.eventDetailsApi.getEventDetail(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
-            numOfRows=numOfRows,
-            pageNo=pageNo,
-            MobileOS="AND",
-            MobileApp="TARRAWA",
-            arrange=arrange,
-            listYN="Y",
+            numOfRows = numOfRows,
+            pageNo = pageNo,
+            MobileOS = "AND",
+            MobileApp = "TARRAWA",
+            arrange = arrange,
+            listYN = "Y",
             areaCode = 1,
-            eventStartDate=eventStartDate,
-            eventEndDate=eventEndDate,
+            eventStartDate = eventStartDate,
+            eventEndDate = eventEndDate,
             _type = "json"
         ).enqueue(object : Callback<EventDetailsResponse> {
             override fun onFailure(call: Call<EventDetailsResponse>, t: Throwable) {
@@ -231,12 +307,15 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                         it.response.body.items.item
                             .map { tourItem ->
                                 LocationTourModel(
-                                    imgUrl = tourItem.firstimage,
+                                    categoryCode = category.code,
                                     title = tourItem.title,
                                     address = tourItem.addr1,
-                                    contentID = tourItem.contentid,
-                                    mapX = tourItem.mapx,
-                                    mapY = tourItem.mapy,
+                                    startTime = getStartTime(),
+                                    endTime = getEndTime(),
+                                    latitude = tourItem.mapx,
+                                    longitude = tourItem.mapy.toDouble(),
+                                    imgUrl = tourItem.firstimage,
+                                    contentId = tourItem.contentid,
                                     startDate = tourItem.eventstartdate,
                                     endDate = tourItem.eventenddate
                                 )
@@ -311,7 +390,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                               } else {
                                   tourItem.dist.toString() + "m"
                               },
-                              contentID = tourItem.contentid,
+                              contentId = tourItem.contentid,
                               mapX = tourItem.mapx,
                               mapY = tourItem.mapy
                           )
@@ -330,7 +409,23 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         }
     }
 
+    private fun getStartTime() =
+        try {
+            binding.tietStartTime.text.toString().replace(":".toRegex(), "").toInt()
+        } catch (e: NumberFormatException) {
+            getCurrentDay("HHss").toInt()
+        }
+
+
+    private fun getEndTime() =
+        try {
+            binding.tietEndTime.text.toString().replace(":".toRegex(), "").toInt()
+        } catch (e: NumberFormatException) {
+            getCurrentDay("HHss").toInt()
+        }
+
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"
+        const val DETAIL_REQUEST_CODE = 3000
     }
 }

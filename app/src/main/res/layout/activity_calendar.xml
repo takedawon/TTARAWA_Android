@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.map.CalendarFragment">
+        tools:context=".ui.calendar.CalendarFragment">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cal_back"
