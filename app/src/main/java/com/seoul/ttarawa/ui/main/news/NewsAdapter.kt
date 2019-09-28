@@ -32,22 +32,23 @@ class NewsAdapter(val context: Context, val list:ArrayList<NewsData>) : Recycler
         var txtNewsContent = itemView.findViewById<TextView>(R.id.txt_news_content)
         var layout = itemView.findViewById<LinearLayout>(R.id.layout_news)
         var layoutContent = itemView.findViewById<LinearLayout>(R.id.layout_news_content)
-        var state = true
         fun bind(news: NewsData) {
             txtNewsTitle.text = news.newstitle
             txtNewsDate.text = news.newsDate
             imgNewsArrow.setImageResource(R.drawable.down_arrow)
             txtNewsContent.text = news.newsContent
+
+            if(news.state) {
+                layoutContent.visibility = View.VISIBLE
+                imgNewsArrow.setImageResource(R.drawable.up_arrow)
+            } else {
+                layoutContent.visibility = View.GONE
+                imgNewsArrow.setImageResource(R.drawable.down_arrow)
+            }
+
             layout.setOnClickListener {
-                if(state) {
-                    layoutContent.visibility = View.VISIBLE
-                    imgNewsArrow.setImageResource(R.drawable.up_arrow)
-                    state = false
-                } else {
-                    layoutContent.visibility = View.GONE
-                    imgNewsArrow.setImageResource(R.drawable.down_arrow)
-                    state = true
-                }
+                news.state = !news.state
+                notifyItemChanged(adapterPosition)
             }
         }
     }
