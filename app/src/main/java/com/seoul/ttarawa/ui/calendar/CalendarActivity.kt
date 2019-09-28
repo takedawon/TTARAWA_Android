@@ -36,6 +36,7 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
 
             val today = Calendar.getInstance()
             cvCal.date = today.timeInMillis
+            cvCal.minDate = today.time.time
 
             cvCal.setOnDateChangeListener { _, year, month, dayOfMonth ->
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
