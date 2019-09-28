@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
@@ -59,7 +60,16 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         initBottomSheetBehavior()
 
         bind {
-            rvSearch.adapter = searchAdapter
+            rvSearch.apply {
+                adapter = searchAdapter
+
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        searchListHeaderShadow.visibility =
+                            if (recyclerView.canScrollVertically(-1)) View.VISIBLE else View.GONE
+                    }
+                })
+            }
 
             cgSearch.setOnCheckedChangeListener { chipGroup, checkedId ->
                 if (checkedId == CategoryType.NONE_SELECTED.code) {

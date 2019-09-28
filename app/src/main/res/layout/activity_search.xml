@@ -263,18 +263,19 @@
 
             <!--This is the backdrop's header with a title and icon-->
             <LinearLayout
+                android:id="@+id/ll_search_bottom_sheet_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:background="@drawable/ic_list_header_background"
                 android:clickable="true"
-                android:elevation="4dp"
                 android:focusable="true"
-                android:orientation="horizontal"
-                android:padding="20dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:text="0 items(s)" />
 
@@ -282,11 +283,20 @@
                     android:id="@+id/iv_search_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="16dp"
                     android:contentDescription="TODO"
                     android:src="@drawable/ic_arrow_upward_black_24dp" />
 
             </LinearLayout>
+
+            <View
+                android:id="@+id/search_list_header_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@drawable/shape_drop_down_shadow"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <!--And finally this is the body of the backdrop's content. You can add here whatever you need inside a view group (LinearLayout, RelativeLayout, SwipeRefreshLayout, ConstraintLayout, etc.)-->
             <androidx.constraintlayout.widget.ConstraintLayout
