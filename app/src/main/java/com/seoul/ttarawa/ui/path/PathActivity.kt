@@ -22,18 +22,16 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
-import com.seoul.ttarawa.ext.*
+import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.CategoryType
 import com.seoul.ttarawa.ui.search.SearchActivity
 import com.seoul.ttarawa.ui.search.TourDetailActivity
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import retrofit2.Call
@@ -231,14 +229,18 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SEARCH_REQUEST_CODE -> {
-                    val tour = data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                    val tour =
+                        data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
                     // 여기서 받아야 하는 정보들
                     // 출발시간, 도착시간, 이름, 주소, 부가정보, 카테고리
                     tour?.let {
                         if (markerList.isEmpty()) {
                             // 처음에는 마커만 생성
                             Timber.e("addMarkerInMap onActivityResult")
-                            addMarkerInMap(LatLng(tour.latitude, tour.longitude), CategoryType.get(tour.categoryCode))
+                            addMarkerInMap(
+                                LatLng(tour.latitude, tour.longitude),
+                                CategoryType.get(tour.categoryCode)
+                            )
                         } else {
                             getRoadPath(
                                 startLat = markerList.last.position.latitude,
@@ -336,12 +338,14 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * 전체 [latLngList] 를 기준으로 중심점 변경
      */
     private fun moveCameraCenterByLatLngList() {
-        naverMap?.moveCamera(
-            CameraUpdate.fitBounds(
-                LatLngBounds.Builder().include(latLngList.flatten()).build(),
-                400, 400, 400, 400
+        if (latLngList.isNotEmpty()) {
+            naverMap?.moveCamera(
+                CameraUpdate.fitBounds(
+                    LatLngBounds.Builder().include(latLngList.flatten()).build(),
+                    400, 400, 400, 400
+                )
             )
-        )
+        }
     }
 
     /**

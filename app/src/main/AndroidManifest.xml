@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.search.TourDetailActivity" />
-        <activity android:name=".ui.map.CalendarActivity" />
+        <activity android:name=".ui.calendar.CalendarActivity" />
         <activity
             android:name=".ui.path.PathActivity"
             android:theme="@style/AppTheme.NoneStatusBar" />

@@ -55,14 +55,11 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
     }
 
     override fun initView() {
+        initActionBar()
+        initBottomSheetBehavior()
+
         bind {
-            setSupportActionBar(tbSearch)
-            supportActionBar?.title = getString(R.string.path_actionbar_title)
-
             rvSearch.adapter = searchAdapter
-
-            llSearchBottomSheet.layoutParams.height = getHeightWithoutActionBarSize()
-            bottomSheetBehavior = BottomSheetBehavior.from(binding.llSearchBottomSheet)
 
             cgSearch.setOnCheckedChangeListener { chipGroup, checkedId ->
                 if (checkedId == CategoryType.NONE_SELECTED.code) {
@@ -100,7 +97,44 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 requestSearch()
             }
 
+            ivSearchArrow click {
+                changeBottomSheetState()
+            }
+        }
+    }
 
+    private fun initBottomSheetBehavior() {
+        binding.llSearchBottomSheet.layoutParams.height = getHeightWithoutActionBarSize()
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.llSearchBottomSheet)
+        bottomSheetBehavior?.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                /*ignored*/
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED ||
+                    newState == BottomSheetBehavior.STATE_COLLAPSED
+                ) {
+                    binding.ivSearchArrow.animate().setDuration(300).rotationBy(180f).start()
+                }
+            }
+        })
+    }
+
+    private fun initActionBar() {
+        setSupportActionBar(binding.tbSearch)
+        supportActionBar?.title = getString(R.string.path_actionbar_title)
+    }
+
+    private fun changeBottomSheetState() {
+        bottomSheetBehavior?.run {
+            state = if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                BottomSheetBehavior.STATE_COLLAPSED
+
+            } else {
+                BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 
@@ -117,11 +151,10 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
     private fun requestSearch() {
         try {
             validateSearch()
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         } catch (e: Exception) {
             toast(e.message ?: "")
         }
-
-        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
         when (category) {
             CategoryType.NONE_SELECTED -> {
@@ -234,15 +267,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         item?.let {
             when (it.itemId) {
                 android.R.id.home -> {
-                    bottomSheetBehavior?.run {
-                        state = if (state == BottomSheetBehavior.STATE_EXPANDED) {
-                            BottomSheetBehavior.STATE_COLLAPSED
-
-                        } else {
-                            BottomSheetBehavior.STATE_EXPANDED
-                        }
-                        return true
-                    }
+                    changeBottomSheetState()
+                    return true
                 }
                 else -> {
                     /*ignored*/
