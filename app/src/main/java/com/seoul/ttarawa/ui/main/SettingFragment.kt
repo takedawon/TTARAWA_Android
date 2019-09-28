@@ -27,6 +27,7 @@ import com.kakao.util.helper.log.Logger
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentSettingBinding
+import com.seoul.ttarawa.ui.main.news.NewsActivity
 import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 
