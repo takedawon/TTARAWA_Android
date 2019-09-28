@@ -238,8 +238,9 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                             // 처음에는 마커만 생성
                             Timber.e("addMarkerInMap onActivityResult")
                             addMarkerInMap(
-                                LatLng(tour.latitude, tour.longitude),
-                                CategoryType.get(tour.categoryCode)
+                                latLng = LatLng(tour.latitude, tour.longitude),
+                                category = CategoryType.get(tour.categoryCode),
+                                shouldMoveCamera = true
                             )
                         } else {
                             getRoadPath(
@@ -397,7 +398,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * @param latLng 좌표
      * @param captionText 마커 하단에 보이는 텍스트
      */
-    private fun addMarkerInMap(latLng: LatLng, category: CategoryType) {
+    private fun addMarkerInMap(
+        latLng: LatLng,
+        category: CategoryType,
+        shouldMoveCamera: Boolean = false
+    ) {
         val marker = Marker(latLng)
         markerList.add(marker)
 
@@ -412,6 +417,10 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             // 아이콘 색 변경
             // icon = MarkerIcons.GREEN
             iconTintColor = ContextCompat.getColor(this@PathActivity, category.PathColor)
+        }
+
+        if (shouldMoveCamera) {
+            moveCameraCenterByLatLng(latLng)
         }
     }
 
