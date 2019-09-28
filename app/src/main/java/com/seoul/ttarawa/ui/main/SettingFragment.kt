@@ -100,6 +100,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     .show()
             }
 
+            txtSettingNews.setOnClickListener {
+                val intent = Intent(context, NewsActivity::class.java)
+                startActivity(intent)
+            }
+
             btnLoginJoinAfter.setOnClickListener {
                 // 프로필 편집 변수 state 기본값=true
                 if (state) {
@@ -150,7 +155,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
     private fun setLogoutView() {
         bind {
             btnLoginLogout.visibility = View.GONE
-            layoutLoginAfter.visibility = View.GONE
+            layoutLoginAfter.visibility = View.INVISIBLE
             layoutLoginBefore.visibility = View.VISIBLE
         }
     }
@@ -191,7 +196,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     private fun showProgressBar() {
         bind {
-            layoutLoginBefore.visibility = View.GONE
+            layoutLoginBefore.visibility = View.INVISIBLE
             layoutLoginAfter.visibility = View.INVISIBLE
             pbLoginAfter.visibility = View.VISIBLE
         }
