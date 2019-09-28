@@ -24,10 +24,12 @@ import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ext.getCurrentDay
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.CategoryType
 import com.seoul.ttarawa.ui.search.SearchActivity
@@ -80,7 +82,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         super.onCreate(savedInstanceState)
         initView()
 
-        chooseDate = intent.getStringExtra(EXTRA_DATE)
+        chooseDate = intent.getStringExtra(EXTRA_DATE) ?: getCurrentDay()
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
@@ -229,26 +231,37 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SEARCH_REQUEST_CODE -> {
-                    val tour =
-                        data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                    val categoryCode = data?.getIntExtra(TourDetailActivity.EXTRA_CATEGORY, -1) ?: -1
+
+                    CategoryType.get(categoryCode)
+
+                    val model = when (CategoryType.get(categoryCode)) {
+                        CategoryType.TOUR -> {
+                            data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                        }
+                        else -> {
+                            data?.getSerializableExtra(TourDetailActivity.EXTRA_ENTITY) as BaseSearchEntity
+                        }
+                    }
+
                     // 여기서 받아야 하는 정보들
                     // 출발시간, 도착시간, 이름, 주소, 부가정보, 카테고리
-                    tour?.let {
+                    model?.let {
                         if (markerList.isEmpty()) {
                             // 처음에는 마커만 생성
                             Timber.e("addMarkerInMap onActivityResult")
                             addMarkerInMap(
-                                latLng = LatLng(tour.latitude, tour.longitude),
-                                category = CategoryType.get(tour.categoryCode),
+                                latLng = LatLng(model.latitude, model.longitude),
+                                category = CategoryType.get(model.categoryCode),
                                 shouldMoveCamera = true
                             )
                         } else {
                             getRoadPath(
                                 startLat = markerList.last.position.latitude,
                                 startLon = markerList.last.position.longitude,
-                                endLat = tour.latitude,
-                                endLon = tour.longitude,
-                                categoryType = CategoryType.get(tour.categoryCode)
+                                endLat = model.latitude,
+                                endLon = model.longitude,
+                                categoryType = CategoryType.get(model.categoryCode)
                             )
                         }
                     }

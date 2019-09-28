@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
 import android.view.View.VISIBLE
+import com.naver.maps.geometry.Utmk
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
@@ -70,6 +71,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
                 setResult(
                     Activity.RESULT_OK,
                     Intent().apply {
+                        putExtra(EXTRA_CATEGORY, tour.categoryCode)
                         putExtra(EXTRA_ENTITY, tour)
                     }
                 )
@@ -201,6 +203,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
 
     companion object {
         const val EXTRA_ENTITY = "EXTRA_ENTITY"
+        const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
     }
 }
 

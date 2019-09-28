@@ -25,6 +25,8 @@ object NetworkModule {
 
     val kobisApi: KobisApi = createRetrofit("http://www.kobis.or.kr/kobisopenapi/webservice/rest/").create(KobisApi::class.java)
 
+    val naverFindApi: NaverFindApi = createRetrofit("https://openapi.naver.com/").create(NaverFindApi::class.java)
+
     @JvmStatic
     private fun createRetrofit(uri: String) =
         Retrofit.Builder()
