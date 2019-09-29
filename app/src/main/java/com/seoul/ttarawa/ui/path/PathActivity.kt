@@ -55,6 +55,9 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
     private var pathId: Int = NEW_PATH
 
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
+
     private val nodeList = mutableListOf<NodeEntity>()
 
     private var chooseDate: String = ""
@@ -96,6 +99,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         pathId = intent.getIntExtra(EXTRA_PATH_ID, NEW_PATH)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        Timber.e(locationSource.lastLocation.toString())
     }
 
     private fun initSavedPath() {
@@ -141,7 +145,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             fabPathAdd click {
                 startActivityForResult<SearchActivity>(
                     requestCode = SEARCH_REQUEST_CODE,
-                    params = *arrayOf(SearchActivity.EXTRA_DATE to chooseDate)
+                    params = *arrayOf(
+                        SearchActivity.EXTRA_DATE to chooseDate,
+                        SearchActivity.EXTRA_LAT to latitude,
+                        SearchActivity.EXTRA_LON to longitude
+                    )
                 )
             }
 
@@ -255,9 +263,12 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             setContentPadding(0, 0, 0, 250)
 
             locationSource = this@PathActivity.locationSource
+
             // 위치 변경 리스너
             addOnLocationChangeListener { location ->
                 Timber.d("${location.latitude} ${location.longitude}")
+                latitude = location.latitude
+                longitude = location.longitude
             }
         }
 

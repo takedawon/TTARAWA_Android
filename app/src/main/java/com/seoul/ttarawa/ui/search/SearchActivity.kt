@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +15,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.entity.NaverFindModel
-import com.seoul.ttarawa.data.remote.response.EventDetailsResponse
-import com.seoul.ttarawa.data.remote.response.LocationBaseTourResponse
-import com.seoul.ttarawa.data.remote.response.NaverFindResponse
+import com.seoul.ttarawa.data.remote.response.*
 import com.seoul.ttarawa.databinding.ActivitySearchBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.getCurrentDay
@@ -42,6 +41,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
     R.layout.activity_search
 ) {
 
+    private var longitude: Double = 37.568477
+    private var latitude: Double = 126.981611
     private var chooseDate: String = ""
 
     private var category = CategoryType.NONE_SELECTED
@@ -54,8 +55,11 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         super.onCreate(savedInstanceState)
 
         chooseDate = intent.getStringExtra(EXTRA_DATE) ?: getCurrentDay()
+        latitude = intent.getDoubleExtra(EXTRA_LAT, 126.981611)
+        longitude = intent.getDoubleExtra(EXTRA_LON, 37.568477)
 
         initView()
+        Timber.e(latitude.toString())
     }
 
     override fun initView() {
@@ -184,22 +188,20 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 /*ignored*/
             }
             CategoryType.MOVIE -> {
-                getEventDetailsList(
-                    numOfRows = 30,
-                    pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                getNaverFindList(
+                    query = binding.tietSearch.text.toString(),
+                    display = "10",
+                    start = "1",
+                    sort = "random",
                     category = category
                 )
             }
             CategoryType.WAY_POINT -> {
-                getEventDetailsList(
-                    numOfRows = 30,
-                    pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                getNaverFindList(
+                    query = binding.tietSearch.text.toString(),
+                    display = "10",
+                    start = "1",
+                    sort = "random",
                     category = category
                 )
             }
@@ -213,42 +215,41 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.CULTURE -> {
-                getEventDetailsList(
+                getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                    contentTypeId = 14,
+                    arrange = "E",
+                    mapX = longitude.toString(),
+                    mapY = latitude.toString(),
+                    radius = 10000,
                     category = category
                 )
             }
             CategoryType.EXHIBITION -> {
-                getEventDetailsList(
-                    numOfRows = 30,
-                    pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
-                    category = category
-                )
+                getGeoCoding(longitude,latitude)
             }
             CategoryType.TOUR -> {
-                getEventDetailsList(
+                getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                    contentTypeId = 12,
+                    arrange = "E",
+                    mapX = longitude.toString(),
+                    mapY = latitude.toString(),
+                    radius = 10000,
                     category = category
                 )
             }
             CategoryType.SPORTS -> {
-                getEventDetailsList(
+                getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                    contentTypeId = 12,
+                    arrange = "E",
+                    mapX = longitude.toString(),
+                    mapY = latitude.toString(),
+                    radius = 10000,
                     category = category
                 )
             }
@@ -319,6 +320,52 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         binding.pbTour.hide()
     }
 
+    private fun getGeoCoding(
+        x: Double,
+        y: Double
+    ) {
+        NetworkModule.geoCodingApi.getGeoCoding(
+            Authorization=BuildConfig.KAKAO_KEY,
+            x = x,
+            y = y
+        ).enqueue(object : Callback<GeoCodingResponse> {
+            override fun onFailure(call: Call<GeoCodingResponse>, t: Throwable) {
+                hideProgressBar()
+                t.printStackTrace()
+            }
+
+            override fun onResponse(
+                call: Call<GeoCodingResponse>,
+                response: Response<GeoCodingResponse>
+            ) {
+                Log.e("테스트",response.body()?.documents?.get(0)?.region2depthName)
+                val num =
+                    when (response.body()?.documents?.get(0)?.region2depthName) {
+                        "강남구" -> 1
+                        "강동구" -> 2
+                        "강북구" -> 3
+                        "강서구" -> 4
+                        "관악구" -> 5
+                        "광진구" -> 6
+                        "구로구" -> 7
+                        "금천구" -> 8
+                        "노원구" -> 9
+                        "도봉구" -> 10
+                        else -> 0
+                    }
+                getAreaBasedList(1,
+                    30,
+                    "P",
+                    "A02",
+                    "A0206",
+                    "A02060300",
+                    "14",
+                    num.toString())
+            }
+
+        })
+    }
+
     private fun getNaverFindList(
         query: String,
         display: String,
@@ -335,6 +382,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
             sort = sort
         ).enqueue(object : Callback<NaverFindResponse> {
             override fun onFailure(call: Call<NaverFindResponse>, t: Throwable) {
+                hideProgressBar()
                 t.printStackTrace()
             }
 
@@ -356,8 +404,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                 latitude = latlng.latitude,
                                 longitude = latlng.longitude,
                                 title = naver.title,
-                                address = naver.address,
-                                content = naver.description
+                                address = naver.address
                             )
                         })
                 }
@@ -438,7 +485,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         arrange: String,
         mapX: String,
         mapY: String,
-        radius: Int
+        radius: Int,
+        category: CategoryType
     ) {
         showProgressBar()
 
@@ -468,32 +516,94 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 hideProgressBar()
 
                 response.body()?.let {
-                    /*
                     val defaultPhoto =
-                      "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
+                        "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
 
-                  searchAdapter.replaceAll(
-                      it.response.body.items.item
-                          .sortedBy { it.dist }
-                          .map { tourItem ->
-                          LocationTourModel(
-                              imgUrl = tourItem.firstimage ?: defaultPhoto,
-                              title = tourItem.title,
-                              address = tourItem.addr1,
-                              distance = if (tourItem.dist >= 1000.0) {
-                                  String.format("%.1f", (tourItem.dist / 1000.0)) + "km"
-                              } else {
-                                  tourItem.dist.toString() + "m"
-                              },
-                              contentId = tourItem.contentid,
-                              mapX = tourItem.mapx,
-                              mapY = tourItem.mapy
-                          )
-                      }
-                  )
-                  */
+                    searchAdapter.replaceAll(
+                        it.response.body.items.item
+                            .sortedBy { it.dist }
+                            .map { tourItem ->
+                                LocationTourModel(
+                                    title = tourItem.title,
+                                    address = tourItem.addr1,
+                                    content = "",
+                                    startTime = getStartTime(),
+                                    endTime = getEndTime(),
+                                    latitude = tourItem.mapx,
+                                    longitude = tourItem.mapy,
+                                    imgUrl = tourItem.firstimage ?: defaultPhoto,
+                                    contentId = tourItem.contentid,
+                                    startDate = 0,
+                                    endDate = 0,
+                                    categoryCode = category.code
+                                )
+                            }
+                    )
                 }
             }
+        })
+    }
+
+    private fun getAreaBasedList(
+        pageNo: Int,
+        numOfRows: Int,
+        arrange: String,
+        cat1: String,
+        cat2: String,
+        cat3: String,
+        contentTypeId: String,
+        sigunguCode:String
+    ) {
+        showProgressBar()
+        NetworkModule.areaBasedListApi.getAreaBasedList(
+            serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
+            pageNo = pageNo,
+            numOfRows = numOfRows,
+            MobileApp = "TARRAWA",
+            MobileOS = "AND",
+            arrange = arrange,
+            cat1 = cat1,
+            cat2 = cat2,
+            cat3 = cat3,
+            contentTypeId = contentTypeId,
+            sigunguCode = sigunguCode,
+            areaCode = "1",
+            listYN = "Y",
+            _type = "json"
+        ).enqueue(object : Callback<AreaBasedListResponse> {
+            override fun onFailure(call: Call<AreaBasedListResponse>, t: Throwable) {
+                hideProgressBar()
+                t.printStackTrace()
+            }
+
+            override fun onResponse(
+                call: Call<AreaBasedListResponse>,
+                response: Response<AreaBasedListResponse>
+            ) {
+                hideProgressBar()
+                response.body()?.let {
+                    searchAdapter.replaceAll(
+                        it.response.body.items.item
+                            .map { tourItem ->
+                                LocationTourModel(
+                                    title = tourItem.title,
+                                    address = tourItem.addr1,
+                                    content = "",
+                                    startTime = getStartTime(),
+                                    endTime = getEndTime(),
+                                    latitude = tourItem.mapx.toDouble(),
+                                    longitude = tourItem.mapy,
+                                    imgUrl = tourItem.firstimage,
+                                    contentId = tourItem.contentid,
+                                    startDate = 0,
+                                    endDate = 0,
+                                    categoryCode = category.code
+                                )
+                            }
+                    )
+                }
+            }
+
         })
     }
 
@@ -525,6 +635,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
     }
 
     companion object {
+        const val EXTRA_LON = "EXTRA_LON"
+        const val EXTRA_LAT = "EXTRA_LAT"
         const val EXTRA_DATE = "EXTRA_DATE"
         const val DETAIL_REQUEST_CODE = 3000
     }
