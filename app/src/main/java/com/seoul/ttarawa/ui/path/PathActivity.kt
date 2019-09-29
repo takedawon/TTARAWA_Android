@@ -67,6 +67,9 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
     private var firebaseUser: FirebaseUser? = null
 
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
+
     private val nodeList = mutableListOf<NodeEntity>()
 
     private var chooseDate: String = ""
@@ -111,6 +114,15 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         pathId = intent.getStringExtra(EXTRA_PATH_ID) ?: NEW_PATH
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        Timber.e(locationSource.lastLocation.toString())
+    }
+
+    private fun initSavedPath() {
+        val pathAndNodes = localExecutor.getPathAndNodes(pathId)
+
+        val tmpNodes = mutableListOf<NodeEntity>()
+
+        Timber.e("initSavedPath $naverMap")
 
         initFirebaseUser()
         initView()
@@ -140,7 +152,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             fabPathAdd click {
                 startActivityForResult<SearchActivity>(
                     requestCode = SEARCH_REQUEST_CODE,
-                    params = *arrayOf(SearchActivity.EXTRA_DATE to chooseDate)
+                    params = *arrayOf(
+                        SearchActivity.EXTRA_DATE to chooseDate,
+                        SearchActivity.EXTRA_LAT to latitude,
+                        SearchActivity.EXTRA_LON to longitude
+                    )
                 )
             }
 

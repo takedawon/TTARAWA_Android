@@ -32,12 +32,18 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == CategoryType.TOUR.code) {
-            TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
-        } else if (viewType == CategoryType.CAFE.code) {
-            NaverFindViewHolder(inflateDataBinding(parent, R.layout.item_naver_search), onClickNaverSearch)
-        } else {
-            super.createViewHolder(parent, viewType)
+        return when(viewType) {
+            CategoryType.TOUR.code,
+            CategoryType.SPORTS.code,
+            CategoryType.CULTURE.code,
+            CategoryType.EXHIBITION.code->
+                    TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
+            CategoryType.CAFE.code,
+            CategoryType.WAY_POINT.code,
+            CategoryType.MOVIE.code ->
+                NaverFindViewHolder(inflateDataBinding(parent, R.layout.item_naver_search), onClickNaverSearch)
+            else ->
+                super.createViewHolder(parent, viewType)
         }
     }
 
@@ -53,10 +59,15 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            CategoryType.TOUR.code -> {
+            CategoryType.TOUR.code,
+            CategoryType.SPORTS.code,
+            CategoryType.CULTURE.code,
+            CategoryType.EXHIBITION.code-> {
                 (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel)
             }
-            CategoryType.CAFE.code -> {
+            CategoryType.CAFE.code,
+            CategoryType.WAY_POINT.code,
+            CategoryType.MOVIE.code-> {
                 (holder as? NaverFindViewHolder)?.bind(list[position] as? NaverFindModel)
             }
             else -> {

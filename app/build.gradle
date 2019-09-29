@@ -22,6 +22,7 @@ android {
         buildConfigField "String", "KOBIS_KEY", "\"1e50fd730d07d1a97685abada13fc354\""
         buildConfigField "String", "NAVER_CLENT_ID", "\"gpAcLgUoeEIYcu6koeJa\""
         buildConfigField "String", "NAVER_CLENT_SECRET", "\"bhQq2qe_le\""
+        buildConfigField "String", "KAKAO_KEY", "\"KakaoAK 0bf4e091fa3e085b8a7f126d2f741af4\""
 
     }
     buildTypes {

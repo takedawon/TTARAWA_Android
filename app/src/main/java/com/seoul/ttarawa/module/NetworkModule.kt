@@ -18,6 +18,10 @@ object NetworkModule {
 
     val locationBaseTourApi: LocationBaseTourApi = createRetrofit("http://api.visitkorea.or.kr/").create(LocationBaseTourApi::class.java)
 
+    val areaBasedListApi: AreaBasedListApi = createRetrofit("http://api.visitkorea.or.kr/").create(AreaBasedListApi::class.java)
+
+    val geoCodingApi: GeoCodingApi = createRetrofit("https://dapi.kakao.com").create(GeoCodingApi::class.java)
+
     val tourImageApi: TourImageApi = createRetrofit("http://api.visitkorea.or.kr/").create(TourImageApi::class.java)
 
     val tourDetailsApi: TourDetailsApi = createRetrofit("http://api.visitkorea.or.kr/").create(TourDetailsApi::class.java)
