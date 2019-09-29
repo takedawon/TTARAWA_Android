@@ -12,6 +12,12 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraUpdate
@@ -30,6 +36,8 @@ import com.seoul.ttarawa.data.local.entity.NodeEntity
 import com.seoul.ttarawa.data.local.entity.PathEntity
 import com.seoul.ttarawa.data.local.executor.LocalExecutor
 import com.seoul.ttarawa.data.local.executor.provideLocalExecutor
+import com.seoul.ttarawa.data.remote.FirebaseLeaf
+import com.seoul.ttarawa.data.remote.leaf.PathLeaf
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
@@ -54,13 +62,17 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
 
-    private var pathId: Int = NEW_PATH
+    private var pathId: String = NEW_PATH
+
+    private var firebaseUser: FirebaseUser? = null
 
     private val nodeList = mutableListOf<NodeEntity>()
 
     private var chooseDate: String = ""
 
     private lateinit var locationSource: FusedLocationSource
+
+    private lateinit var database: FirebaseDatabase
 
     private val localExecutor: LocalExecutor by lazy { provideLocalExecutor(this@PathActivity) }
 
@@ -91,35 +103,20 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView()
+
+        database = FirebaseDatabase.getInstance()
 
         chooseDate = intent.getStringExtra(EXTRA_DATE) ?: getCurrentDay()
-        pathId = intent.getIntExtra(EXTRA_PATH_ID, NEW_PATH)
+        pathId = intent.getStringExtra(EXTRA_PATH_ID) ?: NEW_PATH
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
+        initFirebaseUser()
+        initView()
     }
 
-    private fun initSavedPath() {
-        val pathAndNodes = localExecutor.getPathAndNodes(pathId)
-
-        val tmpNodes = mutableListOf<NodeEntity>()
-
-        Timber.e("initSavedPath $naverMap")
-
-        if (pathAndNodes != null) {
-            for (node in pathAndNodes.nodes) {
-                if (node.markerYn) {
-                    if (tmpNodes.isNotEmpty()) {
-                        addPathLineInMap(tmpNodes.toList(), CategoryType.get(node.categoryCode))
-                        tmpNodes.clear()
-                    }
-                    addMarkerInMap(node.toBaseSearchEntity())
-                } else {
-                    tmpNodes.add(node)
-                }
-            }
-            moveCameraCenterByLatLngList()
-        }
+    private fun initFirebaseUser() {
+        firebaseUser = FirebaseAuth.getInstance().currentUser
     }
 
     override fun initView() {
@@ -162,6 +159,41 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     fun savePath(pathTitle: String) {
+        val uid = firebaseUser?.uid
+
+        if (uid != null) {
+            savePathToRemote(uid, pathTitle)
+        } else {
+            savePathToLocal(pathTitle)
+        }
+    }
+
+    private fun savePathToRemote(uid: String, pathTitle: String) {
+        database.reference
+            .child(FirebaseLeaf.DB_LEAF_PATH)
+            .child(uid)
+            .child(chooseDate)
+            .push()
+            .setValue(
+                PathLeaf(
+                    title = pathTitle,
+                    date = chooseDate,
+                    nodes = nodeList
+                )
+            ) { error, ref ->
+                // todo 프로그레스
+                if (error == null) {
+                    toast(R.string.path_save_success)
+                } else {
+                    Timber.w("error = ${error.code}, ${error}")
+                    toast(R.string.path_save_fail)
+                }
+
+            }
+    }
+
+    private fun savePathToLocal(pathTitle: String) {
+        // todo 프로그레스
         try {
             val isSuccess = localExecutor.insertPath(
 
@@ -172,11 +204,13 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                 nodes = nodeList
             )
             if (isSuccess) {
-                toast("경로가 저장되었습니다.")
+                // todo 프로그레스
+                toast(R.string.path_save_success)
                 finish()
             }
-        } catch(e: Exception) {
-            toast("경로 저장에 실패했습니다.\n잠시 후 다시 시도해주세요.")
+        } catch (e: Exception) {
+            // todo 프로그레스
+            toast(R.string.path_save_fail)
         }
     }
 
@@ -286,9 +320,67 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             isLocationButtonEnabled = true
         }
 
-        if (pathId != NEW_PATH) {
-            initSavedPath()
+        if (isSavedPathLocal()) {
+            initSavedPathFromLocal()
+        } else {
+            val uid = firebaseUser?.uid
+            if (uid != null) {
+                initSavedPathFromRemote(uid)
+            }
         }
+    }
+
+    private fun initSavedPathFromLocal() {
+        val pathAndNodes = localExecutor.getPathAndNodes(pathId.toInt())
+
+        if (pathAndNodes != null) {
+            initSavedPath(pathAndNodes.nodes)
+        }
+    }
+
+    private fun initSavedPathFromRemote(uid: String) {
+        database.reference
+            .child(FirebaseLeaf.DB_LEAF_PATH)
+            .child(uid)
+            .child(chooseDate)
+            .child(pathId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.w("$error")
+                    toast(R.string.path_save_fail)
+                }
+
+                override fun onDataChange(path: DataSnapshot) {
+                    val pathLeaf = path.getValue(PathLeaf::class.java)
+                    if (pathLeaf != null) {
+                        initSavedPath(pathLeaf.nodes)
+                    }
+                }
+            })
+    }
+
+    private fun initSavedPath(nodes: List<NodeEntity>) {
+        val tmpNodes = mutableListOf<NodeEntity>()
+
+        for (node in nodes) {
+            if (node.markerYn) {
+                if (tmpNodes.isNotEmpty()) {
+                    addPathLineInMap(tmpNodes.toList(), CategoryType.get(node.categoryCode))
+                    tmpNodes.clear()
+                }
+                addMarkerInMap(node.toBaseSearchEntity())
+            } else {
+                tmpNodes.add(node)
+            }
+        }
+        moveCameraCenterByLatLngList()
+    }
+
+    private fun isSavedPathLocal() = try {
+        pathId.toInt()
+        true
+    } catch (e: NumberFormatException) {
+        false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -548,7 +640,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     companion object {
-        const val NEW_PATH = -1
+        const val NEW_PATH = ""
         const val EXTRA_PATH_ID = "EXTRA_PATH_ID"
         const val EXTRA_DATE = "EXTRA_DATE"
         const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"

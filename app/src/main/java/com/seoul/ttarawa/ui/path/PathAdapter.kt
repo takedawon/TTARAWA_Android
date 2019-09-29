@@ -7,26 +7,26 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
-import com.seoul.ttarawa.data.entity.PathEntity
+import com.seoul.ttarawa.data.entity.WayPointEntity
 import com.seoul.ttarawa.databinding.ItemPathAddBinding
 import com.seoul.ttarawa.databinding.ItemPathBinding
 
 class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val list = mutableListOf<PathEntity>()
+    val list = mutableListOf<WayPointEntity>()
 
     init {
         replaceAll(
             listOf(
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1020", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1720", "2030", false, 0),
-                PathEntity("abcd", "서울특별시 구로구 고척동", "", "", "1820", "2030", false, 0)
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1020", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1720", "2030", false, 0),
+                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1820", "2030", false, 0)
             )
         )
     }
@@ -36,12 +36,12 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun add(path: PathEntity) {
-        this.list.add(path)
+    fun add(wayPoint: WayPointEntity) {
+        this.list.add(wayPoint)
         notifyDataSetChanged()
     }
 
-    fun replaceAll(list: List<PathEntity>) {
+    fun replaceAll(list: List<WayPointEntity>) {
         this.list.clear()
         this.list.addAll(list)
         notifyDataSetChanged()
@@ -75,7 +75,7 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return super.getItemViewType(position)
     }
 
-    fun getItem(position: Int): PathEntity? {
+    fun getItem(position: Int): WayPointEntity? {
         return if (position >= list.size) {
             null
         } else {
@@ -85,10 +85,10 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class PathViewHolder(val binding: ItemPathBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(path: PathEntity) {
-            binding.tvPathName.text = path.name
-            binding.tvPathTime.text = path.address
-            binding.ivPathDelete.visibility = if (path.isVisibleDelete) View.VISIBLE else View.GONE
+        fun bind(wayPoint: WayPointEntity) {
+            binding.tvPathName.text = wayPoint.name
+            binding.tvPathTime.text = wayPoint.address
+            binding.ivPathDelete.visibility = if (wayPoint.isVisibleDelete) View.VISIBLE else View.GONE
         }
     }
 

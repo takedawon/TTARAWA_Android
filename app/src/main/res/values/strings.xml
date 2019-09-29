@@ -8,4 +8,6 @@
     <string name="menu_action_up_down">Up down</string>
     <string name="menu_action_up_down_stack">Up down stack</string>
     <string name="my_path_toolbar_title">내 경로</string>
+    <string name="path_save_success">경로가 저장되었습니다.</string>
+    <string name="path_save_fail">경로 저장에 실패했습니다.\n잠시 후 다시 시도해주세요.</string>
 </resources>

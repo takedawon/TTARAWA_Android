@@ -29,9 +29,9 @@ class NodeEntity(
     @ColumnInfo(name = "address")
     val address: String = "",
     @ColumnInfo(name = "latitude")
-    val latitude: Double,
+    val latitude: Double = 0.0,
     @ColumnInfo(name = "longitude")
-    val longitude: Double,
+    val longitude: Double = 0.0,
     @ColumnInfo(name = "categoryCode")
     val categoryCode: Int = 0,
     @ColumnInfo(name = "startTime")
