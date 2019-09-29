@@ -27,6 +27,7 @@ import com.kakao.util.helper.log.Logger
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.databinding.FragmentSettingBinding
+import com.seoul.ttarawa.ui.main.news.NewsActivity
 import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 
@@ -169,24 +170,28 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     val email = p0.child("email").value.toString()
                     val profileUrl = p0.child("profileImage").value.toString()
 
-                    bind {
-                        txtSettingInfoAfter.text = nick + "님 환영합니다!"
-                        txtLoginEmail.text = email
-                        if (file == null) {
-                            Glide.with(this@SettingFragment)
-                                .load(profileUrl)
-                                .centerCrop()
-                                .apply(RequestOptions().circleCrop())
-                                .into(imgProfileAfter)
-                        } else {
-                            Glide.with(this@SettingFragment)
-                                .load(file)
-                                .centerCrop()
-                                .apply(RequestOptions().circleCrop())
-                                .into(imgProfileAfter)
+                    try {
+                        bind {
+                            txtSettingInfoAfter.text = nick + "님 환영합니다!"
+                            txtLoginEmail.text = email
+                            if (file == null) {
+                                Glide.with(this@SettingFragment)
+                                    .load(profileUrl)
+                                    .centerCrop()
+                                    .apply(RequestOptions().circleCrop())
+                                    .into(imgProfileAfter)
+                            } else {
+                                Glide.with(this@SettingFragment)
+                                    .load(file)
+                                    .centerCrop()
+                                    .apply(RequestOptions().circleCrop())
+                                    .into(imgProfileAfter)
+                            }
                         }
+                        hideProgressBar()
+                    } catch (e: NullPointerException) {
+                        /*ignored*/
                     }
-                    hideProgressBar()
                 }
 
                 override fun onCancelled(p0: DatabaseError) {
@@ -240,6 +245,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                 getString(R.string.com_kakao_cancel_button)
             ) { dialog, _ -> dialog.dismiss() }.show()
 
+    }
+
+    override fun onStop() {
+        Glide.with(this@SettingFragment).pauseRequests()
+        super.onStop()
     }
 
     override fun onDestroyView() {

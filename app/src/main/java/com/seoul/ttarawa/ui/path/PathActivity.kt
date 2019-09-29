@@ -33,6 +33,7 @@ import com.seoul.ttarawa.data.local.executor.LocalExecutor
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
+import com.seoul.ttarawa.ext.getCurrentDay
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.search.CategoryType
 import com.seoul.ttarawa.ui.search.SearchActivity
@@ -89,7 +90,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         super.onCreate(savedInstanceState)
         initView()
 
-        chooseDate = intent.getStringExtra(EXTRA_DATE)
+        chooseDate = intent.getStringExtra(EXTRA_DATE) ?: getCurrentDay()
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
@@ -248,23 +249,34 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SEARCH_REQUEST_CODE -> {
-                    val tour =
-                        data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                    val categoryCode = data?.getIntExtra(TourDetailActivity.EXTRA_CATEGORY, -1) ?: -1
+
+                    CategoryType.get(categoryCode)
+
+                    val model = when (CategoryType.get(categoryCode)) {
+                        CategoryType.TOUR -> {
+                            data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
+                        }
+                        else -> {
+                            data?.getSerializableExtra(TourDetailActivity.EXTRA_ENTITY) as BaseSearchEntity
+                        }
+                    }
+
                     // 여기서 받아야 하는 정보들
                     // 출발시간, 도착시간, 이름, 주소, 부가정보, 카테고리
-                    tour?.let {
+                    model?.let {
                         if (markerList.isEmpty()) {
                             // 처음에는 마커만 생성
                             Timber.e("addMarkerInMap onActivityResult")
                             addMarkerInMap(
-                                searchEntity = tour,
+                                searchEntity = model,
                                 shouldMoveCamera = true
                             )
                         } else {
                             getRoadPath(
                                 startLat = markerList.last.position.latitude,
                                 startLon = markerList.last.position.longitude,
-                                searchEntity = tour
+                                searchEntity = model
                             )
                         }
                     }

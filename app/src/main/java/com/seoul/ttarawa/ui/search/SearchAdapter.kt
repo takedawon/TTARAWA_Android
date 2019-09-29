@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
+import com.seoul.ttarawa.data.entity.NaverFindModel
+import com.seoul.ttarawa.ui.search.veiwholder.NaverFindViewHolder
 import com.seoul.ttarawa.ui.search.veiwholder.TourViewHolder
 
 class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -15,6 +17,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val list = mutableListOf<BaseSearchEntity>()
 
     var onClickStartDetail: ((model: BaseSearchEntity) -> Unit)? = null
+    var onClickNaverSearch: ((model: BaseSearchEntity) -> Unit)? = null
 
     fun replaceAll(list: List<BaseSearchEntity>) {
         this.list.clear()
@@ -29,8 +32,10 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == TYPE_TOUR) {
+        return if (viewType == CategoryType.TOUR.code) {
             TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
+        } else if (viewType == CategoryType.CAFE.code) {
+            NaverFindViewHolder(inflateDataBinding(parent, R.layout.item_naver_search), onClickNaverSearch)
         } else {
             super.createViewHolder(parent, viewType)
         }
@@ -48,8 +53,11 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            TYPE_TOUR -> {
+            CategoryType.TOUR.code -> {
                 (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel)
+            }
+            CategoryType.CAFE.code -> {
+                (holder as? NaverFindViewHolder)?.bind(list[position] as? NaverFindModel)
             }
             else -> {
             }
@@ -57,11 +65,7 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) {
-            TYPE_TOUR
-        } else {
-            super.getItemViewType(position)
-        }
+        return list[position].categoryCode
     }
 
     companion object {

@@ -8,12 +8,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.naver.maps.geometry.Tm128
+import com.naver.maps.geometry.Utmk
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.LocationTourModel
+import com.seoul.ttarawa.data.entity.NaverFindModel
 import com.seoul.ttarawa.data.remote.response.EventDetailsResponse
 import com.seoul.ttarawa.data.remote.response.LocationBaseTourResponse
+import com.seoul.ttarawa.data.remote.response.NaverFindResponse
 import com.seoul.ttarawa.databinding.ActivitySearchBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.getCurrentDay
@@ -155,6 +159,16 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                     TourDetailActivity.EXTRA_ENTITY to model
                 )
             }
+            onClickNaverSearch = { model ->
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().apply {
+                        putExtra(TourDetailActivity.EXTRA_CATEGORY, model.categoryCode)
+                        putExtra(TourDetailActivity.EXTRA_ENTITY, model as? NaverFindModel)
+                    }
+                )
+                finish()
+            }
         }
 
     private fun requestSearch() {
@@ -190,12 +204,11 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.CAFE -> {
-                getEventDetailsList(
-                    numOfRows = 30,
-                    pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                getNaverFindList(
+                    query = binding.tietSearch.text.toString(),
+                    display = "10",
+                    start = "1",
+                    sort = "random",
                     category = category
                 )
             }
@@ -304,6 +317,50 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
 
     private fun hideProgressBar() {
         binding.pbTour.hide()
+    }
+
+    private fun getNaverFindList(
+        query: String,
+        display: String,
+        start: String,
+        sort: String,
+        category: CategoryType
+    ) {
+        NetworkModule.naverFindApi.getNaverFind(
+            clientId = BuildConfig.NAVER_CLENT_ID,
+            clientSecret = BuildConfig.NAVER_CLENT_SECRET,
+            url = query,
+            display = display,
+            start = start,
+            sort = sort
+        ).enqueue(object : Callback<NaverFindResponse> {
+            override fun onFailure(call: Call<NaverFindResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+            override fun onResponse(
+                call: Call<NaverFindResponse>,
+                response: Response<NaverFindResponse>
+            ) {
+                response.body()?.let {
+                    searchAdapter.replaceAll(
+                        it.items.map { naver ->
+                            val latlng =
+                                Tm128(naver.mapx.toDouble(), naver.mapy.toDouble()).toLatLng()
+
+                            NaverFindModel(
+                                categoryCode = category.code,
+                                startTime = getStartTime(),
+                                endTime = getEndTime(),
+                                latitude = latlng.latitude,
+                                longitude = latlng.longitude,
+                                title = naver.title,
+                                address = naver.address
+                            )
+                        })
+                }
+            }
+        })
     }
 
     private fun getEventDetailsList(

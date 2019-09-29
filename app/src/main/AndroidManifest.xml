@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.main.NewsActivity"></activity>
+        <activity android:name=".ui.main.news.NewsActivity"/>
         <activity android:name=".ui.main.JoinActivity"></activity>
         <activity android:name=".ui.main.LoginActivity" />
 

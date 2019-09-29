@@ -20,6 +20,9 @@ android {
         buildConfigField "String", "KMA_KEY", "\"5QyVwm0GQxAdvNdc%2BRHjoLPF07dmzuYnQi%2F2BiMLpPQtGwPItZolkz4GLA4PPiS7pgTGKhGBhn5GHi8t9WRcnQ%3D%3D\""
         buildConfigField "String", "TMAP_KEY", "\"d21dbb20-70b0-4824-8b51-cf3cc6fd8aca\""
         buildConfigField "String", "KOBIS_KEY", "\"1e50fd730d07d1a97685abada13fc354\""
+        buildConfigField "String", "NAVER_CLENT_ID", "\"gpAcLgUoeEIYcu6koeJa\""
+        buildConfigField "String", "NAVER_CLENT_SECRET", "\"bhQq2qe_le\""
+
     }
     buildTypes {
         release {
@@ -103,6 +106,7 @@ dependencies {
 
     // naver
     implementation 'com.naver.maps:map-sdk:3.5.0'
+    implementation project(path: ':ODsayAndroidSDK')
 
     // room
     implementation "androidx.room:room-runtime:$room_version"
