@@ -19,11 +19,13 @@ import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.mypath.MyPathActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import timber.log.Timber
 
 
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
+    private var lastClickTimeMenuSetting: Long = 0
     private lateinit var homeFragment: HomeFragment
     private lateinit var settingFragment: SettingFragment
 
@@ -145,8 +147,17 @@ class MainActivity :
     private fun setOnMenuItemClickListener() {
         binding.babMain.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { menu ->
             if (menu.itemId == R.id.menu_setting) {
-                addFragment(settingFragment, MainFragmentTags.SETTING)
-                return@OnMenuItemClickListener true
+                val currentClickTimeMenuSetting = System.currentTimeMillis()
+
+                Timber.e("$currentClickTimeMenuSetting $lastClickTimeMenuSetting")
+
+                if (lastClickTimeMenuSetting + 1500 <= currentClickTimeMenuSetting) {
+
+                    lastClickTimeMenuSetting = currentClickTimeMenuSetting
+
+                    addFragment(settingFragment, MainFragmentTags.SETTING)
+                    return@OnMenuItemClickListener true
+                }
             }
             return@OnMenuItemClickListener false
         })

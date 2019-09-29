@@ -54,6 +54,8 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
     }
 
     private fun getMyPath() {
+        showProgress()
+
         val list = localExecutor.getPath()
             .map { it.toPath() }
             .toMutableList()
@@ -65,6 +67,7 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                 .child(uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
+                        hideProgress()
                         Timber.e("$error")
                     }
 
@@ -78,6 +81,7 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                             }
                         }
                         myPathAdapter.replaceAll(list)
+                        hideProgress()
                     }
                 }
                 )

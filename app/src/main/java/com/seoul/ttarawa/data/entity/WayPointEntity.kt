@@ -3,10 +3,10 @@ package com.seoul.ttarawa.data.entity
 data class WayPointEntity(
     val name: String,
     val address: String,
-    val lat: String,
-    val lng: String,
+    val lat: Double,
+    val lng: Double,
     val startTime: String,
     val endTime: String,
-    var isVisibleDelete: Boolean,
+    var isVisibleDelete: Boolean = false,
     val dayNumber: Int = 0
 )

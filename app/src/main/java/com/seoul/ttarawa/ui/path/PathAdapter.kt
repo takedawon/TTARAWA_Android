@@ -15,22 +15,6 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val list = mutableListOf<WayPointEntity>()
 
-    init {
-        replaceAll(
-            listOf(
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1020", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1120", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1420", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1720", "2030", false, 0),
-                WayPointEntity("abcd", "서울특별시 구로구 고척동", "", "", "1820", "2030", false, 0)
-            )
-        )
-    }
-
     fun changeDeleteMode(isChecked: Boolean) {
         list.forEach { it.isVisibleDelete = isChecked }
         notifyDataSetChanged()

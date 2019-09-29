@@ -32,6 +32,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
+import com.seoul.ttarawa.data.entity.WayPointEntity
 import com.seoul.ttarawa.data.local.entity.NodeEntity
 import com.seoul.ttarawa.data.local.entity.PathEntity
 import com.seoul.ttarawa.data.local.executor.LocalExecutor
@@ -588,6 +589,17 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         val latLng = LatLng(searchEntity.latitude, searchEntity.longitude)
         val marker = Marker(latLng)
         markerList.add(marker)
+
+        pathAdapter.add(
+            WayPointEntity(
+                name = searchEntity.title,
+                address = searchEntity.address,
+                lat = searchEntity.latitude,
+                lng = searchEntity.longitude,
+                startTime = searchEntity.startTime,
+                endTime = searchEntity.endTime
+            )
+        )
 
         nodeList.add(
             NodeEntity(

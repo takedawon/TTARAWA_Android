@@ -43,4 +43,15 @@
     <style name="TextLimitError" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/colorRed</item>
     </style>
+
+    <style name="TransparentDialog">
+<!--        <item name="android:windowBackground">@null</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="android:windowIsFloating">true</item>-->
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowContentOverlay">@null</item>-->
+<!--        <item name="android:alwaysDrawnWithCache">false</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
 </resources>
