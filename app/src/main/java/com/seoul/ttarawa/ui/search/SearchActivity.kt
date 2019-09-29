@@ -227,7 +227,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.EXHIBITION -> {
-                getGeoCoding(longitude,latitude)
+                getGeoCoding(longitude,latitude,"A02","A0206","A02060300","14")
             }
             CategoryType.TOUR -> {
                 getLocationBaseTourList(
@@ -245,8 +245,8 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    contentTypeId = 12,
-                    arrange = "E",
+                    contentTypeId = 28,
+                    arrange = "B",
                     mapX = longitude.toString(),
                     mapY = latitude.toString(),
                     radius = 10000,
@@ -254,12 +254,14 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.SHOPPING -> {
-                getEventDetailsList(
+                getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    arrange = "P",
-                    eventStartDate = chooseDate.toInt(),
-                    eventEndDate = 20191023,
+                    contentTypeId = 38,
+                    arrange = "E",
+                    mapX = longitude.toString(),
+                    mapY = latitude.toString(),
+                    radius = 10000,
                     category = category
                 )
             }
@@ -322,7 +324,11 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
 
     private fun getGeoCoding(
         x: Double,
-        y: Double
+        y: Double,
+        cat1: String,
+        cat2: String,
+        cat3: String,
+        contentTypeId: String
     ) {
         NetworkModule.geoCodingApi.getGeoCoding(
             Authorization=BuildConfig.KAKAO_KEY,
@@ -356,10 +362,10 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 getAreaBasedList(1,
                     30,
                     "P",
-                    "A02",
-                    "A0206",
-                    "A02060300",
-                    "14",
+                    cat1,
+                    cat2,
+                    cat3,
+                    contentTypeId,
                     num.toString())
             }
 

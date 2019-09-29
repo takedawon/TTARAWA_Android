@@ -36,7 +36,8 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             CategoryType.TOUR.code,
             CategoryType.SPORTS.code,
             CategoryType.CULTURE.code,
-            CategoryType.EXHIBITION.code->
+            CategoryType.EXHIBITION.code,
+            CategoryType.SHOPPING.code ->
                     TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
             CategoryType.CAFE.code,
             CategoryType.WAY_POINT.code,
@@ -62,7 +63,8 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             CategoryType.TOUR.code,
             CategoryType.SPORTS.code,
             CategoryType.CULTURE.code,
-            CategoryType.EXHIBITION.code-> {
+            CategoryType.EXHIBITION.code,
+            CategoryType.SHOPPING.code -> {
                 (holder as? TourViewHolder)?.bind(list[position] as? LocationTourModel)
             }
             CategoryType.CAFE.code,
