@@ -11,7 +11,11 @@ abstract class PathDao: BaseDao<PathEntity> {
 
     @Transaction
     @Query("SELECT * FROM path_tb")
-    abstract fun getPathWithNodes(): List<PathAndAllNodes>
+    abstract fun getPathWithNodesAll(): List<PathAndAllNodes>
+
+    @Transaction
+    @Query("SELECT * FROM path_tb WHERE id == (:pathId)")
+    abstract fun getPathWithNodes(pathId: Int): PathAndAllNodes
 
     @Query("SELECT * FROM path_tb ORDER BY id DESC LIMIT 1")
     abstract fun getLastPathId(): Int

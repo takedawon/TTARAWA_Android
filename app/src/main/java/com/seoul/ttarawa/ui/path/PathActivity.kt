@@ -26,10 +26,10 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
-import com.seoul.ttarawa.data.local.LocalDataBaseProvider
 import com.seoul.ttarawa.data.local.entity.NodeEntity
 import com.seoul.ttarawa.data.local.entity.PathEntity
 import com.seoul.ttarawa.data.local.executor.LocalExecutor
+import com.seoul.ttarawa.data.local.executor.provideLocalExecutor
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
@@ -53,13 +53,15 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
 
+    private var pathId: Int = NEW_PATH
+
     private val nodeList = mutableListOf<NodeEntity>()
 
     private var chooseDate: String = ""
 
     private lateinit var locationSource: FusedLocationSource
 
-    private val localExecutor: LocalExecutor by lazy { provideLocalExecutor() }
+    private val localExecutor: LocalExecutor by lazy { provideLocalExecutor(this@PathActivity) }
 
     /**
      * 바텀시트동작 제어
@@ -91,11 +93,32 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         initView()
 
         chooseDate = intent.getStringExtra(EXTRA_DATE) ?: getCurrentDay()
+        pathId = intent.getIntExtra(EXTRA_PATH_ID, NEW_PATH)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+    }
 
-        // getRoadPath(37.47276907, 126.89075388, 37.47371341, 126.89094828, CategoryType.WAY_POINT)
-        // getRoadPath(37.47371341, 126.89094828, 37.48371341, 126.89575388, CategoryType.WAY_POINT)
+    private fun initSavedPath() {
+        val pathAndNodes = localExecutor.getPathAndNodes(pathId)
+
+        val tmpNodes = mutableListOf<NodeEntity>()
+
+        Timber.e("initSavedPath $naverMap")
+
+        if (pathAndNodes != null) {
+            for (node in pathAndNodes.nodes) {
+                if (node.markerYn) {
+                    if (tmpNodes.isNotEmpty()) {
+                        addPathLineInMap(tmpNodes.toList(), CategoryType.get(node.categoryCode))
+                        tmpNodes.clear()
+                    }
+                    addMarkerInMap(node.toBaseSearchEntity())
+                } else {
+                    tmpNodes.add(node)
+                }
+            }
+            moveCameraCenterByLatLngList()
+        }
     }
 
     override fun initView() {
@@ -219,6 +242,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * 네이버 맵 초기화
      */
     override fun onMapReady(naverMap: NaverMap) {
+        Timber.e("onMapReady")
         // 네이버맵 인스턴스 획득
         this.naverMap = naverMap
 
@@ -243,13 +267,18 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             // 위치 추적 버튼 활성화
             isLocationButtonEnabled = true
         }
+
+        if (pathId != NEW_PATH) {
+            initSavedPath()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SEARCH_REQUEST_CODE -> {
-                    val categoryCode = data?.getIntExtra(TourDetailActivity.EXTRA_CATEGORY, -1) ?: -1
+                    val categoryCode =
+                        data?.getIntExtra(TourDetailActivity.EXTRA_CATEGORY, -1) ?: -1
 
                     CategoryType.get(categoryCode)
 
@@ -355,11 +384,12 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                         )
                     val categoryType = CategoryType.get(searchEntity.categoryCode)
 
-                    addMarkerInMap(searchEntity)         // 마커 추가
-
                     nodes.add(endLatLng)
                     // 좌표리스트 맵에 반영
                     addPathLineInMap(nodes, categoryType)
+
+                    addMarkerInMap(searchEntity)         // 마커 추가
+
                     // 맵 이동
                     moveCameraCenterByLatLngList()
                 }
@@ -499,12 +529,10 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         markerList.remove(markerList[position])
     }
 
-    private fun provideLocalExecutor() =
-        LocalExecutor.getInstance(
-            LocalDataBaseProvider.getInstance(this@PathActivity.applicationContext)
-        )
 
     companion object {
+        const val NEW_PATH = -1
+        const val EXTRA_PATH_ID = "EXTRA_PATH_ID"
         const val EXTRA_DATE = "EXTRA_DATE"
         const val EXTRA_SUGGEST_ROUTE_KEY = "EXTRA_SUGGEST_ROUTE_KEY"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1000

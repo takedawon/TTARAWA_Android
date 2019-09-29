@@ -9,7 +9,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.Tm128
-import com.naver.maps.geometry.Utmk
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
@@ -33,6 +32,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.net.URLDecoder
+
 /**
  * 검색 화면
  * 조건을 추가하고, 검색을 한다
@@ -352,6 +352,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                 categoryCode = category.code,
                                 startTime = getStartTime(),
                                 endTime = getEndTime(),
+                                content = naver.description,
                                 latitude = latlng.latitude,
                                 longitude = latlng.longitude,
                                 title = naver.title,

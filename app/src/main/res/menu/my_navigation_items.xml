@@ -5,7 +5,7 @@
           android:icon="@drawable/ic_home_black_24dp" />
     <item android:id="@+id/bottom_menu"
           android:title="MENU"
-          android:icon="@drawable/ic_menu_black_24dp" />
+          android:icon="@drawable/ic_menu_white_24dp" />
     <item android:id="@+id/bottom_info"
           android:title="INFO"
           android:icon="@drawable/ic_info_outline_black_24dp" />

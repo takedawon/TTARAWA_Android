@@ -57,6 +57,7 @@
             android:name=".ui.path.PathActivity"
             android:theme="@style/AppTheme.NoneStatusBar" />
         <activity android:name=".ui.search.SearchActivity" />
+        <activity android:name=".ui.mypath.MyPathActivity" />
     </application>
 
 </manifest>

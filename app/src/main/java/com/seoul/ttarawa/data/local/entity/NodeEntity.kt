@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.seoul.ttarawa.data.entity.BaseSearchEntity
+import com.seoul.ttarawa.data.entity.BaseSearchEntityImpl
 
 @Entity(
     tableName = "node_tb",
@@ -39,6 +41,19 @@ class NodeEntity(
     @ColumnInfo(name = "markerYn")
     val markerYn: Boolean = false
 ) {
+    fun toBaseSearchEntity(): BaseSearchEntity {
+        return BaseSearchEntityImpl(
+            categoryCode = categoryCode,
+            startTime = startTime,
+            endTime = endTime,
+            latitude = latitude,
+            longitude = longitude,
+            title = title,
+            address = address,
+            content = content
+        )
+    }
+
     @ColumnInfo(name = "pathId")
     var pathId: Int = 0
 }

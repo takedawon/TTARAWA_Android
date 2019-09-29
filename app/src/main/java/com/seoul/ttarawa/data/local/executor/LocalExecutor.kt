@@ -29,11 +29,31 @@ class LocalExecutor private constructor(
         }
     }
 
-    fun getPathAndNodes(): List<PathAndAllNodes> {
+    fun getPathAndNodesAll(): List<PathAndAllNodes> {
         val executor = Executors.newSingleThreadExecutor()
         val future =
             executor.submit(Callable<List<PathAndAllNodes>> {
-                localDataBase.getPathDao().getPathWithNodes()
+                localDataBase.getPathDao().getPathWithNodesAll()
+            })
+
+        return future.get() ?: emptyList()
+    }
+
+    fun getPathAndNodes(pathId: Int): PathAndAllNodes? {
+        val executor = Executors.newSingleThreadExecutor()
+        val future =
+            executor.submit(Callable<PathAndAllNodes> {
+                localDataBase.getPathDao().getPathWithNodes(pathId)
+            })
+
+        return future.get() ?: null
+    }
+
+    fun getPath(): List<PathEntity> {
+        val executor = Executors.newSingleThreadExecutor()
+        val future =
+            executor.submit(Callable<List<PathEntity>> {
+                localDataBase.getPathDao().getPathList()
             })
 
         return future.get() ?: emptyList()

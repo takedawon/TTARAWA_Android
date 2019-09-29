@@ -3,4 +3,5 @@
     <string name="kakao_app_key">82bc076291b2fa4ae672fbba42d20b00</string>
     <string name="path_actionbar_title">검색</string>
     <string name="text_id">아이디</string>
+    <string name="my_path_toolbar_title">내 경로</string>
 </resources>

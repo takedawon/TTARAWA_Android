@@ -25,30 +25,39 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_suggest_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="야경이 아름다운 밤" />
+                tools:minHeight="300dp" />
 
-            <TextView
-                android:id="@+id/tv_suggest_sub_title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/ll_my_path_bg_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:alpha="0.8"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_suggest_title"
-                tools:text="무한으로 즐겨요" />
+                android:background="#99000000"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_my_path_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingEnd="10dp"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="야경이 아름다운 밤" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_my_path_sharing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="공유하기" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

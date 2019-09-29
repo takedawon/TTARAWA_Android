@@ -16,6 +16,7 @@ import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.calendar.CalendarActivity
 import com.seoul.ttarawa.ui.main.home.HomeFragment
+import com.seoul.ttarawa.ui.mypath.MyPathActivity
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -171,7 +172,7 @@ class MainActivity :
             setNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.bottom_home -> {
-                        toast("bottom_home")
+                        startActivity<MyPathActivity>()
                     }
                     R.id.bottom_info -> {
                         toast("bottom_info")

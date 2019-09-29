@@ -1,8 +1,6 @@
 package com.seoul.ttarawa.data.entity
 
-import java.io.Serializable
-
-data class NaverFindModel(
+data class BaseSearchEntityImpl(
     override val categoryCode: Int,
     override val startTime: String,
     override val endTime: String,
@@ -11,4 +9,4 @@ data class NaverFindModel(
     override val title: String,
     override val address: String,
     override val content: String
-):BaseSearchEntity, Serializable
+): BaseSearchEntity
