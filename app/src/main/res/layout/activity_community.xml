@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layout_community_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_news_back"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="#00ff0000"
+                android:drawableStart="@drawable/ic_arrow_back_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="40dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="공지사항"
+                android:textColor="#534F4F"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <com.loopeer.cardstack.CardStackView
+            android:id="@+id/stackview_main"
+            android:layout_below="@+id/layout_community_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:clipToPadding="false"
+            android:paddingLeft="12dp"
+            android:paddingTop="12dp"
+            android:paddingRight="12dp" />
+    </RelativeLayout>
+</layout>
