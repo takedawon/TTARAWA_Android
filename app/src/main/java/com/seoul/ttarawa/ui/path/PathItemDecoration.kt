@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
-import com.seoul.ttarawa.data.entity.PathEntity
+import com.seoul.ttarawa.data.entity.WayPointEntity
 import java.lang.ref.WeakReference
 
 class PathItemDecoration(
@@ -161,7 +161,7 @@ class PathItemDecoration(
         return TimeText(path.dayNumber, time, y.toFloat(), fixed)
     }
 
-    private fun getPath(position: Int): PathEntity? {
+    private fun getPath(position: Int): WayPointEntity? {
         val pathAdapter: PathAdapter = pathAdapterRef.get() ?: return null
 
         if (position < 0 || position >= pathAdapter.itemCount) {
@@ -170,10 +170,10 @@ class PathItemDecoration(
         return pathAdapter.getItem(position)
     }
 
-    private fun extractPathTime(path: PathEntity): String {
-        return cachedDateTimeText[path.startTime]
-            ?: path.startTime.also {
-                cachedDateTimeText[path.startTime] = it
+    private fun extractPathTime(wayPoint: WayPointEntity): String {
+        return cachedDateTimeText[wayPoint.startTime]
+            ?: wayPoint.startTime.also {
+                cachedDateTimeText[wayPoint.startTime] = it
             }
     }
 }

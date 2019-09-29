@@ -1,6 +1,6 @@
 package com.seoul.ttarawa.data.entity
 
-data class PathEntity(
+data class WayPointEntity(
     val name: String,
     val address: String,
     val lat: String,

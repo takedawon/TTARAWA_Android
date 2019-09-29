@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="24dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_path_save_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내 경로 저장"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--<editor-fold desc="검색어">-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_path_save_path_name"
+                style="@style/CustomTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_path_save_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiet_path_save_path_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="경로명"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--</editor-fold>-->
+
+            <Button
+                android:id="@+id/btn_path_save_confirm"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="확인"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_path_save_path_name" />
+
+            <Button
+                android:id="@+id/btn_path_save_cancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="취소"
+                app:layout_constraintBottom_toBottomOf="@id/btn_path_save_confirm"
+                app:layout_constraintEnd_toStartOf="@id/btn_path_save_confirm"
+                app:layout_constraintTop_toTopOf="@id/btn_path_save_confirm" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

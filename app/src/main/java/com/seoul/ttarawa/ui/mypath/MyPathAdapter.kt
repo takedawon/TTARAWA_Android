@@ -6,17 +6,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
-import com.seoul.ttarawa.data.local.entity.PathEntity
+import com.seoul.ttarawa.data.entity.Path
 import com.seoul.ttarawa.databinding.ItemMyPathBinding
 import com.seoul.ttarawa.ext.click
 
 class MyPathAdapter : RecyclerView.Adapter<MyPathAdapter.MyPathViewHolder>() {
 
-    private val list = mutableListOf<PathEntity>()
+    private val list = mutableListOf<Path>()
 
-    var onClickStartPathActivity: ((pathId: Int, pathDate: String) -> Unit)? = null
+    var onClickStartPathActivity: ((pathId: String, pathDate: String) -> Unit)? = null
 
-    fun replaceAll(list: List<PathEntity>) {
+    fun replaceAll(list: List<Path>) {
         this.list.clear()
         this.list.addAll(list)
         notifyDataSetChanged()
@@ -45,10 +45,10 @@ class MyPathAdapter : RecyclerView.Adapter<MyPathAdapter.MyPathViewHolder>() {
 
     class MyPathViewHolder(
         private val binding: ItemMyPathBinding,
-        private val onClickStartPathActivity: ((pathId: Int, pathDate: String) -> Unit)?
+        private val onClickStartPathActivity: ((pathId: String, pathDate: String) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(path: PathEntity) {
+        fun bind(path: Path) {
             binding.run {
                 tvMyPathTitle.text = path.title
                 btnMyPathSharing.isSelected = path.shareYn
