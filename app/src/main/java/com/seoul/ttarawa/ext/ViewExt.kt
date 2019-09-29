@@ -1,6 +1,8 @@
 package com.seoul.ttarawa.ext
 
+import android.app.Service
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.BindingAdapter
 
 /**
@@ -46,3 +48,16 @@ fun View.show() {
 fun View.isEnable(enable: Boolean?) {
     this.isEnabled = enable ?: true
 }
+
+fun View.showKeyboard() {
+    val imm = this.context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    imm.showSoftInput(this, 0)
+}
+
+fun View.hideKeyboard() {
+    val imm = this.context.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    imm.hideSoftInputFromWindow(this.windowToken, 0)
+}
+

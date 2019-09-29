@@ -356,8 +356,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                 latitude = latlng.latitude,
                                 longitude = latlng.longitude,
                                 title = naver.title,
-                                address = naver.address,
-                                content = naver.description
+                                address = naver.address
                             )
                         })
                 }

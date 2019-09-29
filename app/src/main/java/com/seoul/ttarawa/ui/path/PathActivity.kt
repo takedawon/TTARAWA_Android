@@ -35,6 +35,7 @@ import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.getCurrentDay
 import com.seoul.ttarawa.module.NetworkModule
+import com.seoul.ttarawa.ui.path.dialog.PathSaveConfirmDialog
 import com.seoul.ttarawa.ui.search.CategoryType
 import com.seoul.ttarawa.ui.search.SearchActivity
 import com.seoul.ttarawa.ui.search.TourDetailActivity
@@ -146,19 +147,36 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             }
 
             fabPathSave click {
-                localExecutor.insertPath(
-                    path = PathEntity(
-                        title = "",
-                        date = chooseDate
-                    ),
-                    nodes = nodeList
-                )
+                showSaveConfirmDialog()
             }
 
             // 아이템 제거 버튼을 활성, 비활성화
             cbPathDeleteMode.setOnCheckedChangeListener { _, isChecked ->
                 pathAdapter.changeDeleteMode(isChecked)
             }
+        }
+    }
+
+    private fun showSaveConfirmDialog() {
+        PathSaveConfirmDialog.newInstance().show(supportFragmentManager, null)
+    }
+
+    fun savePath(pathTitle: String) {
+        try {
+            val isSuccess = localExecutor.insertPath(
+
+                path = PathEntity(
+                    title = pathTitle,
+                    date = chooseDate
+                ),
+                nodes = nodeList
+            )
+            if (isSuccess) {
+                toast("경로가 저장되었습니다.")
+                finish()
+            }
+        } catch(e: Exception) {
+            toast("경로 저장에 실패했습니다.\n잠시 후 다시 시도해주세요.")
         }
     }
 
@@ -528,7 +546,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         markerList[position].map = null
         markerList.remove(markerList[position])
     }
-
 
     companion object {
         const val NEW_PATH = -1

@@ -10,8 +10,9 @@ import java.util.concurrent.Executors
 class LocalExecutor private constructor(
     private val localDataBase: LocalDataBase
 ) {
-    fun insertPath(path: PathEntity, nodes: List<NodeEntity>) {
-        val executor = Executors.newSingleThreadExecutor()
+    private val executor = Executors.newCachedThreadPool()
+
+    fun insertPath(path: PathEntity, nodes: List<NodeEntity>): Boolean {
         executor.execute {
             localDataBase.runInTransaction(
                 Callable<Boolean> {
@@ -27,10 +28,10 @@ class LocalExecutor private constructor(
                 }
             )
         }
+        return true
     }
 
     fun getPathAndNodesAll(): List<PathAndAllNodes> {
-        val executor = Executors.newSingleThreadExecutor()
         val future =
             executor.submit(Callable<List<PathAndAllNodes>> {
                 localDataBase.getPathDao().getPathWithNodesAll()
@@ -40,17 +41,19 @@ class LocalExecutor private constructor(
     }
 
     fun getPathAndNodes(pathId: Int): PathAndAllNodes? {
-        val executor = Executors.newSingleThreadExecutor()
         val future =
             executor.submit(Callable<PathAndAllNodes> {
                 localDataBase.getPathDao().getPathWithNodes(pathId)
             })
 
+        if (future.isDone) {
+
+        }
+
         return future.get() ?: null
     }
 
     fun getPath(): List<PathEntity> {
-        val executor = Executors.newSingleThreadExecutor()
         val future =
             executor.submit(Callable<List<PathEntity>> {
                 localDataBase.getPathDao().getPathList()
