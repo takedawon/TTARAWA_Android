@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.module
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.data.remote.api.*
 import okhttp3.OkHttpClient
@@ -34,9 +35,13 @@ object NetworkModule {
             .build()
 
     @JvmStatic
+    private fun createNetworkInterceptor() = StethoInterceptor()
+
+    @JvmStatic
     private fun createOkHttpClient() =
         OkHttpClient.Builder()
             .addInterceptor(createLoggingInterceptor())
+            .addNetworkInterceptor(createNetworkInterceptor())
             .build()
 
     @JvmStatic

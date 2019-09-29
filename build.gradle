@@ -17,6 +17,7 @@ buildscript {
         stetho_version = '1.5.1'
         smartlocation_version = "3.3.3"
         playServices_version="17.0.0"
+        room_version = "2.2.0-rc01"
     }
     repositories {
         google()

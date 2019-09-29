@@ -11,10 +11,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.local.entity.LocationEntity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.click
-import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.calendar.CalendarActivity
+import com.seoul.ttarawa.ui.main.home.HomeFragment
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 

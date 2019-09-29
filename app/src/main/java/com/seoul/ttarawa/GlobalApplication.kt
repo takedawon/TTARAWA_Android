@@ -13,6 +13,7 @@ class GlobalApplication : Application() {
         instance = this
         KakaoSDK.init(KakaoSDKAdapter())
         FirebaseApp.initializeApp(this)
+        Stetho.initializeWithDefaults(this)
 
         // init timber
         Timber.plant(Timber.DebugTree())

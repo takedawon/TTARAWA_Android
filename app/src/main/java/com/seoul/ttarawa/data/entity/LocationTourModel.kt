@@ -7,8 +7,9 @@ data class LocationTourModel(
     override val categoryCode: Int,
     override val title: String,
     override val address: String,
-    override val startTime: Int,
-    override val endTime: Int,
+    override val content: String,
+    override val startTime: String,
+    override val endTime: String,
     override val latitude: Double,
     override val longitude: Double,
     val imgUrl: String?,
@@ -16,12 +17,14 @@ data class LocationTourModel(
     val startDate: Int,
     val endDate: Int
 ) : BaseSearchEntity, Parcelable {
+
     constructor(source: Parcel) : this(
         source.readInt(),
         source.readString() ?: "",
         source.readString() ?: "",
-        source.readInt(),
-        source.readInt(),
+        source.readString() ?: "",
+        source.readString() ?: "",
+        source.readString() ?: "",
         source.readDouble(),
         source.readDouble(),
         source.readString(),
@@ -36,8 +39,9 @@ data class LocationTourModel(
         writeInt(categoryCode)
         writeString(title)
         writeString(address)
-        writeInt(startTime)
-        writeInt(endTime)
+        writeString(content)
+        writeString(startTime)
+        writeString(endTime)
         writeDouble(latitude)
         writeDouble(longitude)
         writeString(imgUrl)

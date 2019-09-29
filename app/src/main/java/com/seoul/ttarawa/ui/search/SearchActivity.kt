@@ -29,7 +29,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.net.URLDecoder
-
 /**
  * 검색 화면
  * 조건을 추가하고, 검색을 한다
@@ -346,6 +345,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                     categoryCode = category.code,
                                     title = tourItem.title,
                                     address = tourItem.addr1,
+                                    content = "",
                                     startTime = getStartTime(),
                                     endTime = getEndTime(),
                                     latitude = tourItem.mapx,
@@ -445,23 +445,29 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         }
     }
 
-    private fun getStartTime() =
-        try {
-            binding.tietStartTime.text.toString().replace(":".toRegex(), "").toInt()
-        } catch (e: NumberFormatException) {
-            getCurrentDay("HHss").toInt()
-        }
+    private fun getStartTime(): String {
+        val time = binding.tietStartTime.text.toString().replace(":".toRegex(), "")
 
-
-    private fun getEndTime() =
-        try {
-            binding.tietEndTime.text.toString().replace(":".toRegex(), "").toInt()
-        } catch (e: NumberFormatException) {
-            getCurrentDay("HHss").toInt()
+        return if (time.isEmpty()) {
+            getCurrentDay("HHmm")
+        } else {
+            time
         }
+    }
+
+    private fun getEndTime(): String {
+        val time = binding.tietEndTime.text.toString().replace(":".toRegex(), "")
+
+        return if (time.isEmpty()) {
+            getCurrentDay("HHmm")
+        } else {
+            time
+        }
+    }
 
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"
         const val DETAIL_REQUEST_CODE = 3000
     }
 }
+

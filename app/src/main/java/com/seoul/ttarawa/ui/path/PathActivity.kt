@@ -24,7 +24,12 @@ import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
+import com.seoul.ttarawa.data.local.LocalDataBaseProvider
+import com.seoul.ttarawa.data.local.entity.NodeEntity
+import com.seoul.ttarawa.data.local.entity.PathEntity
+import com.seoul.ttarawa.data.local.executor.LocalExecutor
 import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
@@ -47,9 +52,13 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     R.layout.activity_path
 ), OnMapReadyCallback {
 
+    private val nodeList = mutableListOf<NodeEntity>()
+
     private var chooseDate: String = ""
 
     private lateinit var locationSource: FusedLocationSource
+
+    private val localExecutor: LocalExecutor by lazy { provideLocalExecutor() }
 
     /**
      * 바텀시트동작 제어
@@ -109,6 +118,16 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                 startActivityForResult<SearchActivity>(
                     requestCode = SEARCH_REQUEST_CODE,
                     params = *arrayOf(SearchActivity.EXTRA_DATE to chooseDate)
+                )
+            }
+
+            fabPathSave click {
+                localExecutor.insertPath(
+                    path = PathEntity(
+                        title = "",
+                        date = chooseDate
+                    ),
+                    nodes = nodeList
                 )
             }
 
@@ -238,17 +257,14 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                             // 처음에는 마커만 생성
                             Timber.e("addMarkerInMap onActivityResult")
                             addMarkerInMap(
-                                latLng = LatLng(tour.latitude, tour.longitude),
-                                category = CategoryType.get(tour.categoryCode),
+                                searchEntity = tour,
                                 shouldMoveCamera = true
                             )
                         } else {
                             getRoadPath(
                                 startLat = markerList.last.position.latitude,
                                 startLon = markerList.last.position.longitude,
-                                endLat = tour.latitude,
-                                endLon = tour.longitude,
-                                categoryType = CategoryType.get(tour.categoryCode)
+                                searchEntity = tour
                             )
                         }
                     }
@@ -262,19 +278,17 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     private fun getRoadPath(
         startLat: Double,
         startLon: Double,
-        endLat: Double,
-        endLon: Double,
-        categoryType: CategoryType
+        searchEntity: BaseSearchEntity
     ) {
         NetworkModule.tmapWalkingApi.getWalkingPath(
             appKey = "d21dbb20-70b0-4824-8b51-cf3cc6fd8aca",
             version = "1",
             startName = "123",
             endName = "456",
-            startX = startLon,
-            startY = startLat,
-            endX = endLon,
-            endY = endLat
+            startX = startLat,
+            startY = startLon,
+            endX = searchEntity.latitude,
+            endY = searchEntity.longitude
         ).enqueue(object : Callback<TmapWalkingResponse?> {
             override fun onFailure(call: Call<TmapWalkingResponse?>, t: Throwable) {
                 t.printStackTrace()
@@ -292,11 +306,14 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
                 response.body()?.let {
 
-                    val startLatLng = LatLng(startLat, startLon)
+                    val startLatLng = NodeEntity(
+                        latitude = startLat,
+                        longitude = startLon
+                    )
 
                     // onResponse 안에서만 수집할 좌표 리스트
-                    val latLngs = mutableListOf<LatLng>()
-                    latLngs.add(startLatLng)
+                    val nodes = mutableListOf<NodeEntity>()
+                    nodes.add(startLatLng)
 
                     for (feature in it.features) {
                         val geometry = feature.geometry
@@ -309,17 +326,28 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                                 val x = (list[j] as List<*>)[1].toString().toDouble()
                                 val y = (list[j] as List<*>)[0].toString().toDouble()
 
-                                latLngs.add(LatLng(x, y))
+                                nodes.add(
+                                    NodeEntity(
+                                        latitude = x,
+                                        longitude = y
+                                    )
+                                )
                             }
                         }
                     }
 
-                    val endLatLng = LatLng(endLat, endLon)
-                    addMarkerInMap(endLatLng, categoryType)         // 마커 추가
+                    val endLatLng =
+                        NodeEntity(
+                            latitude = searchEntity.latitude,
+                            longitude = searchEntity.longitude
+                        )
+                    val categoryType = CategoryType.get(searchEntity.categoryCode)
 
-                    latLngs.add(endLatLng)
+                    addMarkerInMap(searchEntity)         // 마커 추가
+
+                    nodes.add(endLatLng)
                     // 좌표리스트 맵에 반영
-                    addPathLineInMap(latLngs, categoryType)
+                    addPathLineInMap(nodes, categoryType)
                     // 맵 이동
                     moveCameraCenterByLatLngList()
                 }
@@ -353,7 +381,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
      * 맵에 라인 추가
      * @param latLngs 좌표 리스트
      */
-    private fun addPathLineInMap(latLngs: List<LatLng>, category: CategoryType) {
+    private fun addPathLineInMap(nodes: List<NodeEntity>, category: CategoryType) {
+        val latLngs = nodes.map {
+            LatLng(it.latitude, it.longitude)
+        }
+
         val pathOverlay = PathOverlay().apply {
             // 경로
             coords = latLngs
@@ -370,6 +402,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             // 세팅
             map = naverMap
         }
+        nodeList.addAll(nodes)
         latLngList.add(latLngs)
         pathOverlayList.add(pathOverlay)
     }
@@ -395,16 +428,30 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
     /**
      * 마커 추가
-     * @param latLng 좌표
-     * @param captionText 마커 하단에 보이는 텍스트
      */
     private fun addMarkerInMap(
-        latLng: LatLng,
-        category: CategoryType,
+        searchEntity: BaseSearchEntity,
         shouldMoveCamera: Boolean = false
     ) {
+        val latLng = LatLng(searchEntity.latitude, searchEntity.longitude)
         val marker = Marker(latLng)
         markerList.add(marker)
+
+        nodeList.add(
+            NodeEntity(
+                title = searchEntity.title,
+                content = searchEntity.content,
+                address = searchEntity.address,
+                latitude = searchEntity.latitude,
+                longitude = searchEntity.longitude,
+                categoryCode = searchEntity.categoryCode,
+                startTime = searchEntity.startTime,
+                endTime = searchEntity.endTime,
+                markerYn = true
+            )
+        )
+
+        val category = CategoryType.get(searchEntity.categoryCode)
 
         marker.apply {
             // 맵에 표시
@@ -439,6 +486,11 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         markerList[position].map = null
         markerList.remove(markerList[position])
     }
+
+    private fun provideLocalExecutor() =
+        LocalExecutor.getInstance(
+            LocalDataBaseProvider.getInstance(this@PathActivity.applicationContext)
+        )
 
     companion object {
         const val EXTRA_DATE = "EXTRA_DATE"

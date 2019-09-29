@@ -105,6 +105,19 @@
             app:rippleColor="@color/colorPrimaryDark"
             app:tint="@color/white" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_path_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="96dp"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_save_white_24dp"
+            app:borderWidth="0dp"
+            app:layout_anchor="@+id/cl_path_bottom_sheet"
+            app:layout_anchorGravity="end"
+            app:rippleColor="@color/colorPrimaryDark"
+            app:tint="@color/white" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
