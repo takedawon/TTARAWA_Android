@@ -20,10 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
@@ -316,10 +313,15 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             setContentPadding(0, 0, 0, 250)
 
             locationSource = this@PathActivity.locationSource
+
             // 위치 변경 리스너
             addOnLocationChangeListener { location ->
                 Timber.d("${location.latitude} ${location.longitude}")
+                latitude = location.latitude
+                longitude = location.longitude
             }
+
+            locationTrackingMode = LocationTrackingMode.Follow
         }
 
         naverMap.uiSettings.apply {
