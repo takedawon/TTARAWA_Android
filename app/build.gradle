@@ -117,4 +117,7 @@ dependencies {
     // stetho
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
+    //CardStackView
+    implementation 'com.loopeer.library:cardstack:1.0.2'
 }

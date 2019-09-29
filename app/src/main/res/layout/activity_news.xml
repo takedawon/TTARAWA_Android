@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.news.NewsActivity">
     <LinearLayout
-        android:id="@+id/layout_news_back"
+        android:id="@+id/layout_community_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +44,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_news_back" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_community_back" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
