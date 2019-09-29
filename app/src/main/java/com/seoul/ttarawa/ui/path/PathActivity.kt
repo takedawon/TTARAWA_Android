@@ -115,14 +115,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         Timber.e(locationSource.lastLocation.toString())
-    }
-
-    private fun initSavedPath() {
-        val pathAndNodes = localExecutor.getPathAndNodes(pathId)
-
-        val tmpNodes = mutableListOf<NodeEntity>()
-
-        Timber.e("initSavedPath $naverMap")
 
         initFirebaseUser()
         initView()
