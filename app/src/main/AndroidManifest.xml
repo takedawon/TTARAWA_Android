@@ -22,7 +22,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.main.community.CommunityAcitivty"/>
+        <activity android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.main.community.CommunityAcitivty" />
         <activity android:name=".ui.main.news.NewsActivity" />
         <activity android:name=".ui.main.JoinActivity" />
         <activity android:name=".ui.main.LoginActivity" />
@@ -44,14 +53,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.search.TourDetailActivity" />
         <activity android:name=".ui.calendar.CalendarActivity" />
         <activity
