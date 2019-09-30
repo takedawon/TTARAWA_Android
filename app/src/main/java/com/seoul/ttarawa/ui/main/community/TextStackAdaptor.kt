@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.loopeer.cardstack.CardStackView
@@ -57,6 +58,7 @@ class TestStackAdapter(context: Context) : StackAdapter<CommunityEntity>(context
         private var mTextTitle: TextView = view.findViewById(R.id.text_list_card_title)
         private var mTextUserName: TextView = view.findViewById(R.id.text_list_card_user_name)
         private var mTextDate: TextView = view.findViewById(R.id.text_list_card_date)
+        private var mIvBg: ImageView = view.findViewById(R.id.iv_list_bg)
 
         override fun onItemExpand(b: Boolean) {
             // mContainerContent.visibility = if (b) View.VISIBLE else View.GONE
@@ -64,11 +66,7 @@ class TestStackAdapter(context: Context) : StackAdapter<CommunityEntity>(context
 
         fun onBind(data: CommunityEntity?, position: Int) {
             data?.let {
-                mLayout.background
-                    .setColorFilter(
-                        ContextCompat.getColor(context, it.backgroundResId),
-                        PorterDuff.Mode.SRC_IN
-                    )
+                mIvBg.background = ContextCompat.getDrawable(mIvBg.context, it.backgroundResId)
                 mTextTitle.text = it.title
                 mTextUserName.text = it.userName
                 mTextDate.text = it.date.simpleDateFormat(original = "yyyyMMdd", format = "yyyy-MM-dd")
@@ -89,11 +87,6 @@ class TestStackAdapter(context: Context) : StackAdapter<CommunityEntity>(context
 
         fun onBind(data: CommunityEntity?, position: Int) {
             data?.let {
-                mLayout.background
-                    .setColorFilter(
-                        ContextCompat.getColor(context, it.backgroundResId),
-                        PorterDuff.Mode.SRC_IN
-                    )
                 mTextTitle.text = it.title
             }
         }
@@ -121,11 +114,6 @@ class TestStackAdapter(context: Context) : StackAdapter<CommunityEntity>(context
 
         fun onBind(data: CommunityEntity?, position: Int) {
             data?.let {
-                mLayout.background
-                    .setColorFilter(
-                        ContextCompat.getColor(context, it.backgroundResId),
-                        PorterDuff.Mode.SRC_IN
-                    )
                 mTextTitle.text = it.title
 
                 itemView.findViewById<View>(R.id.text_view)

@@ -26,6 +26,6 @@ class SplashActivity : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed(Runnable {
             startActivity(intent)
-            finish() }, 1200)
+            finish() }, 500)
     }
 }

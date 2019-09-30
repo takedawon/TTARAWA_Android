@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.data.entity.Path
+import com.seoul.ttarawa.data.getBackgroundResId
 import com.seoul.ttarawa.databinding.ItemMyPathBinding
 import com.seoul.ttarawa.ext.click
 
@@ -64,6 +65,7 @@ class MyPathAdapter : RecyclerView.Adapter<MyPathAdapter.MyPathViewHolder>() {
             binding.run {
                 tvMyPathTitle.text = path.title
                 btnMyPathSharing.isSelected = path.shareYn
+                ivSuggest.background = ContextCompat.getDrawable(ivSuggest.context, getBackgroundResId())
 
                 if (path.shareYn) {
                     // 버튼 텍스트
