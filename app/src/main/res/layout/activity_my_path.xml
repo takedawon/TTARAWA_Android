@@ -39,5 +39,19 @@
             app:layout_constraintTop_toBottomOf="@id/abl_my_path"
             tools:listitem="@layout/item_my_path" />
 
+        <TextView
+            android:id="@+id/tv_my_path_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="아직 저장된 경로가 없습니다.\n경로를 추가해주세요!"
+            android:textSize="18dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

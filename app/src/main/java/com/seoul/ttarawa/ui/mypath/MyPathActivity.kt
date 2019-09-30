@@ -90,9 +90,24 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                         binding.rvMyPath.visibility = View.VISIBLE
                         myPathAdapter.replaceAll(list)
                         hideProgress()
+                        showEmpty()
                     }
                 }
                 )
+        } else {
+            binding.rvMyPath.visibility = View.VISIBLE
+            myPathAdapter.replaceAll(list)
+            hideProgress()
+            showEmpty()
+        }
+    }
+
+    private fun showEmpty() {
+        if (myPathAdapter.itemCount == 0) {
+            bind {
+                tvMyPathEmpty.visibility = View.VISIBLE
+                binding.rvMyPath.visibility = View.INVISIBLE
+            }
         }
     }
 
