@@ -2,13 +2,20 @@ package com.seoul.ttarawa.ui.main.home
 
 import android.os.Bundle
 import android.util.Log
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
+import com.seoul.ttarawa.data.entity.SuggestRouteLeaf
 import com.seoul.ttarawa.data.entity.SuggestRouteModel
 import com.seoul.ttarawa.data.entity.WeatherModel
+import com.seoul.ttarawa.data.remote.FirebaseLeaf
 import com.seoul.ttarawa.data.remote.response.WeatherResponse
 import com.seoul.ttarawa.databinding.FragmentHomeBinding
 import com.seoul.ttarawa.ext.hide
@@ -32,6 +39,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
 
+    private val homeList = mutableListOf<Any>()
+    private lateinit var database: FirebaseDatabase
+
     private val provider: LocationProvider by lazy { createProvider() }
 
     private val homeAdapter: HomeAdapter by lazy { createHomeAdapter() }
@@ -40,6 +50,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        database = FirebaseDatabase.getInstance()
 
         initView()
 
@@ -56,11 +68,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private fun createHomeAdapter(): HomeAdapter =
         HomeAdapter().apply {
-            setOnClickSuggestRoute { startPathActivityWithSuggestRouteKey(it) }
+            setOnClickSuggestRoute { pathId, date ->
+                startPathActivityWithSuggestRouteKey(pathId, date)
+            }
         }
 
-    private fun startPathActivityWithSuggestRouteKey(routeKey: String) {
-        startActivity<PathActivity>(PathActivity.EXTRA_SUGGEST_ROUTE_KEY to routeKey)
+    private fun startPathActivityWithSuggestRouteKey(routeKey: String, date: String) {
+        startActivity<PathActivity>(
+            PathActivity.EXTRA_PATH_ID to routeKey,
+            PathActivity.EXTRA_DATE to date
+        )
     }
 
     private fun requestPermission() {
@@ -129,42 +146,39 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         else
             "눈이 오고 있어요! 우산 꼭 챙기세요!"
 
-        hideProgressBar()
+        homeList.add(WeatherModel("사용자님", text))
 
-        // todo 테스트 데이터
-        homeAdapter.replaceAll(
-            listOf(
-                WeatherModel("사용자님", text),
-                SuggestRouteModel(
-                    routeKey = "12345678",
-                    title = "명륜진사갈비",
-                    subTitle = "무한으로 즐겨요",
-                    textColor = android.R.color.white,
-                    imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"
-                ),
-                SuggestRouteModel(
-                    routeKey = "12345678",
-                    title = "다원이가다해줄거야",
-                    subTitle = "ㅎㅎㅎㅎㅎㅎㅎ",
-                    textColor = android.R.color.black,
-                    imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"
-                ),
-                SuggestRouteModel(
-                    routeKey = "12345678",
-                    title = "야경이 밫나는 밤",
-                    subTitle = "오늘 함께 떠나볼까요?",
-                    textColor = android.R.color.white,
-                    imgUri = "https://avatars3.githubusercontent.com/u/36095102?s=460&v=4"
-                ),
-                SuggestRouteModel(
-                    routeKey = "12345678",
-                    title = "서울 경복궁 코스",
-                    subTitle = "가족 나들이 완성!",
-                    textColor = android.R.color.black,
-                    imgUri = "https://avatars2.githubusercontent.com/u/44185071?s=460&v=4"
-                )
-            )
-        )
+        // 추천 경로 데이터
+        getSuggestDataList()
+
+    }
+
+    private fun getSuggestDataList() {
+        database.reference
+            .child(FirebaseLeaf.DB_LEAF_PATH)
+            .child("yXAy0DjqjMhiOsrgRW1QZy4Okrt1")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    hideProgressBar()
+                    /*ignored*/
+                    homeAdapter.replaceAll(homeList)
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    hideProgressBar()
+                    for (date in snapshot.children) {
+                        for (pathKey in date.children) {
+                            val pathId = pathKey.key
+                            val suggestRouteLeaf = pathKey.getValue(SuggestRouteLeaf::class.java)
+
+                            if (suggestRouteLeaf != null && pathId != null) {
+                                homeList.add(suggestRouteLeaf.toSuggestRouteModel(pathId))
+                            }
+                        }
+                    }
+                    homeAdapter.replaceAll(homeList)
+                }
+            })
     }
 
     private fun getWeather(baseDate: String, baseTime: String, nx: Int, ny: Int) {

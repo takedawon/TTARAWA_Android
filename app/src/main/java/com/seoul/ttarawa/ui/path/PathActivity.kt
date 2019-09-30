@@ -533,7 +533,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             naverMap?.moveCamera(
                 CameraUpdate.fitBounds(
                     LatLngBounds.Builder().include(latLngList.flatten()).build(),
-                    400, 400, 400, 400
+                    400, 400, 100, 100
                 )
             )
         }

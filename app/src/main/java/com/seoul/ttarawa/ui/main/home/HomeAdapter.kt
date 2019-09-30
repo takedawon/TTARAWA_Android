@@ -31,9 +31,9 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRangeInserted(0, list.size)
     }
 
-    private var onClickSuggestRoute: ((routeKey: String) -> Unit)? = null
+    private var onClickSuggestRoute: ((pathId: String, date: String) -> Unit)? = null
 
-    fun setOnClickSuggestRoute(onClickSuggestRoute: ((routeKey: String) -> Unit)) {
+    fun setOnClickSuggestRoute(onClickSuggestRoute: ((pathId: String, date: String) -> Unit)) {
         this.onClickSuggestRoute = onClickSuggestRoute
     }
 
@@ -96,21 +96,51 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      */
     class SuggestRouteViewHolder(
         private val binding: ItemHomeSuggestRouteBinding,
-        private val onClickSuggestRoute: ((routeKey: String) -> Unit)?
+        private val onClickSuggestRoute: ((pathId: String, date: String) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(suggestRouteModel: SuggestRouteModel?) {
             suggestRouteModel?.let {
                 binding.run {
                     tvSuggestTitle.text = it.title
-                    tvSuggestTitle.setTextColor(ContextCompat.getColor(binding.root.context, suggestRouteModel.textColor))
-
                     tvSuggestSubTitle.text = it.subTitle
-                    tvSuggestSubTitle.setTextColor(ContextCompat.getColor(binding.root.context, suggestRouteModel.textColor))
+
+                    if (suggestRouteModel.textColor == 0) {
+                        tvSuggestTitle.setTextColor(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                R.color.white
+                            )
+                        )
+                        tvSuggestSubTitle.setTextColor(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                R.color.white
+                            )
+                        )
+                    } else {
+                        tvSuggestTitle.setTextColor(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                R.color.black
+                            )
+                        )
+                        tvSuggestSubTitle.setTextColor(
+                            ContextCompat.getColor(
+                                binding.root.context,
+                                R.color.black
+                            )
+                        )
+                    }
 
                     initCardViewBackground(it.imgUri)
 
-                    cvSuggest click { onClickSuggestRoute?.invoke(suggestRouteModel.routeKey) }
+                    cvSuggest click {
+                        onClickSuggestRoute?.invoke(
+                            suggestRouteModel.id,
+                            suggestRouteModel.date
+                        )
+                    }
 
                 }
             }
@@ -130,7 +160,10 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         override fun onResourceCleared(placeholder: Drawable?) {
                         }
 
-                        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            transition: Transition<in Drawable>?
+                        ) {
                             binding.ivSuggest.background = resource
                         }
 
