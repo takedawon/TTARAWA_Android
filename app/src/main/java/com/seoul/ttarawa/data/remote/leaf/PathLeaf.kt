@@ -14,6 +14,7 @@ data class PathLeaf(
             id = id,
             title = title,
             date = date,
-            shareYn = shareYn
+            shareYn = shareYn,
+            nodes = nodes
         )
 }

@@ -10,4 +10,13 @@
     <string name="my_path_toolbar_title">내 경로</string>
     <string name="path_save_success">경로가 저장되었습니다.</string>
     <string name="path_save_fail">경로 저장에 실패했습니다.\n잠시 후 다시 시도해주세요.</string>
+
+    <string name="my_path_share_success">내 경로가 공유되었습니다!</string>
+    <string name="my_path_share_cancel_success">내 경로 공유가 취소되었습니다.</string>
+    <string name="my_path_share_fail">내 경로 공유에 실패했습니다.\n잠시 후 다시 시도해주세요.</string>
+
+    <string name="my_path_sharing">공유 중</string>
+    <string name="my_path_sharable">공유하기</string>
+    <string name="menu_action_my_path">내 경로</string>
+    <string name="menu_action_community">커뮤니티</string>
 </resources>

@@ -22,6 +22,7 @@ class PathEntity constructor(
             id = id.toString(),
             title = title,
             date = date,
-            shareYn = shareYn
+            shareYn = shareYn,
+            nodes = emptyList()
         )
 }

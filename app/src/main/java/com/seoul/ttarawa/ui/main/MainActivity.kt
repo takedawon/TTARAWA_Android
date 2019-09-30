@@ -3,22 +3,21 @@ package com.seoul.ttarawa.ui.main
 import android.os.Bundle
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.navigation.NavigationView
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
-import com.seoul.ttarawa.data.local.entity.LocationEntity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.calendar.CalendarActivity
+import com.seoul.ttarawa.ui.main.community.CommunityAcitivty
 import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.mypath.MyPathActivity
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import timber.log.Timber
 
 
@@ -179,22 +178,14 @@ class MainActivity :
         }
         dialog.show()
 
-        bottomNavigation.findViewById<NavigationView>(R.id.navigation_main_menu).apply {
-            setNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.bottom_home -> {
-                        startActivity<MyPathActivity>()
-                    }
-                    R.id.bottom_info -> {
-                        toast("bottom_info")
-                    }
-                    R.id.bottom_menu -> {
-                        toast("bottom_menu")
-                    }
-                }
-                dialog.dismiss()
-                return@setNavigationItemSelectedListener false
-            }
+        bottomNavigation.findViewById<ConstraintLayout>(R.id.ll_navi_my_path).setOnClickListener {
+            startActivity<MyPathActivity>()
+            dialog.dismiss()
+        }
+
+        bottomNavigation.findViewById<ConstraintLayout>(R.id.ll_navi_community).setOnClickListener {
+            startActivity<CommunityAcitivty>()
+            dialog.dismiss()
         }
     }
 }
