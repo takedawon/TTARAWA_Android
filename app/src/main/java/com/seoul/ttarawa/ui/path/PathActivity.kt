@@ -334,7 +334,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             bind {
                 fabPathSave.visibility = View.GONE
                 fabPathAdd.visibility = View.GONE
-                bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
             if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
