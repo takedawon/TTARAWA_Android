@@ -1,7 +1,10 @@
 package com.seoul.ttarawa.ui.onboarding
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.commit
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
@@ -21,6 +24,8 @@ class OnBoardingActivity : BaseActivity<ActivityOnboardingBinding>(
     }
 
     override fun initView() {
+        initTransparentStatusBar()
+
         val onboardingFragment = PaperOnboardingFragment.newInstance(
             arrayListOf(
                 // 경로 생성
@@ -61,5 +66,20 @@ class OnBoardingActivity : BaseActivity<ActivityOnboardingBinding>(
 
 
     }
+
+    private fun initTransparentStatusBar() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        // 스테이터스바 글자 색 어둡게 변경, 23 이상
+        var flag = window.decorView.systemUiVisibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flag = flag or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        window.decorView.systemUiVisibility = flag
+        window.statusBarColor = Color.TRANSPARENT
+    }
+
 
 }

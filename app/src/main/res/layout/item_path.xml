@@ -36,6 +36,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="24dp"
+            android:visibility="gone"
             android:background="@drawable/ic_drag_handle_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_path_delete"

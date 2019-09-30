@@ -28,7 +28,6 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.data.entity.BaseSearchEntity
-import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.entity.WayPointEntity
 import com.seoul.ttarawa.data.local.entity.NodeEntity
 import com.seoul.ttarawa.data.local.entity.PathEntity
@@ -329,6 +328,16 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
             isIndoorLevelPickerEnabled = true
             // 위치 추적 버튼 활성화
             isLocationButtonEnabled = true
+        }
+
+        if (pathId != NEW_PATH) {
+            if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+                naverMap?.setContentPadding(0, 0, 0, getHeightMiddleOfDisplay())
+                moveCameraCenterByLatLngList()
+            } else if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                naverMap?.setContentPadding(0, 0, 0, 250)
+                moveCameraCenterByLatLngList()
+            }
         }
 
         if (isSavedPathLocal()) {

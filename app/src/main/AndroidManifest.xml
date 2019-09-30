@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.SplashActivity"
+        <activity
+            android:name=".ui.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.community.CommunityActivity"/>
+        <activity android:name=".ui.main.community.CommunityActivity" />
         <activity android:name=".ui.main.news.NewsActivity" />
         <activity android:name=".ui.main.JoinActivity" />
         <activity android:name=".ui.main.LoginActivity" />
@@ -53,7 +54,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.search.TourDetailActivity" />
         <activity android:name=".ui.calendar.CalendarActivity" />
         <activity
@@ -61,7 +62,9 @@
             android:theme="@style/AppTheme.NoneStatusBar" />
         <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.mypath.MyPathActivity" />
-        <activity android:name=".ui.onboarding.OnBoardingActivity" />
+        <activity
+            android:name=".ui.onboarding.OnBoardingActivity"
+            android:theme="@style/AppTheme.NoneStatusBar" />
     </application>
 
 </manifest>
