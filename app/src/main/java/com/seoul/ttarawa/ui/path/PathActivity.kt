@@ -39,6 +39,8 @@ import com.seoul.ttarawa.data.remote.response.TmapWalkingResponse
 import com.seoul.ttarawa.databinding.ActivityPathBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.getCurrentDay
+import com.seoul.ttarawa.ext.hide
+import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
 import com.seoul.ttarawa.ui.path.dialog.PathSaveConfirmDialog
 import com.seoul.ttarawa.ui.search.CategoryType
@@ -174,6 +176,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     private fun savePathToRemote(uid: String, pathTitle: String) {
+        showProgressBar()
         database.reference
             .child(FirebaseLeaf.DB_LEAF_PATH)
             .child(uid)
@@ -186,7 +189,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                     nodes = nodeList
                 )
             ) { error, ref ->
-                // todo 프로그레스
+                hideProgressBar()
                 if (error == null) {
                     toast(R.string.path_save_success)
                 } else {
@@ -198,7 +201,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     private fun savePathToLocal(pathTitle: String) {
-        // todo 프로그레스
+        showProgressBar()
         try {
             val isSuccess = localExecutor.insertPath(
 
@@ -209,12 +212,12 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                 nodes = nodeList
             )
             if (isSuccess) {
-                // todo 프로그레스
+                hideProgressBar()
                 toast(R.string.path_save_success)
                 finish()
             }
         } catch (e: Exception) {
-            // todo 프로그레스
+            hideProgressBar()
             toast(R.string.path_save_fail)
         }
     }
@@ -348,37 +351,62 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         if (isSavedPathLocal()) {
             initSavedPathFromLocal()
         } else {
-            val uid = firebaseUser?.uid
-            if (uid != null) {
-                initSavedPathFromRemote(uid)
-            }
+            initSavedPathFromRemote()
         }
     }
 
     private fun initSavedPathFromLocal() {
+        showProgressBar()
         val pathAndNodes = localExecutor.getPathAndNodes(pathId.toInt())
 
         if (pathAndNodes != null) {
+            hideProgressBar()
             initSavedPath(pathAndNodes.nodes)
         }
     }
 
-    private fun initSavedPathFromRemote(uid: String) {
+    private fun initSavedPathFromRemote() {
+        showProgressBar()
         database.reference
             .child(FirebaseLeaf.DB_LEAF_PATH)
-            .child(uid)
-            .child(chooseDate)
-            .child(pathId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
+                    hideProgressBar()
                     Timber.w("$error")
-                    toast(R.string.path_save_fail)
                 }
 
-                override fun onDataChange(path: DataSnapshot) {
-                    val pathLeaf = path.getValue(PathLeaf::class.java)
-                    if (pathLeaf != null) {
-                        initSavedPath(pathLeaf.nodes)
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (userSnapshot in snapshot.children) {
+                        val userKey = userSnapshot.key
+                        for (dateSnapshot in userSnapshot.children) {
+                            for (pathSnapshot in dateSnapshot.children) {
+                                val pathKey = pathSnapshot.key
+                                if (pathKey != null && pathId == pathKey && userKey != null) {
+                                    database.reference
+                                        .child(FirebaseLeaf.DB_LEAF_PATH)
+                                        .child(userKey)
+                                        .child(chooseDate)
+                                        .child(pathId)
+                                        .addListenerForSingleValueEvent(object :
+                                            ValueEventListener {
+                                            override fun onCancelled(error: DatabaseError) {
+                                                hideProgressBar()
+                                                Timber.w("$error")
+                                                toast(R.string.path_save_fail)
+                                            }
+
+                                            override fun onDataChange(path: DataSnapshot) {
+                                                hideProgressBar()
+                                                val pathLeaf = path.getValue(PathLeaf::class.java)
+                                                if (pathLeaf != null) {
+                                                    initSavedPath(pathLeaf.nodes)
+                                                }
+                                            }
+                                        })
+                                    break
+                                }
+                            }
+                        }
                     }
                 }
             })
@@ -647,6 +675,14 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         if (shouldMoveCamera) {
             moveCameraCenterByLatLng(latLng)
         }
+    }
+
+    private fun showProgressBar() {
+        binding.pbPath.show()
+    }
+
+    private fun hideProgressBar() {
+        binding.pbPath.hide()
     }
 
     /**

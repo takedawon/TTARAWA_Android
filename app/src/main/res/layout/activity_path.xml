@@ -63,12 +63,12 @@
             <CheckBox
                 android:id="@+id/cb_path_delete_mode"
                 android:layout_width="wrap_content"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:button="@drawable/path_selector_delete_toggle"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/tv_path_bottom_sheet_title"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -118,6 +118,13 @@
             app:layout_anchorGravity="end"
             app:rippleColor="@color/colorPrimaryDark"
             app:tint="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/pb_path"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
