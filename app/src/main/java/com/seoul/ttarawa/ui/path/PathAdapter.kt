@@ -10,6 +10,7 @@ import com.seoul.ttarawa.R
 import com.seoul.ttarawa.data.entity.WayPointEntity
 import com.seoul.ttarawa.databinding.ItemPathAddBinding
 import com.seoul.ttarawa.databinding.ItemPathBinding
+import com.seoul.ttarawa.ext.htmlToString
 
 class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -70,8 +71,8 @@ class PathAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class PathViewHolder(val binding: ItemPathBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(wayPoint: WayPointEntity) {
-            binding.tvPathName.text = wayPoint.name
-            binding.tvPathTime.text = wayPoint.address
+            binding.tvPathName.text = wayPoint.name.htmlToString()
+            binding.tvPathTime.text = wayPoint.address.htmlToString()
             binding.ivPathDelete.visibility = if (wayPoint.isVisibleDelete) View.VISIBLE else View.GONE
         }
     }

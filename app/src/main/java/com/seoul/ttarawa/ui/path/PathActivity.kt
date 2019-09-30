@@ -331,6 +331,12 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
         }
 
         if (pathId != NEW_PATH) {
+            bind {
+                fabPathSave.visibility = View.GONE
+                fabPathAdd.visibility = View.GONE
+                bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
+            }
+
             if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
                 naverMap?.setContentPadding(0, 0, 0, getHeightMiddleOfDisplay())
                 moveCameraCenterByLatLngList()
