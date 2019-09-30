@@ -58,6 +58,7 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
         val eDate = tour.endDate
         val date = getDateToString(sDate) + " ~ " + getDateToString(eDate)
         bind {
+            btnCalBack.setOnClickListener { onBackPressed() }
             txtTourTitle.text = title
             txtEventDate.text = date
             layoutTourDetails.setOnClickListener {

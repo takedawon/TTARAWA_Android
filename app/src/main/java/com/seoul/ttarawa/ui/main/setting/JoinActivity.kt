@@ -29,6 +29,8 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(
 
     override fun initView() {
         bind {
+            btnJoinBack.setOnClickListener { onBackPressed() }
+
             setEventTextwatcher(layoutTextInputEmail, txtInputJoinEmail)
             setEventTextwatcher(layoutTextInputPw, txtInputJoinPw)
             setEventTextwatcher(layoutTextInputNick, txtInputJoinNick)

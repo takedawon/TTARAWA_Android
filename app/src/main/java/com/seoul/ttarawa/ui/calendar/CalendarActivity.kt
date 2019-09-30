@@ -19,7 +19,7 @@ import java.util.*
 class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
     R.layout.activity_calendar
 ) {
-    private var mLastClickTime:Long = 0
+    private var mLastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,8 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
 
     override fun initView() {
         bind {
+            btnCalBack click { onBackPressed() }
+
             btnCalBack click {
                 onBackPressed()
                 // overridePendingTransition(R.anim.not_move_activity, R.anim.rightout_activity)
@@ -56,7 +58,8 @@ class CalendarActivity : BaseActivity<ActivityCalendarBinding>(
                 }
 
                 toast("${year}년 ${month + 1}월 ${dayOfMonth}일을 선택하셨습니다.")
-                val date = "$year${(month + 1).getTextFormattedTime()}${dayOfMonth.getTextFormattedTime()}"
+                val date =
+                    "$year${(month + 1).getTextFormattedTime()}${dayOfMonth.getTextFormattedTime()}"
 
                 // 패스 액티비티로 이동 및 종료
                 startActivity<PathActivity>(PathActivity.EXTRA_DATE to date)

@@ -84,6 +84,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
 
     override fun initView() {
         bind {
+
+            btnSettingBack.setOnClickListener { (activity as? MainActivity)?.onBackPressed() }
+
             btnLoginJoin.setOnClickListener {
                 val intent = Intent(activity, LoginActivity::class.java)
                 startActivityForResult(intent, 1000)

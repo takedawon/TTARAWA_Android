@@ -44,6 +44,8 @@ class CommunityActivity : BaseActivity<ActivityCommunityBinding>(
 
     override fun initView() {
         bind {
+            btnNewsBack.setOnClickListener { onBackPressed() }
+
             stackviewMain.setItemExpendListener { expend -> }
 
             mTestStackAdapter = TestStackAdapter(this@CommunityActivity).apply {
