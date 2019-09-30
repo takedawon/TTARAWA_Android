@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -17,8 +19,11 @@ import com.seoul.ttarawa.data.local.executor.provideLocalExecutor
 import com.seoul.ttarawa.data.remote.FirebaseLeaf
 import com.seoul.ttarawa.data.remote.leaf.PathLeaf
 import com.seoul.ttarawa.databinding.ActivityMyPathBinding
+import com.seoul.ttarawa.ui.main.LoginActivity
 import com.seoul.ttarawa.ui.path.PathActivity
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
+import org.jetbrains.anko.toast
 import timber.log.Timber
 
 class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
@@ -54,6 +59,7 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
     }
 
     private fun getMyPath() {
+        binding.rvMyPath.visibility = View.INVISIBLE
         showProgress()
 
         val list = localExecutor.getPath()
@@ -69,6 +75,7 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                     override fun onCancelled(error: DatabaseError) {
                         hideProgress()
                         Timber.e("$error")
+                        binding.rvMyPath.visibility = View.VISIBLE
                     }
 
                     override fun onDataChange(user: DataSnapshot) {
@@ -80,6 +87,7 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                                 }
                             }
                         }
+                        binding.rvMyPath.visibility = View.VISIBLE
                         myPathAdapter.replaceAll(list)
                         hideProgress()
                     }
@@ -99,6 +107,95 @@ class MyPathActivity : BaseActivity<ActivityMyPathBinding>(
                         PathActivity.EXTRA_DATE to date
                     )
                 )
+            }
+
+            onClickChangeSharing = { path, position ->
+                val isLocalData = try {
+                    path.id.toInt()
+                    true
+                } catch (e: NumberFormatException) {
+                    false
+                }
+
+                val uid = firebaseUser?.uid
+
+                if (uid == null) {
+                    MaterialAlertDialogBuilder(this@MyPathActivity)
+                        .setTitle("로그인이 필요합니다.")
+                        .setMessage("로그인이 필요한 서비스입니다. 로그인하시겠습니꺄?")
+                        .setPositiveButton("네") { _, _ ->
+                            startActivity<LoginActivity>()
+                        }
+                        .setNegativeButton("아니오") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                }
+
+                if (uid != null) {
+                    if (isLocalData) {
+                        showProgress()
+                        // 파베에 등록하고, 로컬은 지우고, 상태값만 바꿔주기. 다음에 들어올 땐 파베에서 가져오게 된다.
+                        val pathAndAllNodes = localExecutor.getPathAndNodes(path.id.toInt())
+
+                        if (pathAndAllNodes != null) {
+                            database.reference
+                                .child(FirebaseLeaf.DB_LEAF_PATH)
+                                .child(uid)
+                                .child(path.date)
+                                .push()
+                                .setValue(pathAndAllNodes.toPathLeaf()) { error, _ ->
+                                    if (error == null) {
+                                        if (!path.shareYn) {
+                                            toast(R.string.my_path_share_success)
+                                        } else {
+                                            toast(R.string.my_path_share_cancel_success)
+                                        }
+                                        myPathAdapter.changeStateSharing(position, !path.shareYn)
+                                        try {
+                                            // 기존 로컬 데이터 삭제, 파베에 올라간 데이터를 받기 위해 갱신
+                                            localExecutor.deletePath(path.toPathEntity())
+                                            hideProgress()
+                                            getMyPath()
+                                        } catch (e: Exception) {
+                                            hideProgress()
+                                            Timber.w(e)
+                                        }
+                                    } else {
+                                        hideProgress()
+                                        Timber.w("error = ${error.code}, $error")
+                                        toast(R.string.my_path_share_fail)
+                                    }
+                                }
+                        } else {
+                            toast(R.string.my_path_share_fail)
+                            hideProgress()
+                        }
+                    } else {
+                        // 기존에 파베에 저쟝된 데이터
+                        showProgress()
+                        database.reference
+                            .child(FirebaseLeaf.DB_LEAF_PATH)
+                            .child(uid)
+                            .child(path.date)
+                            .child(path.id)
+                            .child(FirebaseLeaf.DB_LEAF_SAHRE_YN)
+                            .setValue(!path.shareYn) { error, _ ->
+                                hideProgress()
+                                if (error == null) {
+                                    if (!path.shareYn) {
+                                        toast(R.string.my_path_share_success)
+                                    } else {
+                                        toast(R.string.my_path_share_cancel_success)
+                                    }
+                                    myPathAdapter.changeStateSharing(position, !path.shareYn)
+                                } else {
+                                    Timber.w("error = ${error.code}, $error")
+                                    toast(R.string.my_path_share_fail)
+                                }
+                            }
+                    }
+                }
             }
         }
 

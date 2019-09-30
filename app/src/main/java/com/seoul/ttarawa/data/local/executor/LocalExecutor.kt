@@ -62,6 +62,14 @@ class LocalExecutor private constructor(
         return future.get() ?: emptyList()
     }
 
+    fun deletePath(path: PathEntity): Boolean {
+        executor.submit(Callable<Boolean> {
+            localDataBase.getPathDao().delete(path)
+            return@Callable true
+        })
+        return true
+    }
+
     companion object {
         @Volatile
         private var instance: LocalExecutor? = null

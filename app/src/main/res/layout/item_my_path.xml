@@ -42,10 +42,10 @@
                     android:id="@+id/tv_my_path_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
+                    android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     tools:ignore="RtlSymmetry"
@@ -55,7 +55,10 @@
                     android:id="@+id/btn_my_path_sharing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="공유하기" />
+                    android:background="@drawable/my_path_bg_share_ripple"
+                    android:text="공유하기"
+                    android:textColor="@color/colorOnBackground"
+                    tools:textColor="@color/white" />
 
             </LinearLayout>
 

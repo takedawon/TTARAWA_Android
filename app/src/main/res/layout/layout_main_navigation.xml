@@ -1,14 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="12dp">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_main_menu"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_navi_my_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/my_navigation_items" />
+        android:background="@drawable/main_navi_bg_ripple"
+        android:padding="16dp"
+        tools:ignore="SpUsage">
 
+        <ImageView
+            android:id="@+id/iv_navi_my_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_ic_map_book"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_navi_my_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="@string/menu_action_my_path"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintStart_toEndOf="@id/iv_navi_my_path"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_navi_my_path_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="저장한 경로 목록을 표시합니다."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_navi_my_path"
+            app:layout_constraintTop_toBottomOf="@id/tv_navi_my_path" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_navi_community"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_navi_bg_ripple"
+        android:padding="16dp"
+        tools:ignore="SpUsage">
+
+        <ImageView
+            android:id="@+id/iv_navi_community"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_ic_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_navi_community"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="@string/menu_action_community"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintStart_toEndOf="@id/iv_navi_community" />
+
+        <TextView
+            android:id="@+id/tv_navi_community_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="다른 회원들이 공유한 경로를 볼 수 있습니다."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_navi_community"
+            app:layout_constraintTop_toBottomOf="@id/tv_navi_community" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
