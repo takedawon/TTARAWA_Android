@@ -84,11 +84,27 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                     return@setOnCheckedChangeListener
                 }
 
+
                 for (i in 0 until chipGroup.childCount) {
                     val chip = chipGroup.getChildAt(i)
                     if (chip.id == checkedId) {
                         category = CategoryType.get(i)
                         Timber.e("$category")
+
+
+                        when (category) {
+                            CategoryType.CULTURE,
+                            CategoryType.EXHIBITION,
+                            CategoryType.TOUR,
+                            CategoryType.SPORTS,
+                            CategoryType.SHOPPING->
+                                binding.tietSearch.visibility=View.GONE
+                            CategoryType.MOVIE,
+                            CategoryType.WAY_POINT,
+                            CategoryType.CAFE->
+                                binding.tietSearch.visibility=View.VISIBLE
+                        }
+
                         return@setOnCheckedChangeListener
                     }
                 }
@@ -227,7 +243,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.EXHIBITION -> {
-                getGeoCoding(longitude,latitude,"A02","A0206","A02060300","14")
+                getGeoCoding(longitude, latitude, "A02", "A0206", "A02060300", "14")
             }
             CategoryType.TOUR -> {
                 getLocationBaseTourList(
@@ -246,7 +262,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                     numOfRows = 30,
                     pageNo = 1,
                     contentTypeId = 28,
-                    arrange = "B",
+                    arrange = "E",
                     mapX = longitude.toString(),
                     mapY = latitude.toString(),
                     radius = 10000,
@@ -331,7 +347,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         contentTypeId: String
     ) {
         NetworkModule.geoCodingApi.getGeoCoding(
-            Authorization=BuildConfig.KAKAO_KEY,
+            Authorization = BuildConfig.KAKAO_KEY,
             x = x,
             y = y
         ).enqueue(object : Callback<GeoCodingResponse> {
@@ -344,7 +360,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 call: Call<GeoCodingResponse>,
                 response: Response<GeoCodingResponse>
             ) {
-                Log.e("테스트",response.body()?.documents?.get(0)?.region2depthName)
+                Log.e("테스트", response.body()?.documents?.get(0)?.region2depthName)
                 val num =
                     when (response.body()?.documents?.get(0)?.region2depthName) {
                         "강남구" -> 1
@@ -359,14 +375,16 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                         "도봉구" -> 10
                         else -> 0
                     }
-                getAreaBasedList(1,
+                getAreaBasedList(
+                    1,
                     30,
                     "P",
                     cat1,
                     cat2,
                     cat3,
                     contentTypeId,
-                    num.toString())
+                    num.toString()
+                )
             }
 
         })
@@ -558,7 +576,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
         cat2: String,
         cat3: String,
         contentTypeId: String,
-        sigunguCode:String
+        sigunguCode: String
     ) {
         showProgressBar()
         NetworkModule.areaBasedListApi.getAreaBasedList(
