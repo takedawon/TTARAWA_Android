@@ -401,34 +401,24 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
                     val categoryCode =
                         data?.getIntExtra(TourDetailActivity.EXTRA_CATEGORY, -1) ?: -1
 
-                    CategoryType.get(categoryCode)
-
-                    val model = when (CategoryType.get(categoryCode)) {
-                        CategoryType.TOUR -> {
-                            data?.getParcelableExtra<LocationTourModel>(TourDetailActivity.EXTRA_ENTITY)
-                        }
-                        else -> {
-                            data?.getSerializableExtra(TourDetailActivity.EXTRA_ENTITY) as BaseSearchEntity
-                        }
-                    }
+                    val model =
+                        data?.getSerializableExtra(TourDetailActivity.EXTRA_ENTITY) as BaseSearchEntity
 
                     // 여기서 받아야 하는 정보들
                     // 출발시간, 도착시간, 이름, 주소, 부가정보, 카테고리
-                    model?.let {
-                        if (markerList.isEmpty()) {
-                            // 처음에는 마커만 생성
-                            Timber.e("addMarkerInMap onActivityResult")
-                            addMarkerInMap(
-                                searchEntity = model,
-                                shouldMoveCamera = true
-                            )
-                        } else {
-                            getRoadPath(
-                                startLat = markerList.last.position.latitude,
-                                startLon = markerList.last.position.longitude,
-                                searchEntity = model
-                            )
-                        }
+                    if (markerList.isEmpty()) {
+                        // 처음에는 마커만 생성
+                        Timber.e("addMarkerInMap onActivityResult")
+                        addMarkerInMap(
+                            searchEntity = model,
+                            shouldMoveCamera = true
+                        )
+                    } else {
+                        getRoadPath(
+                            startLat = markerList.last.position.latitude,
+                            startLon = markerList.last.position.longitude,
+                            searchEntity = model
+                        )
                     }
                     return
                 }

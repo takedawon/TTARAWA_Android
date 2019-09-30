@@ -214,24 +214,5 @@
             android:layout_height="1dp"
             android:background="#f2f2f2"
             app:layout_constraintTop_toBottomOf="@+id/txt_setting_news"/>
-
-        <TextView
-            android:id="@+id/txt_setting_make"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:text="만든사람"
-            android:textColor="#363636"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_setting_news" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#f2f2f2"
-            app:layout_constraintTop_toBottomOf="@+id/txt_setting_make"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

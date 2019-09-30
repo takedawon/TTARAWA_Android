@@ -1,5 +1,7 @@
 package com.seoul.ttarawa.data.entity
 
+import java.io.Serializable
+
 data class BaseSearchEntityImpl(
     override val categoryCode: Int,
     override val startTime: String,
@@ -9,4 +11,4 @@ data class BaseSearchEntityImpl(
     override val title: String,
     override val address: String,
     override val content: String
-): BaseSearchEntity
+): BaseSearchEntity, Serializable

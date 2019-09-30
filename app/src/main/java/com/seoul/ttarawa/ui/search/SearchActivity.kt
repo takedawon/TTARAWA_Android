@@ -13,6 +13,7 @@ import com.naver.maps.geometry.Tm128
 import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseActivity
+import com.seoul.ttarawa.data.entity.BaseSearchEntity
 import com.seoul.ttarawa.data.entity.LocationTourModel
 import com.seoul.ttarawa.data.entity.NaverFindModel
 import com.seoul.ttarawa.data.remote.response.*
@@ -30,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.io.Serializable
 import java.net.URLDecoder
 
 /**
@@ -184,7 +186,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                     Activity.RESULT_OK,
                     Intent().apply {
                         putExtra(TourDetailActivity.EXTRA_CATEGORY, model.categoryCode)
-                        putExtra(TourDetailActivity.EXTRA_ENTITY, model as? NaverFindModel)
+                        putExtra(
+                            TourDetailActivity.EXTRA_ENTITY, model as Serializable
+                        )
                     }
                 )
                 finish()
@@ -243,19 +247,25 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 )
             }
             CategoryType.EXHIBITION -> {
-                getGeoCoding(longitude, latitude, "A02", "A0206", "A02060300", "14")
-            }
-            CategoryType.TOUR -> {
                 getLocationBaseTourList(
                     numOfRows = 30,
                     pageNo = 1,
-                    contentTypeId = 12,
-                    arrange = "E",
+                    contentTypeId = 14,
+                    arrange = "B",
                     mapX = longitude.toString(),
                     mapY = latitude.toString(),
                     radius = 10000,
                     category = category
                 )
+            }
+            CategoryType.TOUR -> {
+                getEventDetailsList(
+                    numOfRows = 30,
+                    pageNo = 1,
+                    arrange = "P",
+                    eventStartDate=chooseDate.toInt(),
+                    eventEndDate= chooseDate.toInt(),
+                    category = category)
             }
             CategoryType.SPORTS -> {
                 getLocationBaseTourList(
@@ -542,7 +552,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 response.body()?.let {
                     val defaultPhoto =
                         "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
-
                     searchAdapter.replaceAll(
                         it.response.body.items.item
                             .sortedBy { it.dist }
@@ -557,7 +566,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                                     longitude = tourItem.mapy,
                                     imgUrl = tourItem.firstimage ?: defaultPhoto,
                                     contentId = tourItem.contentid,
-                                    startDate = 0,
+                                    startDate = chooseDate.toInt(),
                                     endDate = 0,
                                     categoryCode = category.code
                                 )
