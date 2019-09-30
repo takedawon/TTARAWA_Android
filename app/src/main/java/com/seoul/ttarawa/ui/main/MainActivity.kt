@@ -14,7 +14,7 @@ import com.seoul.ttarawa.base.BaseActivity
 import com.seoul.ttarawa.databinding.ActivityMainBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.calendar.CalendarActivity
-import com.seoul.ttarawa.ui.main.community.CommunityAcitivty
+import com.seoul.ttarawa.ui.main.community.CommunityActivity
 import com.seoul.ttarawa.ui.main.home.HomeFragment
 import com.seoul.ttarawa.ui.mypath.MyPathActivity
 import org.jetbrains.anko.startActivity
@@ -184,7 +184,7 @@ class MainActivity :
         }
 
         bottomNavigation.findViewById<ConstraintLayout>(R.id.ll_navi_community).setOnClickListener {
-            startActivity<CommunityAcitivty>()
+            startActivity<CommunityActivity>()
             dialog.dismiss()
         }
     }

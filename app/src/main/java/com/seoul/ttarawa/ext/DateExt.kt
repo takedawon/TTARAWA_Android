@@ -1,5 +1,6 @@
 package com.seoul.ttarawa.ext
 
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,3 +15,16 @@ fun Int.getTextFormattedTime() =
     } else {
         "$this"
     }
+
+fun String.simpleDateFormat(original: String = "yyyyMMddHHmmss", format: String = "yyMMdd"): String {
+
+    val dateFormat = SimpleDateFormat(original, Locale.getDefault())
+    val simpleFormat = SimpleDateFormat(format, Locale.getDefault())
+
+    return try {
+        simpleFormat.format(dateFormat.parse(this))
+    } catch (e: Exception) {
+        Timber.w(e)
+        this
+    }
+}
