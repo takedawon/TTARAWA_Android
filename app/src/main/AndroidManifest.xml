@@ -61,6 +61,7 @@
             android:theme="@style/AppTheme.NoneStatusBar" />
         <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.mypath.MyPathActivity" />
+        <activity android:name=".ui.onboarding.OnBoardingActivity" />
     </application>
 
 </manifest>
