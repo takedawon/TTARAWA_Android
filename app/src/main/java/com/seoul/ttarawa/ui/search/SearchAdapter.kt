@@ -33,12 +33,13 @@ class SearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            CategoryType.TOUR.code,
+            CategoryType.TOUR.code->
+                TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
             CategoryType.SPORTS.code,
             CategoryType.CULTURE.code,
             CategoryType.EXHIBITION.code,
             CategoryType.SHOPPING.code ->
-                    TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickStartDetail)
+                    TourViewHolder(inflateDataBinding(parent, R.layout.item_tour), onClickNaverSearch)
             CategoryType.CAFE.code,
             CategoryType.WAY_POINT.code,
             CategoryType.MOVIE.code ->

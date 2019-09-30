@@ -19,6 +19,7 @@ import com.seoul.ttarawa.databinding.ActivityTourDetailBinding
 import com.seoul.ttarawa.ext.hide
 import com.seoul.ttarawa.ext.show
 import com.seoul.ttarawa.module.NetworkModule
+import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +35,8 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tour = intent.getParcelableExtra(EXTRA_ENTITY)
+        tour = intent.getSerializableExtra(EXTRA_ENTITY) as LocationTourModel
+
         initView()
 
         showProgressBar()
@@ -110,6 +112,8 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
         subImageYN: String
     ) {
         val image: ArrayList<String> = ArrayList()
+        val defaultPhoto =
+            "https://firebasestorage.googleapis.com/v0/b/ttarawa-aa23f.appspot.com/o/coming-soon-3080102_1920.png?alt=media&token=341113e2-81b7-4ec3-b024-a360f1deb625"
         NetworkModule.tourImageApi.getTourImage(
             serviceKey = URLDecoder.decode(BuildConfig.KMA_KEY, "utf-8"),
             numOfRows = numOfRows,
@@ -123,6 +127,14 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
         ).enqueue(object : Callback<TourImageResponse> {
             override fun onFailure(call: Call<TourImageResponse>, t: Throwable) {
                 t.printStackTrace()
+                image.add(tour.imgUrl.toString())
+                val adapter = TourImageAdapter()
+                adapter.replaceAll(image)
+                bind {
+                    tourDetailViewPager.adapter = adapter
+                }
+
+                getTourDetails(1, 1, contentId, 15)
             }
 
             override fun onResponse(
@@ -131,12 +143,16 @@ class TourDetailActivity : BaseActivity<ActivityTourDetailBinding>(
             ) {
 
                 response.body()?.let {
-                    val num = if (numOfRows >= it.response.body.totalCount)
-                        it.response.body.totalCount
-                    else
-                        numOfRows
-                    for (i in 0 until num) {
-                        image.add(it.response.body.items.item[i].originimgurl)
+                    if(it.response.body.totalCount != 0) {
+                        val num = if (numOfRows >= it.response.body.totalCount)
+                            it.response.body.totalCount
+                        else
+                            numOfRows
+                        for (i in 0 until num) {
+                            image.add(it.response.body.items.item[i].originimgurl)
+                        }
+                    } else {
+                        image.add(defaultPhoto)
                     }
                 }
 
