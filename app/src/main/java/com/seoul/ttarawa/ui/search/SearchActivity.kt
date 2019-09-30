@@ -370,7 +370,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(
                 call: Call<GeoCodingResponse>,
                 response: Response<GeoCodingResponse>
             ) {
-                Log.e("테스트", response.body()?.documents?.get(0)?.region2depthName)
+                // Log.e("테스트", response.body()?.documents?.get(0)?.region2depthName)
                 val num =
                     when (response.body()?.documents?.get(0)?.region2depthName) {
                         "강남구" -> 1

@@ -315,7 +315,6 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
             // 위치 변경 리스너
             addOnLocationChangeListener { location ->
-                Timber.d("${location.latitude} ${location.longitude}")
                 latitude = location.latitude
                 longitude = location.longitude
             }
@@ -484,7 +483,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
 
                     for (feature in it.features) {
                         val geometry = feature.geometry
-                        Log.e("테스트: type", geometry.type)
+                        // Log.e("테스트: type", geometry.type)
 
                         // 라인스트링일때만
                         if (geometry.type == "LineString") {
