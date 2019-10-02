@@ -2,13 +2,13 @@ package com.seoul.ttarawa.ui.path.dialog
 
 import android.content.Context
 import android.os.Bundle
-import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseDialogFragment
 import com.seoul.ttarawa.databinding.DialogFragmentPathSaveConfirmBinding
 import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ext.showKeyboard
 import com.seoul.ttarawa.ui.path.PathActivity
 import org.jetbrains.anko.support.v4.toast
+
 
 class PathSaveConfirmDialog : BaseDialogFragment<DialogFragmentPathSaveConfirmBinding>(
     R.layout.dialog_fragment_path_save_confirm

@@ -366,7 +366,7 @@ class PathActivity : BaseActivity<ActivityPathBinding>(
     }
 
     private fun initSavedPathFromRemote() {
-        showProgressBar()
+        hideProgressBar()
         database.reference
             .child(FirebaseLeaf.DB_LEAF_PATH)
             .addListenerForSingleValueEvent(object : ValueEventListener {
