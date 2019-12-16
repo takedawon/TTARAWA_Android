@@ -5,18 +5,18 @@
 ● 시간을 설정하여 전체적인 코스의 시간을 관리할 수 있음  
 
 # 사용한 라이브러리
-Material + Glide  
-Firebase AUTH, DB, Storage  
-Retrofit2 + OkHttp3  
-TedPermission + Timber  
-SmartLocation + naverMap  
-LifeCycle + Room  
-CardStackView  
-PaperOnBoarding  
+○ Material + Glide  
+○ Firebase AUTH, DB, Storage  
+○ Retrofit2 + OkHttp3  
+○ TedPermission + Timber  
+○ SmartLocation + naverMap  
+○ LifeCycle + Room  
+○ CardStackView  
+○ PaperOnBoarding  
 
 # 사용한 API
-NaverMap(https://navermaps.github.io/maps.js/)  
-Tmap(http://tmapapi.sktelecom.com/)  
-Naver Search(https://developers.naver.com/products/search/)  
-국내 관광정보 서비스(https://www.data.go.kr/)  
-동네예보정보조회서비스(https://www.data.go.kr/)  
+○ NaverMap(https://navermaps.github.io/maps.js/)  
+○ Tmap(http://tmapapi.sktelecom.com/)  
+○ Naver Search(https://developers.naver.com/products/search/)  
+○ 국내 관광정보 서비스(https://www.data.go.kr/)  
+○ 동네예보정보조회서비스(https://www.data.go.kr/)  
