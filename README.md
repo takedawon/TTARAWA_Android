@@ -20,3 +20,6 @@
 ○ Naver Search(https://developers.naver.com/products/search/)  
 ○ 국내 관광정보 서비스(https://www.data.go.kr/)  
 ○ 동네예보정보조회서비스(https://www.data.go.kr/)  
+
+# TARRAWA Presentation(Youtube)
+[![Video Label](https://img.youtube.com/vi/GIodJxksGkQ/0.jpg)](https://www.youtube.com/watch?v=GIodJxksGkQ&t=1s)
