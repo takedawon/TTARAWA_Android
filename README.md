@@ -11,7 +11,7 @@
 ○ TedPermission + Timber  
 ○ SmartLocation + naverMap  
 ○ LifeCycle + Room  
-○ CardStackView  
+○ CardStackView + ViewPager2
 ○ PaperOnBoarding  
 
 # 사용한 API
