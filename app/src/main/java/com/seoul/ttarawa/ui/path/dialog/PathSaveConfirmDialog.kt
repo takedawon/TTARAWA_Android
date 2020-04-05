@@ -2,6 +2,7 @@ package com.seoul.ttarawa.ui.path.dialog
 
 import android.content.Context
 import android.os.Bundle
+import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseDialogFragment
 import com.seoul.ttarawa.databinding.DialogFragmentPathSaveConfirmBinding
 import com.seoul.ttarawa.ext.click
