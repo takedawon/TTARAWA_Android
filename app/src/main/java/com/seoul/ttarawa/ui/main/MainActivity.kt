@@ -16,6 +16,7 @@ import com.seoul.ttarawa.ext.click
 import com.seoul.ttarawa.ui.calendar.CalendarActivity
 import com.seoul.ttarawa.ui.main.community.CommunityActivity
 import com.seoul.ttarawa.ui.main.home.HomeFragment
+import com.seoul.ttarawa.ui.main.setting.SettingFragment
 import com.seoul.ttarawa.ui.mypath.MyPathActivity
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
