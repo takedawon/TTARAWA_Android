@@ -93,7 +93,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
             }
 
             btnLoginLogout.setOnClickListener {
-                MaterialAlertDialogBuilder(context)
+                MaterialAlertDialogBuilder(requireContext())
                     .setTitle("로그아웃 하시겠습니까?")
                     .setPositiveButton("네") { _, _ ->
                         auth.signOut()
@@ -116,7 +116,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(
                     btnLoginJoinAfter.setBackgroundColor(Color.parseColor("#0E2FFF"))
                     imgProfileAfter.setOnClickListener {
                         // 이미지 누를시 편집창
-                        MaterialAlertDialogBuilder(context)
+                        MaterialAlertDialogBuilder(requireContext())
                             .setTitle("프로필 사진을 변경하시겠습니까?")
                             .setPositiveButton("네") { _, _ ->
                                 val intent = Intent()

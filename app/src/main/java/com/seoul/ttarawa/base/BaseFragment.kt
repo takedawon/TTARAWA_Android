@@ -23,10 +23,6 @@ abstract class BaseFragment<B : ViewDataBinding>(private val layoutId: Int) :
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     protected fun bind(action: B.() -> Unit) {
         binding.run(action)
     }

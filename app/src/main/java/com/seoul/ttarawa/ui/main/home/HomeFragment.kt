@@ -2,8 +2,7 @@ package com.seoul.ttarawa.ui.main.home
 
 import android.os.Bundle
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import android.view.View
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -14,7 +13,6 @@ import com.seoul.ttarawa.BuildConfig
 import com.seoul.ttarawa.R
 import com.seoul.ttarawa.base.BaseFragment
 import com.seoul.ttarawa.data.entity.SuggestRouteLeaf
-import com.seoul.ttarawa.data.entity.SuggestRouteModel
 import com.seoul.ttarawa.data.entity.WeatherModel
 import com.seoul.ttarawa.data.remote.FirebaseLeaf
 import com.seoul.ttarawa.data.remote.response.WeatherResponse
@@ -49,8 +47,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private lateinit var smartLocation: SmartLocation
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         database = FirebaseDatabase.getInstance()
 
@@ -82,7 +80,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun requestPermission() {
-        TedPermission.with(activity!!)
+        TedPermission.with(requireActivity())
             .setPermissionListener(createPermissionListener())
             .setRationaleMessage("앱의 기능을 사용하기 위해서는 권한이 필요합니다.")
             .setDeniedMessage("[설정] > [권한] 에서 권한을 허용할 수 있습니다.")

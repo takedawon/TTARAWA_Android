@@ -6,8 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.seoul.ttarawa.ui.progress.ProgressDialogFragment
 
-abstract class BaseActivity<B : ViewDataBinding>(private val layoutId: Int) :
-    AppCompatActivity() {
+abstract class BaseActivity<B : ViewDataBinding>(
+    private val layoutId: Int
+) : AppCompatActivity() {
 
     private var progress: ProgressDialogFragment? = null
 

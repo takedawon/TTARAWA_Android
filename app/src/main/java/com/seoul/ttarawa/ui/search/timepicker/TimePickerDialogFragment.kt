@@ -3,6 +3,7 @@ package com.seoul.ttarawa.ui.search.timepicker
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TimePicker
@@ -71,8 +72,8 @@ class TimePickerDialogFragment : BaseDialogFragment<DialogFragmentTimePickerBind
         outState.putString(EXTRA_END_TIME, endTime)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         savedInstanceState?.let {
             getBundleData(savedInstanceState)
         }
